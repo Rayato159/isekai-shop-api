@@ -2,6 +2,7 @@ package databases
 
 import (
 	"fmt"
+	"log"
 	"sync"
 
 	"github.com/Rayato159/isekai-shop-api/config"
@@ -14,11 +15,11 @@ type postgresDatabase struct {
 }
 
 var (
-	appDatabase *postgresDatabase
-	once        sync.Once
+	db   *postgresDatabase
+	once sync.Once
 )
 
-func NewAppDatabase(cfg *config.DatabaseConfig) Database {
+func NewPostgresDatabase(cfg *config.DatabaseConfig) Database {
 	once.Do(func() {
 		dsn := fmt.Sprintf(
 			"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s search_path=%s",
@@ -31,16 +32,18 @@ func NewAppDatabase(cfg *config.DatabaseConfig) Database {
 			cfg.Schema,
 		)
 
-		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
 			errMessage := fmt.Sprintf("failed to connect database: %s", err.Error())
 			panic(errMessage)
 		}
 
-		appDatabase = &postgresDatabase{db}
+		log.Printf("Connected to database %s", cfg.DBName)
+
+		db = &postgresDatabase{conn}
 	})
 
-	return appDatabase
+	return db
 }
 
 func (db *postgresDatabase) GetDb() *gorm.DB {

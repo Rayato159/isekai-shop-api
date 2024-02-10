@@ -11,11 +11,6 @@ import (
 var once sync.Once
 
 type (
-	AppConfig struct {
-		ServerConfig   *ServerConfig
-		DatabaseConfig *DatabaseConfig
-	}
-
 	DatabaseConfig struct {
 		Host     string
 		Port     int
@@ -31,6 +26,27 @@ type (
 		AllowOrigins []string
 		Timeout      time.Duration
 		BodyLimit    string
+	}
+
+	Oauth2Config struct {
+		ClientId     string
+		ClientSecret string
+		RedirectUrl  string
+		Scopes       []string // https://developers.google.com/identity/protocols/oauth2/scopes
+		UserInfoUrl  string
+	}
+
+	StateConfig struct {
+		Secret    []byte
+		ExpiresAt time.Duration
+		Issuer    string
+	}
+
+	AppConfig struct {
+		DatabaseConfig *DatabaseConfig
+		ServerConfig   *ServerConfig
+		Oauth2Config   *Oauth2Config
+		StateConfig    *StateConfig
 	}
 )
 
@@ -48,21 +64,14 @@ func GetAppConfig() *AppConfig {
 		}
 
 		appConfig = &AppConfig{
-			ServerConfig:   getServerConfig(),
 			DatabaseConfig: getDatabaseConfig(),
+			ServerConfig:   getServerConfig(),
+			Oauth2Config:   getOauth2Config(),
+			StateConfig:    getStateConfig(),
 		}
 	})
 
 	return appConfig
-}
-
-func getServerConfig() *ServerConfig {
-	return &ServerConfig{
-		Port:         viper.GetInt("server.port"),
-		AllowOrigins: viper.GetStringSlice("server.allowOrigins"),
-		Timeout:      viper.GetDuration("server.timeout"),
-		BodyLimit:    viper.GetString("server.bodyLimit"),
-	}
 }
 
 func getDatabaseConfig() *DatabaseConfig {
@@ -74,5 +83,32 @@ func getDatabaseConfig() *DatabaseConfig {
 		DBName:   viper.GetString("database.dbname"),
 		SSLMode:  viper.GetString("database.sslmode"),
 		Schema:   viper.GetString("database.schema"),
+	}
+}
+
+func getServerConfig() *ServerConfig {
+	return &ServerConfig{
+		Port:         viper.GetInt("server.port"),
+		AllowOrigins: viper.GetStringSlice("server.allowOrigins"),
+		Timeout:      viper.GetDuration("server.timeout"),
+		BodyLimit:    viper.GetString("server.bodyLimit"),
+	}
+}
+
+func getOauth2Config() *Oauth2Config {
+	return &Oauth2Config{
+		ClientId:     viper.GetString("oauth2.google.clientId"),
+		ClientSecret: viper.GetString("oauth2.google.clientSecret"),
+		RedirectUrl:  viper.GetString("oauth2.google.redirectUrl"),
+		Scopes:       viper.GetStringSlice("oauth2.google.scopes"),
+		UserInfoUrl:  viper.GetString("oauth2.google.userInfoUrl"),
+	}
+}
+
+func getStateConfig() *StateConfig {
+	return &StateConfig{
+		Secret:    []byte(viper.GetString("state.jwt.secret")),
+		ExpiresAt: viper.GetDuration("state.jwt.expiresAt"),
+		Issuer:    viper.GetString("state.jwt.issuer"),
 	}
 }

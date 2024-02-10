@@ -8,8 +8,8 @@ import (
 
 func main() {
 	appConfig := config.GetAppConfig()
-	database := databases.NewAppDatabase(appConfig.DatabaseConfig)
-	server := server.NewAppServer(appConfig, database.GetDb())
+	database := databases.NewPostgresDatabase(appConfig.DatabaseConfig)
+	server := server.NewEchoServer(appConfig, database.GetDb())
 
 	server.Start()
 }
