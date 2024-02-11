@@ -2,7 +2,7 @@ package model
 
 type (
 	UserInfo struct {
-		Id            string `json:"id"`
+		ID            string `json:"id"`
 		Email         string `json:"email"`
 		VerifiedEmail bool   `json:"verified_email"`
 		Name          string `json:"name"`
@@ -12,15 +12,15 @@ type (
 		Locale        string `json:"locale"`
 	}
 
-	UserPassport struct {
+	PlayerPassport struct {
 		RefreshToken string `json:"refresh_token"`
 	}
 
-	CreateUserInfo struct {
-		Id      string
+	CreatePlayerInfo struct {
+		ID      string
 		Email   string
 		Name    string
 		Picture string
-		*UserPassport
+		*PlayerPassport
 	}
 )

@@ -5,5 +5,5 @@ import (
 )
 
 type OAuth2Service interface {
-	ManageUserAccount(createUserInfo *_oauth2Model.CreateUserInfo) error
+	ManagePlayerAccount(createPlayerInfo *_oauth2Model.CreatePlayerInfo) error
 }

@@ -3,9 +3,9 @@ package exception
 import "fmt"
 
 type InsertPlayerException struct {
-	PlayerId string
+	PlayerID string
 }
 
 func (e *InsertPlayerException) Error() string {
-	return fmt.Sprintf("Error inserting player: %s", e.PlayerId)
+	return fmt.Sprintf("Error inserting player: %s", e.PlayerID)
 }

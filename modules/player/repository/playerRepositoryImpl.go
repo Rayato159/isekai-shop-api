@@ -25,8 +25,8 @@ func (r *playerRepositoryImpl) InsertPlayer(playerEntitiy *_playerEntity.Player)
 
 	if tx.Error != nil {
 		r.logger.Errorf("Error inserting player: %s", tx.Error.Error())
-		return "", &_playerException.InsertPlayerException{PlayerId: playerEntitiy.Id}
+		return "", &_playerException.InsertPlayerException{PlayerID: playerEntitiy.ID}
 	}
 
-	return playerEntitiy.Id, nil
+	return playerEntitiy.ID, nil
 }

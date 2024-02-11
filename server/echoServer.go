@@ -109,6 +109,7 @@ func (s *echoServer) getMiddlewares() customMiddlewares.CustomMiddleware {
 	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(
 		oauth2Repository,
 		playerRepository,
+		s.app.Logger,
 	)
 
 	return customMiddlewares.NewCustomMiddlewaresImpl(

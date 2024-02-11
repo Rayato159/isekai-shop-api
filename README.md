@@ -30,6 +30,12 @@ Working is now on progress ...
     DROP DATABASE isekaishopdb;
     ```
 
+### Database Migration
+
+```bash
+go run ./databases/migration/migratedb.go
+```
+
 ### config.yaml Example
 
 ```bash

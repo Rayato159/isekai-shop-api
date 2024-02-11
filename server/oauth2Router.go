@@ -27,13 +27,14 @@ func (s *echoServer) initOAuth2Router() {
 	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(
 		oauth2Repository,
 		playerRepository,
+		s.app.Logger,
 	)
 
 	controller := _oauth2Controller.NewGoogleOAuth2Controller(
-		oauth2Config,
-		s.app.Logger,
-		stateProvider,
 		oauth2Service,
+		oauth2Config,
+		stateProvider,
+		s.app.Logger,
 	)
 
 	router.GET("/login", controller.Login)

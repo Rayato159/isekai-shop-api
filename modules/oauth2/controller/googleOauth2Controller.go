@@ -20,12 +20,12 @@ import (
 
 type (
 	googleOAuth2Controller struct {
+		oauth2Service     _oauth2Service.OAuth2Service
 		oauth2Conf        *oauth2.Config
 		oauth2UserInfoUrl string
 		oauth2RevokeUrl   string
 		stateProvider     state.State
 		logger            echo.Logger
-		oauth2Service     _oauth2Service.OAuth2Service
 	}
 
 	oauth2CallbackResponse struct {
@@ -46,10 +46,10 @@ var (
 )
 
 func NewGoogleOAuth2Controller(
-	oauth2Conf *config.OAuth2Config,
-	logger echo.Logger,
-	stateProvider state.State,
 	oauth2Service _oauth2Service.OAuth2Service,
+	oauth2Conf *config.OAuth2Config,
+	stateProvider state.State,
+	logger echo.Logger,
 ) OAuth2Controller {
 	conf := &oauth2.Config{
 		ClientID:     oauth2Conf.ClientId,
@@ -65,12 +65,12 @@ func NewGoogleOAuth2Controller(
 	}
 
 	return &googleOAuth2Controller{
+		oauth2Service:     oauth2Service,
 		oauth2Conf:        conf,
 		oauth2UserInfoUrl: oauth2Conf.UserInfoUrl,
 		oauth2RevokeUrl:   oauth2Conf.RevokeUrl,
 		stateProvider:     stateProvider,
 		logger:            logger,
-		oauth2Service:     oauth2Service,
 	}
 }
 
@@ -107,12 +107,12 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 
 	}
 
-	if err := c.oauth2Service.ManageUserAccount(&_oauth2Model.CreateUserInfo{
-		Id:      userInfo.Id,
+	if err := c.oauth2Service.ManagePlayerAccount(&_oauth2Model.CreatePlayerInfo{
+		ID:      userInfo.ID,
 		Email:   userInfo.Email,
 		Name:    userInfo.Name,
 		Picture: userInfo.Picture,
-		UserPassport: &_oauth2Model.UserPassport{
+		PlayerPassport: &_oauth2Model.PlayerPassport{
 			RefreshToken: token.RefreshToken,
 		},
 	}); err != nil {
@@ -121,7 +121,7 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 
 	c.setSameSiteCookie(pctx, accessTokenCookieName, token.AccessToken)
 	c.setSameSiteCookie(pctx, refreshTokenCookieName, token.RefreshToken)
-	c.setSameSiteCookie(pctx, userIdCookieName, userInfo.Id)
+	c.setSameSiteCookie(pctx, userIdCookieName, userInfo.ID)
 
 	return pctx.JSON(http.StatusOK, &oauth2CallbackResponse{Message: "Login successful"})
 }
