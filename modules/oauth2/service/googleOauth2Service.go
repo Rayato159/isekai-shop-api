@@ -2,16 +2,24 @@ package service
 
 import (
 	_oauth2Repository "github.com/Rayato159/isekai-shop-api/modules/oauth2/repository"
+	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
 )
 
-type googleOauth2Service struct {
-	oauth2Repository _oauth2Repository.Oauth2Repository
+type googleOAuth2Service struct {
+	oauth2Repository _oauth2Repository.OAuth2Repository
+	playerRepository _playerRepository.PlayerRepository
 }
 
-func NewGoogleOauth2Service(oauth2Repository _oauth2Repository.Oauth2Repository) Oauth2Service {
-	return &googleOauth2Service{oauth2Repository}
+func NewGoogleOAuth2Service(
+	oauth2Repository _oauth2Repository.OAuth2Repository,
+	playerRepository _playerRepository.PlayerRepository,
+) OAuth2Service {
+	return &googleOAuth2Service{
+		oauth2Repository,
+		playerRepository,
+	}
 }
 
-func (s *googleOauth2Service) UpdateCredential() error {
+func (s *googleOAuth2Service) ManageUserAccount() error {
 	return nil
 }

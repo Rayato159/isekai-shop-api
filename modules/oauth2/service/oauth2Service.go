@@ -1,5 +1,5 @@
 package service
 
-type Oauth2Service interface {
-	UpdateCredential() error
+type OAuth2Service interface {
+	ManageUserAccount() error
 }

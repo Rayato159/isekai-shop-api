@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 
+	_oauth2Model "github.com/Rayato159/isekai-shop-api/modules/oauth2/model"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/modules/oauth2/service"
 
 	"github.com/Rayato159/isekai-shop-api/config"
@@ -15,20 +16,22 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-type googleOauth2Controller struct {
-	oauth2Conf      *oauth2.Config
-	oauth2LocalConf *config.Oauth2Config
-	stateProvider   state.State
-	logger          echo.Logger
-	oauth2Service   _oauth2Service.Oauth2Service
+type googleOAuth2Controller struct {
+	oauth2Conf         *oauth2.Config
+	oauth2UserInfoUrl  string
+	oauth2CookieDomain string
+	oauth2CookieName   string
+	stateProvider      state.State
+	logger             echo.Logger
+	oauth2Service      _oauth2Service.OAuth2Service
 }
 
-func NewGoogleOauth2Controller(
-	oauth2Conf *config.Oauth2Config,
+func NewGoogleOAuth2Controller(
+	oauth2Conf *config.OAuth2Config,
 	logger echo.Logger,
 	stateProvider state.State,
-	oauth2Service _oauth2Service.Oauth2Service,
-) Oauth2Controller {
+	oauth2Service _oauth2Service.OAuth2Service,
+) OAuth2Controller {
 	conf := &oauth2.Config{
 		ClientID:     oauth2Conf.ClientId,
 		ClientSecret: oauth2Conf.ClientSecret,
@@ -37,16 +40,16 @@ func NewGoogleOauth2Controller(
 		Endpoint:     google.Endpoint,
 	}
 
-	return &googleOauth2Controller{
-		oauth2Conf:      conf,
-		oauth2LocalConf: oauth2Conf,
-		stateProvider:   stateProvider,
-		logger:          logger,
-		oauth2Service:   oauth2Service,
+	return &googleOAuth2Controller{
+		oauth2Conf:        conf,
+		oauth2UserInfoUrl: oauth2Conf.UserInfoUrl,
+		stateProvider:     stateProvider,
+		logger:            logger,
+		oauth2Service:     oauth2Service,
 	}
 }
 
-func (c *googleOauth2Controller) Login(pctx echo.Context) error {
+func (c *googleOAuth2Controller) Login(pctx echo.Context) error {
 	state, err := c.stateProvider.GenerateRandomState()
 	if err != nil {
 		c.logger.Errorf("Error generating state: %s", err.Error())
@@ -56,7 +59,7 @@ func (c *googleOauth2Controller) Login(pctx echo.Context) error {
 	return pctx.Redirect(302, c.oauth2Conf.AuthCodeURL(state))
 }
 
-func (c *googleOauth2Controller) LoginCallback(pctx echo.Context) error {
+func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 	ctx := context.Background()
 
 	if err := c.callbackValidate(pctx); err != nil {
@@ -70,22 +73,24 @@ func (c *googleOauth2Controller) LoginCallback(pctx echo.Context) error {
 	}
 
 	client := c.oauth2Conf.Client(ctx, token)
+
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
 		return err
 
 	}
+
 	_ = userInfo
 
-	if err := c.oauth2Service.UpdateCredential(); err != nil {
+	if err := c.oauth2Service.ManageUserAccount(); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (c *googleOauth2Controller) callbackValidate(pctx echo.Context) error {
+func (c *googleOAuth2Controller) callbackValidate(pctx echo.Context) error {
 	state := pctx.QueryParam("state")
 
 	if err := c.stateProvider.ParseState(state); err != nil {
@@ -96,8 +101,12 @@ func (c *googleOauth2Controller) callbackValidate(pctx echo.Context) error {
 	return nil
 }
 
-func (c *googleOauth2Controller) getUserInfo(client *http.Client) (any, error) {
-	resp, err := client.Get(c.oauth2LocalConf.UserInfoUrl)
+func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
+	return nil
+}
+
+func (c *googleOAuth2Controller) getUserInfo(client *http.Client) (*_oauth2Model.UserInfo, error) {
+	resp, err := client.Get(c.oauth2UserInfoUrl)
 	if err != nil {
 		c.logger.Errorf("Error getting user info: %s", err.Error())
 		return nil, err
@@ -109,10 +118,9 @@ func (c *googleOauth2Controller) getUserInfo(client *http.Client) (any, error) {
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
 		return nil, err
-
 	}
 
-	var userInfo any
+	userInfo := new(_oauth2Model.UserInfo)
 	if err := json.Unmarshal(userInfoInBytes, &userInfo); err != nil {
 		c.logger.Errorf("Error unmarshalling user info: %s", err.Error())
 		return nil, err

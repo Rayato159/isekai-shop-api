@@ -1,5 +1,5 @@
 package repository
 
-type Oauth2Repository interface {
-	InsertOauth2() error
+type OAuth2Repository interface {
+	InsertOAuth2() error
 }

@@ -1,15 +1,17 @@
 package repository
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
-type googleOauth2Repository struct {
+type googleOAuth2Repository struct {
 	db *gorm.DB
 }
 
-func NewGoogleOauth2Repository(db *gorm.DB) Oauth2Repository {
-	return &googleOauth2Repository{db}
+func NewGoogleOAuth2Repository(db *gorm.DB) OAuth2Repository {
+	return &googleOAuth2Repository{db}
 }
 
-func (r *googleOauth2Repository) InsertOauth2() error {
+func (r *googleOAuth2Repository) InsertOAuth2() error {
 	return nil
 }

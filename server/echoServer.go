@@ -58,7 +58,7 @@ func (s *echoServer) Start() {
 	// Initialzie all routers
 	s.baseRouter.GET("/health", s.healthCheck)
 
-	s.initOauth2Router()
+	s.initOAuth2Router()
 
 	// Graceful shutdown
 	quit := make(chan os.Signal, 1)
@@ -88,5 +88,6 @@ func (s *echoServer) gracefulShutdown(quit <-chan os.Signal) {
 }
 
 func (s *echoServer) healthCheck(pctx echo.Context) error {
+	fmt.Println(pctx.Cookie("_authorization"))
 	return pctx.String(http.StatusOK, "OK")
 }

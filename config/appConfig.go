@@ -29,7 +29,7 @@ type (
 		BodyLimit    string
 	}
 
-	Oauth2Config struct {
+	OAuth2Config struct {
 		ClientId     string
 		ClientSecret string
 		RedirectUrl  string
@@ -46,12 +46,12 @@ type (
 	AppConfig struct {
 		DatabaseConfig *DatabaseConfig
 		ServerConfig   *ServerConfig
-		Oauth2Config   *Oauth2Config
+		OAuth2Config   *OAuth2Config
 		StateConfig    *StateConfig
 	}
 )
 
-var appConfig *AppConfig
+var appConfigInstance *AppConfig
 
 func GetAppConfig() *AppConfig {
 	once.Do(func() {
@@ -66,15 +66,15 @@ func GetAppConfig() *AppConfig {
 			panic(fmt.Errorf("fatal error config file: %v", err))
 		}
 
-		appConfig = &AppConfig{
+		appConfigInstance = &AppConfig{
 			DatabaseConfig: getDatabaseConfig(),
 			ServerConfig:   getServerConfig(),
-			Oauth2Config:   getOauth2Config(),
+			OAuth2Config:   getOAuth2Config(),
 			StateConfig:    getStateConfig(),
 		}
 	})
 
-	return appConfig
+	return appConfigInstance
 }
 
 func getDatabaseConfig() *DatabaseConfig {
@@ -98,8 +98,8 @@ func getServerConfig() *ServerConfig {
 	}
 }
 
-func getOauth2Config() *Oauth2Config {
-	return &Oauth2Config{
+func getOAuth2Config() *OAuth2Config {
+	return &OAuth2Config{
 		ClientId:     viper.GetString("oauth2.google.clientId"),
 		ClientSecret: viper.GetString("oauth2.google.clientSecret"),
 		RedirectUrl:  viper.GetString("oauth2.google.redirectUrl"),
