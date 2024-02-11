@@ -33,9 +33,16 @@ type (
 		ClientId     string
 		ClientSecret string
 		RedirectUrl  string
+		Endpoints    *oauth2Endpoints
 		Scopes       []string // https://developers.google.com/identity/protocols/oauth2/scopes
 		UserInfoUrl  string
 		RevokeUrl    string
+	}
+
+	oauth2Endpoints struct {
+		AuthUrl       string
+		TokenUrl      string
+		DeviceAuthUrl string
 	}
 
 	StateConfig struct {
@@ -107,6 +114,11 @@ func getOAuth2Config() *OAuth2Config {
 		Scopes:       viper.GetStringSlice("oauth2.google.scopes"),
 		UserInfoUrl:  viper.GetString("oauth2.google.userInfoUrl"),
 		RevokeUrl:    viper.GetString("oauth2.google.revokeUrl"),
+		Endpoints: &oauth2Endpoints{
+			AuthUrl:       viper.GetString("oauth2.google.endpoints.authUrl"),
+			TokenUrl:      viper.GetString("oauth2.google.endpoints.tokenUrl"),
+			DeviceAuthUrl: viper.GetString("oauth2.google.endpoints.deviceAuthUrl"),
+		},
 	}
 }
 

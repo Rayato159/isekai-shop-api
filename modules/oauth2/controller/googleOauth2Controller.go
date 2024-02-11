@@ -16,7 +16,6 @@ import (
 	"github.com/Rayato159/isekai-shop-api/packages/state"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
 )
 
 type (
@@ -57,7 +56,12 @@ func NewGoogleOAuth2Controller(
 		ClientSecret: oauth2Conf.ClientSecret,
 		RedirectURL:  oauth2Conf.RedirectUrl,
 		Scopes:       oauth2Conf.Scopes,
-		Endpoint:     google.Endpoint, // https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force
+		Endpoint: oauth2.Endpoint{
+			AuthURL:       oauth2Conf.Endpoints.AuthUrl,
+			TokenURL:      oauth2Conf.Endpoints.TokenUrl,
+			DeviceAuthURL: oauth2Conf.Endpoints.DeviceAuthUrl,
+			AuthStyle:     oauth2.AuthStyleInParams,
+		},
 	}
 
 	return &googleOAuth2Controller{
