@@ -45,6 +45,27 @@ server:
     - "*"
   bodyLimit: "10M" # MiB
   timeout: 30 # Seconds
+
+oauth2:
+  google:
+    clientId: "xxxxx"
+    clientSecret: "xxxxx"
+    redirectUrl: "http://localhost:8080/v1/oauth2/google/login/callback"
+    endpoints:
+      authUrl: "https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force"
+      tokenUrl: "https://oauth2.googleapis.com/token"
+      deviceAuthUrl: "https://oauth2.googleapis.com/device/code"
+    scopes:
+      - "https://www.googleapis.com/auth/userinfo.email"
+      - "https://www.googleapis.com/auth/userinfo.profile"
+    userInfoUrl: "https://www.googleapis.com/oauth2/v2/userinfo"
+    revokeUrl: "https://accounts.google.com/o/oauth2/revoke"
+
+state:
+  jwt:
+    secret: "xxxxx"
+    expiresAt: 120 # Seconds
+    issuer: "isekaishop"
   
 database:
   host: localhost
