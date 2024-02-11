@@ -35,6 +35,7 @@ type (
 		RedirectUrl  string
 		Scopes       []string // https://developers.google.com/identity/protocols/oauth2/scopes
 		UserInfoUrl  string
+		RevokeUrl    string
 	}
 
 	StateConfig struct {
@@ -105,6 +106,7 @@ func getOAuth2Config() *OAuth2Config {
 		RedirectUrl:  viper.GetString("oauth2.google.redirectUrl"),
 		Scopes:       viper.GetStringSlice("oauth2.google.scopes"),
 		UserInfoUrl:  viper.GetString("oauth2.google.userInfoUrl"),
+		RevokeUrl:    viper.GetString("oauth2.google.revokeUrl"),
 	}
 }
 

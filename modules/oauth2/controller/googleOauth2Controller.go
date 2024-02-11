@@ -3,6 +3,7 @@ package controller
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -22,6 +23,7 @@ type (
 	googleOAuth2Controller struct {
 		oauth2Conf        *oauth2.Config
 		oauth2UserInfoUrl string
+		oauth2RevokeUrl   string
 		stateProvider     state.State
 		logger            echo.Logger
 		oauth2Service     _oauth2Service.OAuth2Service
@@ -29,6 +31,18 @@ type (
 
 	oauth2CallbackResponse struct {
 		Message string `json:"message"`
+	}
+)
+
+var (
+	accessTokenCookieName  = "_oauth2_access_token"
+	refreshTokenCookieName = "_oauth2_refresh_token"
+	userIdCookieName       = "_user_id"
+
+	cookieNames = []string{
+		accessTokenCookieName,
+		refreshTokenCookieName,
+		userIdCookieName,
 	}
 )
 
@@ -43,12 +57,13 @@ func NewGoogleOAuth2Controller(
 		ClientSecret: oauth2Conf.ClientSecret,
 		RedirectURL:  oauth2Conf.RedirectUrl,
 		Scopes:       oauth2Conf.Scopes,
-		Endpoint:     google.Endpoint,
+		Endpoint:     google.Endpoint, // https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force
 	}
 
 	return &googleOAuth2Controller{
 		oauth2Conf:        conf,
 		oauth2UserInfoUrl: oauth2Conf.UserInfoUrl,
+		oauth2RevokeUrl:   oauth2Conf.RevokeUrl,
 		stateProvider:     stateProvider,
 		logger:            logger,
 		oauth2Service:     oauth2Service,
@@ -62,7 +77,7 @@ func (c *googleOAuth2Controller) Login(pctx echo.Context) error {
 		return err
 	}
 
-	return pctx.Redirect(302, c.oauth2Conf.AuthCodeURL(state))
+	return pctx.Redirect(http.StatusFound, c.oauth2Conf.AuthCodeURL(state))
 }
 
 func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
@@ -100,14 +115,43 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
 	}
 
-	c.setSameSiteCookie(pctx, "_oauth2_access_token", token.AccessToken)
-	c.setSameSiteCookie(pctx, "_oauth2_refresh_token", token.RefreshToken)
-	c.setCookie(pctx, "_user_id", userInfo.Id)
+	c.setSameSiteCookie(pctx, accessTokenCookieName, token.AccessToken)
+	c.setSameSiteCookie(pctx, refreshTokenCookieName, token.RefreshToken)
+	c.setSameSiteCookie(pctx, userIdCookieName, userInfo.Id)
 
-	return pctx.JSON(200, &oauth2CallbackResponse{Message: "Login successful"})
+	return pctx.JSON(http.StatusOK, &oauth2CallbackResponse{Message: "Login successful"})
 }
 
 func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
+	accessToken, err := pctx.Cookie(accessTokenCookieName)
+	if err != nil {
+		c.logger.Errorf("Error getting access token: %s", err.Error())
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.LogoutException{})
+	}
+
+	if accessToken.Value == "" {
+		c.logger.Errorf("Error getting access token: %s", err.Error())
+		return pctx.JSON(http.StatusOK, &_oauth2Exception.LogoutException{})
+	}
+
+	if err := c.revokeToken(accessToken.Value); err != nil {
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.LogoutException{})
+	}
+
+	c.clearCookie(pctx)
+
+	return pctx.JSON(http.StatusOK, &oauth2CallbackResponse{Message: "Logout successful"})
+}
+
+func (c *googleOAuth2Controller) revokeToken(accessToken string) error {
+	revokeURL := fmt.Sprintf("%s?token=%s", c.oauth2RevokeUrl, accessToken)
+	resp, err := http.Post(revokeURL, "application/x-www-form-urlencoded", nil)
+	if err != nil {
+		fmt.Println("Error revoking token:", err)
+		return err
+	}
+	defer resp.Body.Close()
+
 	return nil
 }
 
@@ -128,7 +172,6 @@ func (c *googleOAuth2Controller) getUserInfo(client *http.Client) (*_oauth2Model
 		c.logger.Errorf("Error getting user info: %s", err.Error())
 		return nil, err
 	}
-
 	defer resp.Body.Close()
 
 	userInfoInBytes, err := io.ReadAll(resp.Body)
@@ -159,12 +202,15 @@ func (c *googleOAuth2Controller) setSameSiteCookie(pctx echo.Context, name, toke
 	pctx.SetCookie(cookie)
 }
 
-func (c *googleOAuth2Controller) setCookie(pctx echo.Context, name, token string) {
-	cookie := &http.Cookie{
-		Name:  name,
-		Value: token,
-		Path:  "/",
-	}
+func (c *googleOAuth2Controller) clearCookie(pctx echo.Context) {
+	for i := range 3 {
+		cookie := &http.Cookie{
+			Name:   cookieNames[i],
+			Value:  "",
+			Path:   "/",
+			MaxAge: -1,
+		}
 
-	pctx.SetCookie(cookie)
+		pctx.SetCookie(cookie)
+	}
 }
