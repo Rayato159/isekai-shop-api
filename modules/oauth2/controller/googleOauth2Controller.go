@@ -6,8 +6,10 @@ import (
 	"io"
 	"net/http"
 
+	_oauth2Exception "github.com/Rayato159/isekai-shop-api/modules/oauth2/exception"
 	_oauth2Model "github.com/Rayato159/isekai-shop-api/modules/oauth2/model"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/modules/oauth2/service"
+	"github.com/Rayato159/isekai-shop-api/server/writter"
 
 	"github.com/Rayato159/isekai-shop-api/config"
 	"github.com/Rayato159/isekai-shop-api/packages/state"
@@ -16,15 +18,19 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-type googleOAuth2Controller struct {
-	oauth2Conf         *oauth2.Config
-	oauth2UserInfoUrl  string
-	oauth2CookieDomain string
-	oauth2CookieName   string
-	stateProvider      state.State
-	logger             echo.Logger
-	oauth2Service      _oauth2Service.OAuth2Service
-}
+type (
+	googleOAuth2Controller struct {
+		oauth2Conf        *oauth2.Config
+		oauth2UserInfoUrl string
+		stateProvider     state.State
+		logger            echo.Logger
+		oauth2Service     _oauth2Service.OAuth2Service
+	}
+
+	oauth2CallbackResponse struct {
+		Message string `json:"message"`
+	}
+)
 
 func NewGoogleOAuth2Controller(
 	oauth2Conf *config.OAuth2Config,
@@ -63,13 +69,14 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 	ctx := context.Background()
 
 	if err := c.callbackValidate(pctx); err != nil {
-		return err
+		c.logger.Errorf("Error validating callback: %s", err.Error())
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
 	}
 
 	token, err := c.oauth2Conf.Exchange(ctx, pctx.QueryParam("code"))
 	if err != nil {
 		c.logger.Errorf("Error exchanging code for token: %s", err.Error())
-		return err
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
 	}
 
 	client := c.oauth2Conf.Client(ctx, token)
@@ -77,16 +84,30 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
-		return err
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
 
 	}
 
-	_ = userInfo
-
-	if err := c.oauth2Service.ManageUserAccount(); err != nil {
-		return err
+	if err := c.oauth2Service.ManageUserAccount(&_oauth2Model.CreateUserInfo{
+		Id:      userInfo.Id,
+		Email:   userInfo.Email,
+		Name:    userInfo.Name,
+		Picture: userInfo.Picture,
+		UserPassport: &_oauth2Model.UserPassport{
+			RefreshToken: token.RefreshToken,
+		},
+	}); err != nil {
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
 	}
 
+	c.setSameSiteCookie(pctx, "_oauth2_access_token", token.AccessToken)
+	c.setSameSiteCookie(pctx, "_oauth2_refresh_token", token.RefreshToken)
+	c.setCookie(pctx, "_user_id", userInfo.Id)
+
+	return pctx.JSON(200, &oauth2CallbackResponse{Message: "Login successful"})
+}
+
+func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
 	return nil
 }
 
@@ -98,10 +119,6 @@ func (c *googleOAuth2Controller) callbackValidate(pctx echo.Context) error {
 		return err
 	}
 
-	return nil
-}
-
-func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
 	return nil
 }
 
@@ -127,4 +144,27 @@ func (c *googleOAuth2Controller) getUserInfo(client *http.Client) (*_oauth2Model
 	}
 
 	return userInfo, nil
+}
+
+func (c *googleOAuth2Controller) setSameSiteCookie(pctx echo.Context, name, token string) {
+	cookie := &http.Cookie{
+		Name:     name,
+		Value:    token,
+		SameSite: http.SameSiteLaxMode,
+		Secure:   true,
+		HttpOnly: true,
+		Path:     "/",
+	}
+
+	pctx.SetCookie(cookie)
+}
+
+func (c *googleOAuth2Controller) setCookie(pctx echo.Context, name, token string) {
+	cookie := &http.Cookie{
+		Name:  name,
+		Value: token,
+		Path:  "/",
+	}
+
+	pctx.SetCookie(cookie)
 }

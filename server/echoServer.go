@@ -8,9 +8,15 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/Rayato159/isekai-shop-api/config"
+	_oauth2Repository "github.com/Rayato159/isekai-shop-api/modules/oauth2/repository"
+	_oauth2Service "github.com/Rayato159/isekai-shop-api/modules/oauth2/service"
+	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
+	"github.com/Rayato159/isekai-shop-api/server/customMiddlewares"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
@@ -55,6 +61,10 @@ func (s *echoServer) Start() {
 	s.app.Use(corsMiddleware)
 	s.app.Use(bodyLimitMiddleware)
 
+	// Initialize all custom middlewares
+	middlewares := s.getMiddlewares()
+	_ = middlewares
+
 	// Initialzie all routers
 	s.baseRouter.GET("/health", s.healthCheck)
 
@@ -90,4 +100,40 @@ func (s *echoServer) gracefulShutdown(quit <-chan os.Signal) {
 func (s *echoServer) healthCheck(pctx echo.Context) error {
 	fmt.Println(pctx.Cookie("_authorization"))
 	return pctx.String(http.StatusOK, "OK")
+}
+
+func (s *echoServer) getMiddlewares() customMiddlewares.CustomMiddleware {
+	oauth2Repository := _oauth2Repository.NewGoogleOAuth2Repository(s.db, s.app.Logger)
+	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
+
+	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(
+		oauth2Repository,
+		playerRepository,
+	)
+
+	return customMiddlewares.NewCustomMiddlewaresImpl(
+		s.conf.OAuth2Config,
+		s.app.Logger,
+		oauth2Service,
+	)
+}
+
+func getTimeOutMiddleware(timeout time.Duration) echo.MiddlewareFunc {
+	return middleware.TimeoutWithConfig(middleware.TimeoutConfig{
+		Skipper:      middleware.DefaultSkipper,
+		ErrorMessage: "Error: Request timeout.",
+		Timeout:      timeout * time.Second,
+	})
+}
+
+func getCorsMiddleware(allowOrigins []string) echo.MiddlewareFunc {
+	return middleware.CORSWithConfig(middleware.CORSConfig{
+		Skipper:      middleware.DefaultSkipper,
+		AllowOrigins: allowOrigins,
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.PATCH, echo.DELETE},
+	})
+}
+
+func getBodyLimitMiddleware(bodyLimit string) echo.MiddlewareFunc {
+	return middleware.BodyLimit(bodyLimit)
 }

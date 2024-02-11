@@ -2,20 +2,13 @@ package writter
 
 import "github.com/labstack/echo/v4"
 
-type (
-	CustomErrorResponse interface {
-		GetErrorMessage() string
-		GetStatusCode() int
-	}
+type ErrorMessage struct {
+	Message string `json:"error"`
+}
 
-	ErrorMessage struct {
-		Message string `json:"error"`
-	}
-)
-
-func Error(c echo.Context, customError CustomErrorResponse) error {
+func CustomError(c echo.Context, statusCode int, err error) error {
 	return c.JSON(
-		customError.GetStatusCode(),
-		&ErrorMessage{Message: customError.GetErrorMessage()},
+		statusCode,
+		&ErrorMessage{Message: err.Error()},
 	)
 }

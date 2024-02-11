@@ -1,6 +1,7 @@
 package service
 
 import (
+	_oauth2Model "github.com/Rayato159/isekai-shop-api/modules/oauth2/model"
 	_oauth2Repository "github.com/Rayato159/isekai-shop-api/modules/oauth2/repository"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
 )
@@ -20,6 +21,6 @@ func NewGoogleOAuth2Service(
 	}
 }
 
-func (s *googleOAuth2Service) ManageUserAccount() error {
+func (s *googleOAuth2Service) ManageUserAccount(createUserInfo *_oauth2Model.CreateUserInfo) error {
 	return nil
 }
