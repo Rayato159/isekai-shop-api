@@ -40,4 +40,5 @@ func (s *echoServer) initOAuth2Router() {
 	router.GET("/login", controller.Login)
 	router.GET("/login/callback", controller.LoginCallback)
 	router.POST("/logout", controller.Logout)
+	router.POST("/renew-token", controller.RenewToken)
 }

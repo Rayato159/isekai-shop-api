@@ -160,10 +160,13 @@ func (c *googleOAuth2Controller) RenewToken(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.RenewTokenException{})
 	}
 
-	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{
-		AccessToken:  token.AccessToken,
-		RefreshToken: token.RefreshToken,
-		ExpiresIn:    token.Expiry.Unix(),
+	if err := c.oauth2Service.RenewToken(req.RefreshToken, token.AccessToken); err != nil {
+		return writter.CustomError(pctx, http.StatusInternalServerError, err)
+	}
+
+	return pctx.JSON(http.StatusOK, &_oauth2Model.RenewTokenResponse{
+		AccessToken: token.AccessToken,
+		ExpiresIn:   token.Expiry.Unix(),
 	})
 }
 

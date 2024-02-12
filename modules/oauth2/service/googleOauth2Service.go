@@ -57,6 +57,19 @@ func (s *googleOAuth2Service) ManagePlayerAccount(createPlayerInfo *_oauth2Model
 	return nil
 }
 
+func (s *googleOAuth2Service) RenewToken(refreshToken string, newAccessToken string) error {
+	updateAccessTokenDto := &_oauth2Entity.UpdateAccessTokenDto{
+		RefreshToken: refreshToken,
+		AccessToken:  newAccessToken,
+	}
+
+	return s.oauth2Repository.UpdateAccessToken(updateAccessTokenDto)
+}
+
+func (s *googleOAuth2Service) DeletePassport(refreshToken string) error {
+	return s.oauth2Repository.DeletePassport(refreshToken)
+}
+
 func (s *googleOAuth2Service) isPlayerIsExists(palyerId string) bool {
 	player, err := s.playerRepository.FindPlayerById(palyerId)
 	if err != nil {
@@ -64,8 +77,4 @@ func (s *googleOAuth2Service) isPlayerIsExists(palyerId string) bool {
 	}
 
 	return player != nil
-}
-
-func (s *googleOAuth2Service) DeletePassport(refreshToken string) error {
-	return s.oauth2Repository.DeletePassport(refreshToken)
 }

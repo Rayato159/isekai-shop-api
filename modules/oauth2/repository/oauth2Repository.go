@@ -6,5 +6,6 @@ import (
 
 type OAuth2Repository interface {
 	InsertPassport(passportEntity *_oauth2Entity.Passport) error
+	UpdateAccessToken(updateAccessTokenDto *_oauth2Entity.UpdateAccessTokenDto) error
 	DeletePassport(refreshToken string) error
 }

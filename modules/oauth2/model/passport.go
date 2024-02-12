@@ -24,4 +24,9 @@ type (
 	LogoutResponse struct {
 		Message string `json:"message"`
 	}
+
+	RenewTokenResponse struct {
+		AccessToken string `json:"accessToken"`
+		ExpiresIn   int64  `json:"expiresIn"`
+	}
 )
