@@ -113,10 +113,7 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 	c.setSameSiteCookie(pctx, oauth2AccessTokenKey, token.AccessToken)
 	c.setSameSiteCookie(pctx, oauth2RefreshTokenKey, token.RefreshToken)
 
-	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{
-		AccessToken:  token.AccessToken,
-		RefreshToken: token.RefreshToken,
-	})
+	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{Message: "Login successful"})
 }
 
 func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {

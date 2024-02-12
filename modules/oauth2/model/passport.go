@@ -2,8 +2,7 @@ package model
 
 type (
 	LoginResponse struct {
-		AccessToken  string `json:"accessToken"`
-		RefreshToken string `json:"refreshToken"`
+		Message string `json:"message"`
 	}
 
 	LogoutResponse struct {
