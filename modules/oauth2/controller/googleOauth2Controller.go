@@ -27,22 +27,6 @@ type (
 		stateProvider     state.State
 		logger            echo.Logger
 	}
-
-	oauth2CallbackResponse struct {
-		Message string `json:"message"`
-	}
-)
-
-var (
-	accessTokenCookieName  = "_oauth2_access_token"
-	refreshTokenCookieName = "_oauth2_refresh_token"
-	userIdCookieName       = "_user_id"
-
-	cookieNames = []string{
-		accessTokenCookieName,
-		refreshTokenCookieName,
-		userIdCookieName,
-	}
 )
 
 func NewGoogleOAuth2Controller(
@@ -107,7 +91,7 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 
 	}
 
-	if err := c.oauth2Service.ManagePlayerAccount(&_oauth2Model.CreatePlayerInfo{
+	createPlayerInfo := &_oauth2Model.CreatePlayerInfo{
 		ID:      userInfo.ID,
 		Email:   userInfo.Email,
 		Name:    userInfo.Name,
@@ -116,45 +100,50 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 			AccessToken:  token.AccessToken,
 			RefreshToken: token.RefreshToken,
 		},
-	}); err != nil {
+	}
+
+	if err := c.oauth2Service.ManagePlayerAccount(createPlayerInfo); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
 	}
 
-	c.setSameSiteCookie(pctx, accessTokenCookieName, token.AccessToken)
-	c.setSameSiteCookie(pctx, refreshTokenCookieName, token.RefreshToken)
-	c.setSameSiteCookie(pctx, userIdCookieName, userInfo.ID)
-
-	return pctx.JSON(http.StatusOK, &oauth2CallbackResponse{Message: "Login successful"})
+	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{
+		AccessToken:  token.AccessToken,
+		RefreshToken: token.RefreshToken,
+		ExpiresIn:    token.Expiry.Unix(),
+	})
 }
 
 func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
-	accessToken, err := pctx.Cookie(accessTokenCookieName)
-	if err != nil {
-		c.logger.Errorf("Error getting access token: %s", err.Error())
+	requestCtx := writter.NewCustomEchoRequest(pctx)
+
+	req := new(_oauth2Model.DoLogout)
+
+	if err := requestCtx.Bind(req); err != nil {
+		c.logger.Errorf("Error binding request: %s", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.LogoutException{})
 	}
 
-	if accessToken.Value == "" {
-		c.logger.Errorf("Error getting access token: %s", err.Error())
-		return pctx.JSON(http.StatusOK, &_oauth2Exception.LogoutException{})
-	}
-
-	if err := c.revokeToken(accessToken.Value); err != nil {
+	if err := c.revokeToken(req.RefreshToken); err != nil {
+		c.logger.Errorf("Error revoking token: %s", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.LogoutException{})
 	}
 
-	c.clearCookie(pctx)
+	if err := c.oauth2Service.RevokePassport(req.RefreshToken); err != nil {
+		return writter.CustomError(pctx, http.StatusBadRequest, err)
+	}
 
-	return pctx.JSON(http.StatusOK, &oauth2CallbackResponse{Message: "Logout successful"})
+	return pctx.JSON(http.StatusOK, &_oauth2Model.LogoutResponse{Message: "Logout successful"})
 }
 
 func (c *googleOAuth2Controller) revokeToken(accessToken string) error {
 	revokeURL := fmt.Sprintf("%s?token=%s", c.oauth2RevokeUrl, accessToken)
+
 	resp, err := http.Post(revokeURL, "application/x-www-form-urlencoded", nil)
 	if err != nil {
 		fmt.Println("Error revoking token:", err)
 		return err
 	}
+
 	defer resp.Body.Close()
 
 	return nil
@@ -177,6 +166,7 @@ func (c *googleOAuth2Controller) getUserInfo(client *http.Client) (*_oauth2Model
 		c.logger.Errorf("Error getting user info: %s", err.Error())
 		return nil, err
 	}
+
 	defer resp.Body.Close()
 
 	userInfoInBytes, err := io.ReadAll(resp.Body)
@@ -192,30 +182,4 @@ func (c *googleOAuth2Controller) getUserInfo(client *http.Client) (*_oauth2Model
 	}
 
 	return userInfo, nil
-}
-
-func (c *googleOAuth2Controller) setSameSiteCookie(pctx echo.Context, name, token string) {
-	cookie := &http.Cookie{
-		Name:     name,
-		Value:    token,
-		SameSite: http.SameSiteLaxMode,
-		Secure:   true,
-		HttpOnly: true,
-		Path:     "/",
-	}
-
-	pctx.SetCookie(cookie)
-}
-
-func (c *googleOAuth2Controller) clearCookie(pctx echo.Context) {
-	for i := range 3 {
-		cookie := &http.Cookie{
-			Name:   cookieNames[i],
-			Value:  "",
-			Path:   "/",
-			MaxAge: -1,
-		}
-
-		pctx.SetCookie(cookie)
-	}
 }

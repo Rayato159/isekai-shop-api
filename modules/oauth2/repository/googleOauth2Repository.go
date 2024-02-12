@@ -30,3 +30,14 @@ func (r *googleOAuth2Repository) InsertPassport(passportEntity *_oauth2Entity.Pa
 
 	return nil
 }
+
+func (r *googleOAuth2Repository) DeletePassport(refreshToken string) error {
+	tx := r.db.Where("refresh_token = ?", refreshToken).Delete(&_oauth2Entity.Passport{})
+
+	if tx.Error != nil {
+		r.logger.Errorf("Error deleting passport: %s", tx.Error.Error())
+		return &_oauth2Exception.DeletePassportException{}
+	}
+
+	return nil
+}

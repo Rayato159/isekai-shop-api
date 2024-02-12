@@ -1,6 +1,7 @@
 package model
 
 type (
+	// This struct is provided by Google OAuth2
 	UserInfo struct {
 		ID            string `json:"id"`
 		Email         string `json:"email"`
@@ -10,11 +11,6 @@ type (
 		FamilyName    string `json:"family_name"`
 		Picture       string `json:"picture"`
 		Locale        string `json:"locale"`
-	}
-
-	PlayerPassport struct {
-		AccessToken  string `json:"access_token"`
-		RefreshToken string `json:"refresh_token"`
 	}
 
 	CreatePlayerInfo struct {

@@ -28,16 +28,18 @@ func NewGoogleOAuth2Service(
 }
 
 func (s *googleOAuth2Service) ManagePlayerAccount(createPlayerInfo *_oauth2Model.CreatePlayerInfo) error {
-	playerEntity := &_playerEntity.Player{
-		ID:     createPlayerInfo.ID,
-		Email:  createPlayerInfo.Email,
-		Name:   createPlayerInfo.Name,
-		Avatar: createPlayerInfo.Picture,
-	}
+	if !s.isPlayerIsExists(createPlayerInfo.ID) {
+		playerEntity := &_playerEntity.Player{
+			ID:     createPlayerInfo.ID,
+			Email:  createPlayerInfo.Email,
+			Name:   createPlayerInfo.Name,
+			Avatar: createPlayerInfo.Picture,
+		}
 
-	playerId, err := s.playerRepository.InsertPlayer(playerEntity)
-	if err != nil {
-		return err
+		_, err := s.playerRepository.InsertPlayer(playerEntity)
+		if err != nil {
+			return err
+		}
 	}
 
 	passportEntity := &_oauth2Entity.Passport{
@@ -50,7 +52,20 @@ func (s *googleOAuth2Service) ManagePlayerAccount(createPlayerInfo *_oauth2Model
 		return err
 	}
 
-	s.logger.Infof("Player created: %s", playerId)
+	s.logger.Infof("Player created: %s", createPlayerInfo.ID)
 
 	return nil
+}
+
+func (s *googleOAuth2Service) isPlayerIsExists(palyerId string) bool {
+	player, err := s.playerRepository.FindPlayerById(palyerId)
+	if err != nil {
+		return false
+	}
+
+	return player != nil
+}
+
+func (s *googleOAuth2Service) RevokePassport(refreshToken string) error {
+	return s.oauth2Repository.DeletePassport(refreshToken)
 }

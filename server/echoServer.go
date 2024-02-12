@@ -98,7 +98,6 @@ func (s *echoServer) gracefulShutdown(quit <-chan os.Signal) {
 }
 
 func (s *echoServer) healthCheck(pctx echo.Context) error {
-	fmt.Println(pctx.Cookie("_authorization"))
 	return pctx.String(http.StatusOK, "OK")
 }
 
@@ -132,6 +131,7 @@ func getCorsMiddleware(allowOrigins []string) echo.MiddlewareFunc {
 		Skipper:      middleware.DefaultSkipper,
 		AllowOrigins: allowOrigins,
 		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.PATCH, echo.DELETE},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	})
 }
 

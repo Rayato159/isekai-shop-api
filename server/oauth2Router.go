@@ -39,5 +39,5 @@ func (s *echoServer) initOAuth2Router() {
 
 	router.GET("/login", controller.Login)
 	router.GET("/login/callback", controller.LoginCallback)
-	router.GET("/logout", controller.Logout)
+	router.POST("/logout", controller.Logout)
 }

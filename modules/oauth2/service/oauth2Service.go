@@ -6,4 +6,5 @@ import (
 
 type OAuth2Service interface {
 	ManagePlayerAccount(createPlayerInfo *_oauth2Model.CreatePlayerInfo) error
+	RevokePassport(refreshToken string) error
 }

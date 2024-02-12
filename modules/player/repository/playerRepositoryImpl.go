@@ -30,3 +30,15 @@ func (r *playerRepositoryImpl) InsertPlayer(playerEntitiy *_playerEntity.Player)
 
 	return playerEntitiy.ID, nil
 }
+
+func (r *playerRepositoryImpl) FindPlayerById(playerId string) (*_playerEntity.Player, error) {
+	player := new(_playerEntity.Player)
+	tx := r.db.Where("id = ?", playerId).First(player)
+
+	if tx.Error != nil {
+		r.logger.Errorf("Error finding player: %s", tx.Error.Error())
+		return nil, &_playerException.FindPlayerException{PlayerID: playerId}
+	}
+
+	return player, nil
+}
