@@ -39,39 +39,38 @@ go run ./databases/migration/migratedb.go
 ### config.yaml Example
 
 ```bash
-app:
-  server:
-    port: 8080
-    allowOrigins:
-      - "*"
-    bodyLimit: "10M" # MiB
-    timeout: 30 # Seconds
+server:
+  port: 8080
+  allowOrigins:
+    - "*"
+  bodyLimit: "10M" # MiB
+  timeout: 30 # Seconds
 
-  oauth2:
-    clientId: "xxxxx"
-    clientSecret: "xxxx"
-    redirectUrl: "http://localhost:8080/v1/oauth2/google/login/callback"
-    endpoints:
-      authUrl: "https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force"
-      tokenUrl: "https://oauth2.googleapis.com/token"
-      deviceAuthUrl: "https://oauth2.googleapis.com/device/code"
-    scopes:
-      - "https://www.googleapis.com/auth/userinfo.email"
-      - "https://www.googleapis.com/auth/userinfo.profile"
-    userInfoUrl: "https://www.googleapis.com/oauth2/v2/userinfo"
-    revokeUrl: "https://accounts.google.com/o/oauth2/revoke"
+oauth2:
+  clientId: "xxxxx"
+  clientSecret: "xxxx"
+  redirectUrl: "http://localhost:8080/v1/oauth2/google/login/callback"
+  endpoints:
+    authUrl: "https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force"
+    tokenUrl: "https://oauth2.googleapis.com/token"
+    deviceAuthUrl: "https://oauth2.googleapis.com/device/code"
+  scopes:
+    - "https://www.googleapis.com/auth/userinfo.email"
+    - "https://www.googleapis.com/auth/userinfo.profile"
+  userInfoUrl: "https://www.googleapis.com/oauth2/v2/userinfo"
+  revokeUrl: "https://accounts.google.com/o/oauth2/revoke"
 
-  state:
-    secret: "supersecret"
-    expiresAt: 120 # Seconds
-    issuer: "isekaishop"
-    
-  database:
-    host: localhost
-    port: 5432
-    user: postgres
-    password: 123456
-    dbname: isekaishopdb
-    sslmode: disable
-    schema: public
+state:
+  secret: "supersecret"
+  expiresAt: 120 # Seconds
+  issuer: "isekaishop"
+  
+database:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: 123456
+  dbname: isekaishopdb
+  sslmode: disable
+  schema: public
 ```

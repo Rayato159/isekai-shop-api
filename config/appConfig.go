@@ -69,12 +69,11 @@ func GetAppConfig() *AppConfig {
 		viper.AutomaticEnv()
 		viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
-		err := viper.ReadInConfig()
-		if err != nil {
+		if err := viper.ReadInConfig(); err != nil {
 			panic(fmt.Errorf("read config file failed: %v", err))
 		}
 
-		if err := viper.UnmarshalKey("app", &appConfigInstance); err != nil {
+		if err := viper.Unmarshal(&appConfigInstance); err != nil {
 			panic(fmt.Errorf("unmarshalkey config file failed: %v", err))
 		}
 	})
