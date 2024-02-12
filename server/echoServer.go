@@ -11,9 +11,10 @@ import (
 	"time"
 
 	"github.com/Rayato159/isekai-shop-api/config"
-	_oauth2Repository "github.com/Rayato159/isekai-shop-api/modules/oauth2/repository"
+	_oauth2Controller "github.com/Rayato159/isekai-shop-api/modules/oauth2/controller"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/modules/oauth2/service"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
+	"github.com/Rayato159/isekai-shop-api/packages/state"
 	"github.com/Rayato159/isekai-shop-api/server/customMiddlewares"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -65,10 +66,9 @@ func (s *echoServer) Start() {
 
 	// Initialize all custom middlewares
 	middlewares := s.getMiddlewares()
-	_ = middlewares
 
 	// Initialzie all routers
-	s.baseRouter.GET("/health", s.healthCheck)
+	s.baseRouter.GET("/health", s.healthCheck, middlewares.Authorize)
 
 	s.initOAuth2Router()
 
@@ -104,19 +104,31 @@ func (s *echoServer) healthCheck(pctx echo.Context) error {
 }
 
 func (s *echoServer) getMiddlewares() customMiddlewares.CustomMiddleware {
-	oauth2Repository := _oauth2Repository.NewGoogleOAuth2Repository(s.db, s.app.Logger)
+	stateConfig := s.conf.StateConfig
+	stateProvider := state.NewJwtState(
+		[]byte(stateConfig.Secret),
+		stateConfig.ExpiresAt,
+		stateConfig.Issuer,
+	)
+
 	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
 
 	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(
-		oauth2Repository,
 		playerRepository,
 		s.app.Logger,
 	)
 
+	controller := _oauth2Controller.NewGoogleOAuth2Controller(
+		oauth2Service,
+		s.conf.OAuth2Config,
+		stateProvider,
+		s.app.Logger,
+	)
+
 	return customMiddlewares.NewCustomMiddlewaresImpl(
+		controller,
 		s.conf.OAuth2Config,
 		s.app.Logger,
-		oauth2Service,
 	)
 }
 

@@ -31,6 +31,9 @@ type (
 var (
 	googleOAuth2 *oauth2.Config
 	once         sync.Once
+
+	oauth2AccessTokenKey  = "act"
+	oauth2RefreshTokenKey = "rft"
 )
 
 func NewGoogleOAuth2Controller(
@@ -101,73 +104,37 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 		Email:   userInfo.Email,
 		Name:    userInfo.Name,
 		Picture: userInfo.Picture,
-		PlayerPassport: &_oauth2Model.PlayerPassport{
-			AccessToken:  token.AccessToken,
-			RefreshToken: token.RefreshToken,
-		},
 	}
 
-	if err := c.oauth2Service.ManagePlayerAccount(createPlayerInfo); err != nil {
+	if err := c.oauth2Service.CreatePlayerAccount(createPlayerInfo); err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.Oauth2Exception{})
 	}
+
+	c.setSameSiteCookie(pctx, oauth2AccessTokenKey, token.AccessToken)
+	c.setSameSiteCookie(pctx, oauth2RefreshTokenKey, token.RefreshToken)
 
 	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{
 		AccessToken:  token.AccessToken,
 		RefreshToken: token.RefreshToken,
-		ExpiresIn:    token.Expiry.Unix(),
 	})
 }
 
 func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
-	requestCtx := writter.NewCustomEchoRequest(pctx)
-
-	req := new(_oauth2Model.DoLogout)
-
-	if err := requestCtx.Bind(req); err != nil {
-		c.logger.Errorf("Error binding request: %s", err.Error())
+	accessToken, err := pctx.Cookie(oauth2AccessTokenKey)
+	if err != nil {
+		c.logger.Errorf("Error reading access token: %s", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.LogoutException{})
 	}
 
-	if err := c.oauth2Service.DeletePassport(req.RefreshToken); err != nil {
-		return writter.CustomError(pctx, http.StatusInternalServerError, err)
-	}
-
-	if err := c.revokeToken(req.AcessToken); err != nil {
+	if err := c.revokeToken(accessToken.Value); err != nil {
 		c.logger.Errorf("Error revoking token: %s", err.Error())
 		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.LogoutException{})
 	}
 
+	c.removeSameSiteCookie(pctx, oauth2AccessTokenKey)
+	c.removeSameSiteCookie(pctx, oauth2RefreshTokenKey)
+
 	return pctx.JSON(http.StatusOK, &_oauth2Model.LogoutResponse{Message: "Logout successful"})
-}
-
-func (c *googleOAuth2Controller) RenewToken(pctx echo.Context) error {
-	ctx := context.Background()
-
-	requestCtx := writter.NewCustomEchoRequest(pctx)
-
-	req := new(_oauth2Model.DoRenewToken)
-
-	if err := requestCtx.Bind(req); err != nil {
-		c.logger.Errorf("Error binding request: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.RenewTokenException{})
-	}
-
-	token, err := googleOAuth2.TokenSource(ctx, &oauth2.Token{
-		RefreshToken: req.RefreshToken,
-	}).Token()
-	if err != nil {
-		c.logger.Errorf("Error renewing token: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.RenewTokenException{})
-	}
-
-	if err := c.oauth2Service.RenewToken(req.RefreshToken, token.AccessToken); err != nil {
-		return writter.CustomError(pctx, http.StatusInternalServerError, err)
-	}
-
-	return pctx.JSON(http.StatusOK, &_oauth2Model.RenewTokenResponse{
-		AccessToken: token.AccessToken,
-		ExpiresIn:   token.Expiry.Unix(),
-	})
 }
 
 func (c *googleOAuth2Controller) revokeToken(accessToken string) error {
@@ -217,4 +184,29 @@ func (c *googleOAuth2Controller) getUserInfo(client *http.Client) (*_oauth2Model
 	}
 
 	return userInfo, nil
+}
+
+func (c *googleOAuth2Controller) setSameSiteCookie(pctx echo.Context, name, value string) {
+	cookie := &http.Cookie{
+		Name:     name,
+		Value:    value,
+		Path:     "/",
+		SameSite: http.SameSiteStrictMode,
+		HttpOnly: true,
+	}
+
+	pctx.SetCookie(cookie)
+}
+
+func (c *googleOAuth2Controller) removeSameSiteCookie(pctx echo.Context, name string) {
+	cookie := &http.Cookie{
+		Name:     name,
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		SameSite: http.SameSiteStrictMode,
+		HttpOnly: true,
+	}
+
+	pctx.SetCookie(cookie)
 }

@@ -5,6 +5,8 @@ import "github.com/labstack/echo/v4"
 type OAuth2Controller interface {
 	Login(pctx echo.Context) error
 	LoginCallback(pctx echo.Context) error
-	RenewToken(pctx echo.Context) error
 	Logout(pctx echo.Context) error
+
+	// Middlewares
+	Authorize(pctx echo.Context, next echo.HandlerFunc) error
 }

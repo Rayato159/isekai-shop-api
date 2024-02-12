@@ -18,6 +18,5 @@ type (
 		Email   string
 		Name    string
 		Picture string
-		*PlayerPassport
 	}
 )
