@@ -11,6 +11,7 @@ type (
 	}
 
 	DoLogout struct {
+		AcessToken   string `json:"accessToken" validate:"required"`
 		RefreshToken string `json:"refreshToken" validate:"required"`
 	}
 

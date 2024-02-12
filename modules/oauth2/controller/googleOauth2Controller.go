@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"sync"
 
 	_oauth2Exception "github.com/Rayato159/isekai-shop-api/modules/oauth2/exception"
 	_oauth2Model "github.com/Rayato159/isekai-shop-api/modules/oauth2/model"
@@ -20,13 +21,16 @@ import (
 
 type (
 	googleOAuth2Controller struct {
-		oauth2Service     _oauth2Service.OAuth2Service
-		oauth2Conf        *oauth2.Config
-		oauth2UserInfoUrl string
-		oauth2RevokeUrl   string
-		stateProvider     state.State
-		logger            echo.Logger
+		oauth2Service _oauth2Service.OAuth2Service
+		oauth2Conf    *config.OAuth2Config
+		stateProvider state.State
+		logger        echo.Logger
 	}
+)
+
+var (
+	googleOAuth2 *oauth2.Config
+	once         sync.Once
 )
 
 func NewGoogleOAuth2Controller(
@@ -35,37 +39,38 @@ func NewGoogleOAuth2Controller(
 	stateProvider state.State,
 	logger echo.Logger,
 ) OAuth2Controller {
-	conf := &oauth2.Config{
-		ClientID:     oauth2Conf.ClientId,
-		ClientSecret: oauth2Conf.ClientSecret,
-		RedirectURL:  oauth2Conf.RedirectUrl,
-		Scopes:       oauth2Conf.Scopes,
-		Endpoint: oauth2.Endpoint{
-			AuthURL:       oauth2Conf.Endpoints.AuthUrl,
-			TokenURL:      oauth2Conf.Endpoints.TokenUrl,
-			DeviceAuthURL: oauth2Conf.Endpoints.DeviceAuthUrl,
-			AuthStyle:     oauth2.AuthStyleInParams,
-		},
-	}
+	once.Do(func() {
+		googleOAuth2 = &oauth2.Config{
+			ClientID:     oauth2Conf.ClientId,
+			ClientSecret: oauth2Conf.ClientSecret,
+			RedirectURL:  oauth2Conf.RedirectUrl,
+			Scopes:       oauth2Conf.Scopes,
+			Endpoint: oauth2.Endpoint{
+				AuthURL:       oauth2Conf.Endpoints.AuthUrl,
+				TokenURL:      oauth2Conf.Endpoints.TokenUrl,
+				DeviceAuthURL: oauth2Conf.Endpoints.DeviceAuthUrl,
+				AuthStyle:     oauth2.AuthStyleInParams,
+			},
+		}
+	})
 
 	return &googleOAuth2Controller{
-		oauth2Service:     oauth2Service,
-		oauth2Conf:        conf,
-		oauth2UserInfoUrl: oauth2Conf.UserInfoUrl,
-		oauth2RevokeUrl:   oauth2Conf.RevokeUrl,
-		stateProvider:     stateProvider,
-		logger:            logger,
+		oauth2Service: oauth2Service,
+		oauth2Conf:    oauth2Conf,
+		stateProvider: stateProvider,
+		logger:        logger,
 	}
 }
 
 func (c *googleOAuth2Controller) Login(pctx echo.Context) error {
 	state, err := c.stateProvider.GenerateRandomState()
+
 	if err != nil {
 		c.logger.Errorf("Error generating state: %s", err.Error())
 		return err
 	}
 
-	return pctx.Redirect(http.StatusFound, c.oauth2Conf.AuthCodeURL(state))
+	return pctx.Redirect(http.StatusFound, googleOAuth2.AuthCodeURL(state))
 }
 
 func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
@@ -76,13 +81,13 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
 	}
 
-	token, err := c.oauth2Conf.Exchange(ctx, pctx.QueryParam("code"))
+	token, err := googleOAuth2.Exchange(ctx, pctx.QueryParam("code"))
 	if err != nil {
 		c.logger.Errorf("Error exchanging code for token: %s", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
 	}
 
-	client := c.oauth2Conf.Client(ctx, token)
+	client := googleOAuth2.Client(ctx, token)
 
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
@@ -103,7 +108,7 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 	}
 
 	if err := c.oauth2Service.ManagePlayerAccount(createPlayerInfo); err != nil {
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
+		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.Oauth2Exception{})
 	}
 
 	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{
@@ -123,20 +128,47 @@ func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.LogoutException{})
 	}
 
-	if err := c.revokeToken(req.RefreshToken); err != nil {
-		c.logger.Errorf("Error revoking token: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.LogoutException{})
+	if err := c.oauth2Service.DeletePassport(req.RefreshToken); err != nil {
+		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
-	if err := c.oauth2Service.RevokePassport(req.RefreshToken); err != nil {
-		return writter.CustomError(pctx, http.StatusBadRequest, err)
+	if err := c.revokeToken(req.AcessToken); err != nil {
+		c.logger.Errorf("Error revoking token: %s", err.Error())
+		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.LogoutException{})
 	}
 
 	return pctx.JSON(http.StatusOK, &_oauth2Model.LogoutResponse{Message: "Logout successful"})
 }
 
+func (c *googleOAuth2Controller) RenewToken(pctx echo.Context) error {
+	ctx := context.Background()
+
+	requestCtx := writter.NewCustomEchoRequest(pctx)
+
+	req := new(_oauth2Model.DoRenewToken)
+
+	if err := requestCtx.Bind(req); err != nil {
+		c.logger.Errorf("Error binding request: %s", err.Error())
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.RenewTokenException{})
+	}
+
+	token, err := googleOAuth2.TokenSource(ctx, &oauth2.Token{
+		RefreshToken: req.RefreshToken,
+	}).Token()
+	if err != nil {
+		c.logger.Errorf("Error renewing token: %s", err.Error())
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.RenewTokenException{})
+	}
+
+	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{
+		AccessToken:  token.AccessToken,
+		RefreshToken: token.RefreshToken,
+		ExpiresIn:    token.Expiry.Unix(),
+	})
+}
+
 func (c *googleOAuth2Controller) revokeToken(accessToken string) error {
-	revokeURL := fmt.Sprintf("%s?token=%s", c.oauth2RevokeUrl, accessToken)
+	revokeURL := fmt.Sprintf("%s?token=%s", c.oauth2Conf.RevokeUrl, accessToken)
 
 	resp, err := http.Post(revokeURL, "application/x-www-form-urlencoded", nil)
 	if err != nil {
@@ -161,7 +193,7 @@ func (c *googleOAuth2Controller) callbackValidate(pctx echo.Context) error {
 }
 
 func (c *googleOAuth2Controller) getUserInfo(client *http.Client) (*_oauth2Model.UserInfo, error) {
-	resp, err := client.Get(c.oauth2UserInfoUrl)
+	resp, err := client.Get(c.oauth2Conf.UserInfoUrl)
 	if err != nil {
 		c.logger.Errorf("Error getting user info: %s", err.Error())
 		return nil, err

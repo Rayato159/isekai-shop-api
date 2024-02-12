@@ -66,6 +66,6 @@ func (s *googleOAuth2Service) isPlayerIsExists(palyerId string) bool {
 	return player != nil
 }
 
-func (s *googleOAuth2Service) RevokePassport(refreshToken string) error {
+func (s *googleOAuth2Service) DeletePassport(refreshToken string) error {
 	return s.oauth2Repository.DeletePassport(refreshToken)
 }
