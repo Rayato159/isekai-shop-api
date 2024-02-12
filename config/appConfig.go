@@ -13,49 +13,49 @@ var once sync.Once
 
 type (
 	DatabaseConfig struct {
-		Host     string
-		Port     int
-		User     string
-		Password string
-		DBName   string
-		SSLMode  string
-		Schema   string
+		Host     string `mapstructure:"host"`
+		Port     int    `mapstructure:"port"`
+		User     string `mapstructure:"user"`
+		Password string `mapstructure:"password"`
+		DBName   string `mapstructure:"dbname"`
+		SSLMode  string `mapstructure:"sslmode"`
+		Schema   string `mapstructure:"schema"`
 	}
 
 	ServerConfig struct {
-		Port         int
-		AllowOrigins []string
-		Timeout      time.Duration
-		BodyLimit    string
+		Port         int           `mapstructure:"port"`
+		AllowOrigins []string      `mapstructure:"allowOrigins"`
+		Timeout      time.Duration `mapstructure:"timeout"`
+		BodyLimit    string        `mapstructure:"bodyLimit"`
 	}
 
 	OAuth2Config struct {
-		ClientId     string
-		ClientSecret string
-		RedirectUrl  string
-		Endpoints    *oauth2Endpoints
-		Scopes       []string // https://developers.google.com/identity/protocols/oauth2/scopes
-		UserInfoUrl  string
-		RevokeUrl    string
+		ClientId     string           `mapstructure:"clientId"`
+		ClientSecret string           `mapstructure:"clientSecret"`
+		RedirectUrl  string           `mapstructure:"redirectUrl"`
+		Endpoints    *oauth2Endpoints `mapstructure:"endpoints"`
+		Scopes       []string         `mapstructure:"scopes"` // https://developers.google.com/identity/protocols/oauth2/scopes
+		UserInfoUrl  string           `mapstructure:"userInfoUrl"`
+		RevokeUrl    string           `mapstructure:"revokeUrl"`
 	}
 
 	oauth2Endpoints struct {
-		AuthUrl       string
-		TokenUrl      string
-		DeviceAuthUrl string
+		AuthUrl       string `mapstructure:"authUrl"`
+		TokenUrl      string `mapstructure:"tokenUrl"`
+		DeviceAuthUrl string `mapstructure:"deviceAuthUrl"`
 	}
 
 	StateConfig struct {
-		Secret    []byte
-		ExpiresAt time.Duration
-		Issuer    string
+		Secret    string        `mapstructure:"secret"`
+		ExpiresAt time.Duration `mapstructure:"expiresAt"`
+		Issuer    string        `mapstructure:"issuer"`
 	}
 
 	AppConfig struct {
-		DatabaseConfig *DatabaseConfig
-		ServerConfig   *ServerConfig
-		OAuth2Config   *OAuth2Config
-		StateConfig    *StateConfig
+		DatabaseConfig *DatabaseConfig `mapstructure:"database"`
+		ServerConfig   *ServerConfig   `mapstructure:"server"`
+		OAuth2Config   *OAuth2Config   `mapstructure:"oauth2"`
+		StateConfig    *StateConfig    `mapstructure:"state"`
 	}
 )
 
@@ -71,61 +71,13 @@ func GetAppConfig() *AppConfig {
 
 		err := viper.ReadInConfig()
 		if err != nil {
-			panic(fmt.Errorf("fatal error config file: %v", err))
+			panic(fmt.Errorf("read config file failed: %v", err))
 		}
 
-		appConfigInstance = &AppConfig{
-			DatabaseConfig: getDatabaseConfig(),
-			ServerConfig:   getServerConfig(),
-			OAuth2Config:   getOAuth2Config(),
-			StateConfig:    getStateConfig(),
+		if err := viper.UnmarshalKey("app", &appConfigInstance); err != nil {
+			panic(fmt.Errorf("unmarshalkey config file failed: %v", err))
 		}
 	})
 
 	return appConfigInstance
-}
-
-func getDatabaseConfig() *DatabaseConfig {
-	return &DatabaseConfig{
-		Host:     viper.GetString("database.host"),
-		Port:     viper.GetInt("database.port"),
-		User:     viper.GetString("database.user"),
-		Password: viper.GetString("database.password"),
-		DBName:   viper.GetString("database.dbname"),
-		SSLMode:  viper.GetString("database.sslmode"),
-		Schema:   viper.GetString("database.schema"),
-	}
-}
-
-func getServerConfig() *ServerConfig {
-	return &ServerConfig{
-		Port:         viper.GetInt("server.port"),
-		AllowOrigins: viper.GetStringSlice("server.allowOrigins"),
-		Timeout:      viper.GetDuration("server.timeout"),
-		BodyLimit:    viper.GetString("server.bodyLimit"),
-	}
-}
-
-func getOAuth2Config() *OAuth2Config {
-	return &OAuth2Config{
-		ClientId:     viper.GetString("oauth2.google.clientId"),
-		ClientSecret: viper.GetString("oauth2.google.clientSecret"),
-		RedirectUrl:  viper.GetString("oauth2.google.redirectUrl"),
-		Scopes:       viper.GetStringSlice("oauth2.google.scopes"),
-		UserInfoUrl:  viper.GetString("oauth2.google.userInfoUrl"),
-		RevokeUrl:    viper.GetString("oauth2.google.revokeUrl"),
-		Endpoints: &oauth2Endpoints{
-			AuthUrl:       viper.GetString("oauth2.google.endpoints.authUrl"),
-			TokenUrl:      viper.GetString("oauth2.google.endpoints.tokenUrl"),
-			DeviceAuthUrl: viper.GetString("oauth2.google.endpoints.deviceAuthUrl"),
-		},
-	}
-}
-
-func getStateConfig() *StateConfig {
-	return &StateConfig{
-		Secret:    []byte(viper.GetString("state.jwt.secret")),
-		ExpiresAt: viper.GetDuration("state.jwt.expiresAt"),
-		Issuer:    viper.GetString("state.jwt.issuer"),
-	}
 }

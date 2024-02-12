@@ -16,7 +16,7 @@ func (s *echoServer) initOAuth2Router() {
 	stateConfig := s.conf.StateConfig
 
 	stateProvider := state.NewJwtState(
-		stateConfig.Secret,
+		[]byte(stateConfig.Secret),
 		stateConfig.ExpiresAt,
 		stateConfig.Issuer,
 	)

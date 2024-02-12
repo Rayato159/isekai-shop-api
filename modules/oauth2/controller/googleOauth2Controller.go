@@ -113,6 +113,7 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 		Name:    userInfo.Name,
 		Picture: userInfo.Picture,
 		PlayerPassport: &_oauth2Model.PlayerPassport{
+			AccessToken:  token.AccessToken,
 			RefreshToken: token.RefreshToken,
 		},
 	}); err != nil {

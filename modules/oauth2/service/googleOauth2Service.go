@@ -42,6 +42,7 @@ func (s *googleOAuth2Service) ManagePlayerAccount(createPlayerInfo *_oauth2Model
 
 	passportEntity := &_oauth2Entity.Passport{
 		PlayerID:     createPlayerInfo.ID,
+		AccessToken:  createPlayerInfo.AccessToken,
 		RefreshToken: createPlayerInfo.RefreshToken,
 	}
 

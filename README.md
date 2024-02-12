@@ -39,17 +39,17 @@ go run ./databases/migration/migratedb.go
 ### config.yaml Example
 
 ```bash
-server:
-  port: 8080
-  allowOrigins:
-    - "*"
-  bodyLimit: "10M" # MiB
-  timeout: 30 # Seconds
+app:
+  server:
+    port: 8080
+    allowOrigins:
+      - "*"
+    bodyLimit: "10M" # MiB
+    timeout: 30 # Seconds
 
-oauth2:
-  google:
+  oauth2:
     clientId: "xxxxx"
-    clientSecret: "xxxxx"
+    clientSecret: "xxxx"
     redirectUrl: "http://localhost:8080/v1/oauth2/google/login/callback"
     endpoints:
       authUrl: "https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force"
@@ -61,18 +61,17 @@ oauth2:
     userInfoUrl: "https://www.googleapis.com/oauth2/v2/userinfo"
     revokeUrl: "https://accounts.google.com/o/oauth2/revoke"
 
-state:
-  jwt:
-    secret: "xxxxx"
+  state:
+    secret: "supersecret"
     expiresAt: 120 # Seconds
     issuer: "isekaishop"
-  
-database:
-  host: localhost
-  port: 5432
-  user: postgres
-  password: 123456
-  dbname: isekaishopdb
-  sslmode: disable
-  schema: public
+    
+  database:
+    host: localhost
+    port: 5432
+    user: postgres
+    password: 123456
+    dbname: isekaishopdb
+    sslmode: disable
+    schema: public
 ```
