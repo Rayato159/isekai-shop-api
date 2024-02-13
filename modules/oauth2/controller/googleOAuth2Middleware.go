@@ -28,7 +28,7 @@ func (c *googleOAuth2Controller) Authorize(pctx echo.Context, next echo.HandlerF
 		c.logger.Errorf("Token is not valid")
 
 		// Refresh the token
-		newToken, err := c.refreshToken(ctx, tokenSource)
+		tokenSource, err = c.refreshToken(pctx, tokenSource)
 		if err != nil {
 			c.logger.Errorf("Error refreshing token: %s", err.Error())
 			return writter.CustomError(
@@ -36,12 +36,6 @@ func (c *googleOAuth2Controller) Authorize(pctx echo.Context, next echo.HandlerF
 				&_oauth2Exception.UnAuthorizeException{},
 			)
 		}
-
-		// Update the token
-		c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, newToken.AccessToken)
-		c.setSameSiteCookie(pctx, oauth2RefreshTokenCookieName, newToken.RefreshToken)
-
-		tokenSource = newToken
 	}
 
 	// Get user info
@@ -59,14 +53,20 @@ func (c *googleOAuth2Controller) Authorize(pctx echo.Context, next echo.HandlerF
 	return next(pctx)
 }
 
-func (c *googleOAuth2Controller) refreshToken(ctx context.Context, token *oauth2.Token) (*oauth2.Token, error) {
-	newToken, err := googleOAuth2.TokenSource(ctx, token).Token()
+func (c *googleOAuth2Controller) refreshToken(pctx echo.Context, token *oauth2.Token) (*oauth2.Token, error) {
+	ctx := pctx.Request().Context()
+
+	updatedToken, err := googleOAuth2.TokenSource(ctx, token).Token()
 	if err != nil {
 		c.logger.Errorf("Error refreshing token: %s", err.Error())
 		return nil, err
 	}
 
-	return newToken, nil
+	// Update cookies
+	c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, updatedToken.AccessToken)
+	c.setSameSiteCookie(pctx, oauth2RefreshTokenCookieName, updatedToken.RefreshToken)
+
+	return updatedToken, nil
 }
 
 func (c *googleOAuth2Controller) getToken(pctx echo.Context) (*oauth2.Token, error) {
