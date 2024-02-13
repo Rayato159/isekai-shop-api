@@ -24,17 +24,28 @@ func (c *googleOAuth2Controller) Authorize(pctx echo.Context, next echo.HandlerF
 	}
 
 	// Validate the token
-	token, err := googleOAuth2.TokenSource(ctx, tokenSource).Token()
-	if err != nil {
-		c.logger.Errorf("Error validating token: %s", err.Error())
-		return writter.CustomError(
-			pctx, http.StatusUnauthorized,
-			&_oauth2Exception.UnAuthorizeException{},
-		)
+	if !tokenSource.Valid() {
+		c.logger.Errorf("Token is not valid")
+
+		// Refresh the token
+		newToken, err := c.refreshToken(ctx, tokenSource)
+		if err != nil {
+			c.logger.Errorf("Error refreshing token: %s", err.Error())
+			return writter.CustomError(
+				pctx, http.StatusUnauthorized,
+				&_oauth2Exception.UnAuthorizeException{},
+			)
+		}
+
+		// Update the token
+		c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, newToken.AccessToken)
+		c.setSameSiteCookie(pctx, oauth2RefreshTokenCookieName, newToken.RefreshToken)
+
+		tokenSource = newToken
 	}
 
 	// Get user info
-	client := googleOAuth2.Client(ctx, token)
+	client := googleOAuth2.Client(ctx, tokenSource)
 
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
@@ -48,14 +59,24 @@ func (c *googleOAuth2Controller) Authorize(pctx echo.Context, next echo.HandlerF
 	return next(pctx)
 }
 
+func (c *googleOAuth2Controller) refreshToken(ctx context.Context, token *oauth2.Token) (*oauth2.Token, error) {
+	newToken, err := googleOAuth2.TokenSource(ctx, token).Token()
+	if err != nil {
+		c.logger.Errorf("Error refreshing token: %s", err.Error())
+		return nil, err
+	}
+
+	return newToken, nil
+}
+
 func (c *googleOAuth2Controller) getToken(pctx echo.Context) (*oauth2.Token, error) {
-	accessToken, err := pctx.Cookie(oauth2AccessTokenKey)
+	accessToken, err := pctx.Cookie(oauth2AccessTokenCookieName)
 	if err != nil {
 		c.logger.Errorf("Error reading access token: %s", err.Error())
 		return nil, err
 	}
 
-	refreshToken, err := pctx.Cookie(oauth2AccessTokenKey)
+	refreshToken, err := pctx.Cookie(oauth2AccessTokenCookieName)
 	if err != nil {
 		c.logger.Errorf("Error reading refresh token: %s", err.Error())
 		return nil, err
