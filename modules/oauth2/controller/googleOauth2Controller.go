@@ -32,8 +32,8 @@ var (
 	googleOAuth2 *oauth2.Config
 	once         sync.Once
 
-	oauth2AccessTokenKey  = "act"
-	oauth2RefreshTokenKey = "rft"
+	oauth2AccessTokenCookieName  = "act"
+	oauth2RefreshTokenCookieName = "rft"
 )
 
 func NewGoogleOAuth2Controller(
@@ -110,14 +110,14 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.Oauth2Exception{})
 	}
 
-	c.setSameSiteCookie(pctx, oauth2AccessTokenKey, token.AccessToken)
-	c.setSameSiteCookie(pctx, oauth2RefreshTokenKey, token.RefreshToken)
+	c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, token.AccessToken)
+	c.setSameSiteCookie(pctx, oauth2RefreshTokenCookieName, token.RefreshToken)
 
 	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{Message: "Login successful"})
 }
 
 func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
-	accessToken, err := pctx.Cookie(oauth2AccessTokenKey)
+	accessToken, err := pctx.Cookie(oauth2AccessTokenCookieName)
 	if err != nil {
 		c.logger.Errorf("Error reading access token: %s", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.LogoutException{})
@@ -128,8 +128,8 @@ func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.LogoutException{})
 	}
 
-	c.removeSameSiteCookie(pctx, oauth2AccessTokenKey)
-	c.removeSameSiteCookie(pctx, oauth2RefreshTokenKey)
+	c.removeSameSiteCookie(pctx, oauth2AccessTokenCookieName)
+	c.removeSameSiteCookie(pctx, oauth2RefreshTokenCookieName)
 
 	return pctx.JSON(http.StatusOK, &_oauth2Model.LogoutResponse{Message: "Logout successful"})
 }
