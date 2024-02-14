@@ -1,4 +1,4 @@
-package customMiddlewares
+package customMiddleware
 
 import (
 	_oauth2Controller "github.com/Rayato159/isekai-shop-api/modules/oauth2/controller"

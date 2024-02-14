@@ -15,7 +15,7 @@ import (
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/modules/oauth2/service"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
 	"github.com/Rayato159/isekai-shop-api/packages/state"
-	"github.com/Rayato159/isekai-shop-api/server/customMiddlewares"
+	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
@@ -65,13 +65,13 @@ func (s *echoServer) Start() {
 	s.app.Use(bodyLimitMiddleware)
 
 	// Initialize all custom middlewares
-	middlewares := s.getMiddlewares()
+	customerMiddleware := s.getCustomMiddleware()
 
 	// Initialzie all routers
 	s.baseRouter.GET("/health", s.healthCheck)
 
 	s.initOAuth2Router()
-	s.initPlayerRouter(middlewares)
+	s.initPlayerRouter(customerMiddleware)
 
 	// Graceful shutdown
 	quit := make(chan os.Signal, 1)
@@ -104,7 +104,7 @@ func (s *echoServer) healthCheck(pctx echo.Context) error {
 	return pctx.String(http.StatusOK, "OK")
 }
 
-func (s *echoServer) getMiddlewares() customMiddlewares.CustomMiddleware {
+func (s *echoServer) getCustomMiddleware() customMiddleware.CustomMiddleware {
 	stateConfig := s.conf.StateConfig
 	stateProvider := state.NewJwtState(
 		[]byte(stateConfig.Secret),
@@ -126,7 +126,7 @@ func (s *echoServer) getMiddlewares() customMiddlewares.CustomMiddleware {
 		s.app.Logger,
 	)
 
-	return customMiddlewares.NewCustomMiddlewaresImpl(
+	return customMiddleware.NewCustomMiddlewaresImpl(
 		controller,
 		s.conf.OAuth2Config,
 		s.app.Logger,

@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/Rayato159/isekai-shop-api/config"
 	"github.com/Rayato159/isekai-shop-api/databases"
+	_adminEntity "github.com/Rayato159/isekai-shop-api/modules/admin/entity"
+	_itemEntity "github.com/Rayato159/isekai-shop-api/modules/item/entity"
 	_playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
 )
 
@@ -12,6 +14,8 @@ func main() {
 
 	uuidMigreate(database)
 	playerMigrate(database)
+	adminMigrate(database)
+	itemMigrate(database)
 }
 
 func uuidMigreate(db databases.Database) {
@@ -20,4 +24,12 @@ func uuidMigreate(db databases.Database) {
 
 func playerMigrate(db databases.Database) {
 	db.GetDb().Migrator().CreateTable(&_playerEntity.Player{})
+}
+
+func adminMigrate(db databases.Database) {
+	db.GetDb().Migrator().CreateTable(&_adminEntity.Admin{})
+}
+
+func itemMigrate(db databases.Database) {
+	db.GetDb().Migrator().CreateTable(&_itemEntity.Item{})
 }
