@@ -2,6 +2,8 @@ package entity
 
 import (
 	"time"
+
+	_playerModel "github.com/Rayato159/isekai-shop-api/modules/player/model"
 )
 
 type (
@@ -15,7 +17,19 @@ type (
 		UpdatedAt time.Time `gorm:"not null;autoUpdateTime;"`
 	}
 
-	UpdatePlayer struct {
+	UpdatePlayerDto struct {
 		Username string
 	}
 )
+
+func (p *Player) ToPlayerProfile() *_playerModel.PlayerProfile {
+	return &_playerModel.PlayerProfile{
+		ID:        p.ID,
+		Email:     p.Email,
+		Name:      p.Name,
+		Avatar:    p.Avatar,
+		Username:  p.Username,
+		CreatedAt: p.CreatedAt,
+		UpdatedAt: p.UpdatedAt,
+	}
+}

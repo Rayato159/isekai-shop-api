@@ -1,13 +1,43 @@
 package entity
 
-type Item struct {
-	ID          string `gorm:"primaryKey;autoIncrement"`
-	AdminID     string `gorm:"type:varchar(64);"`
-	Name        string `gorm:"type:varchar(64);unique;not null;"`
-	Description string `gorm:"type:varchar(256);not null;"`
-	Picture     string `gorm:"type:varchar(256);not null;"`
-	Price       int    `gorm:"not null;"`
-	IsArchive   bool   `gorm:"not null;default:false;"`
-	CreatedAt   string `gorm:"not null;autoCreateTime;"`
-	UpdatedAt   string `gorm:"not null;autoUpdateTime;"`
+import (
+	_itemModel "github.com/Rayato159/isekai-shop-api/modules/item/model"
+)
+
+type (
+	Item struct {
+		ID          string `gorm:"primaryKey;autoIncrement"`
+		AdminID     string `gorm:"type:varchar(64);"`
+		Name        string `gorm:"type:varchar(64);unique;not null;"`
+		Description string `gorm:"type:varchar(256);not null;"`
+		Picture     string `gorm:"type:varchar(256);not null;"`
+		Price       int    `gorm:"not null;"`
+		IsArchive   bool   `gorm:"not null;default:false;"`
+		CreatedAt   string `gorm:"not null;autoCreateTime;"`
+		UpdatedAt   string `gorm:"not null;autoUpdateTime;"`
+	}
+
+	ItemFilterDto struct {
+		Name        string
+		Description string
+		PaginateDto
+	}
+
+	PaginateDto struct {
+		Page int64
+		Size int64
+	}
+)
+
+func (i *Item) ToItemModel() *_itemModel.Item {
+	return &_itemModel.Item{
+		ID:          i.ID,
+		AdminID:     i.AdminID,
+		Name:        i.Name,
+		Description: i.Description,
+		Picture:     i.Picture,
+		Price:       i.Price,
+		CreatedAt:   i.CreatedAt,
+		UpdatedAt:   i.UpdatedAt,
+	}
 }

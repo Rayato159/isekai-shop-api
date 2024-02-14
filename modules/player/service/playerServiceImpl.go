@@ -35,11 +35,11 @@ func (s *playerServiceImpl) GetPlayerProfile(playerID string) (*_playerModel.Pla
 }
 
 func (s *playerServiceImpl) EditPlayerProfile(playerID string, updatePlayer *_playerModel.UpdatePlayerProfile) (*_playerModel.PlayerProfile, error) {
-	updatePlayerEntity := &_playerEntity.UpdatePlayer{
+	updatePlayerDto := &_playerEntity.UpdatePlayerDto{
 		Username: updatePlayer.Username,
 	}
 
-	_, err := s.playerRepository.UpdatePlayer(playerID, updatePlayerEntity)
+	_, err := s.playerRepository.UpdatePlayer(playerID, updatePlayerDto)
 	if err != nil {
 		return nil, err
 	}
@@ -49,11 +49,5 @@ func (s *playerServiceImpl) EditPlayerProfile(playerID string, updatePlayer *_pl
 		return nil, err
 	}
 
-	return &_playerModel.PlayerProfile{
-		ID:       player.ID,
-		Username: player.Username,
-		Email:    player.Email,
-		Name:     player.Name,
-		Avatar:   player.Avatar,
-	}, nil
+	return player.ToPlayerProfile(), nil
 }

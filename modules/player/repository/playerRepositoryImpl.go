@@ -43,7 +43,7 @@ func (r *playerRepositoryImpl) FindPlayerById(playerId string) (*_playerEntity.P
 	return player, nil
 }
 
-func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayer *_playerEntity.UpdatePlayer) (string, error) {
+func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayerDto *_playerEntity.UpdatePlayerDto) (string, error) {
 	player := new(_playerEntity.Player)
 
 	tx := r.db.Model(
@@ -51,7 +51,7 @@ func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayer *_play
 	).Where(
 		"id = ?", playerID,
 	).Updates(
-		updatePlayer,
+		updatePlayerDto,
 	)
 
 	if tx.RowsAffected == 0 {

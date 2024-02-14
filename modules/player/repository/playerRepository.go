@@ -5,5 +5,5 @@ import _playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity
 type PlayerRepository interface {
 	InsertPlayer(playerEntitiy *_playerEntity.Player) (string, error)
 	FindPlayerById(playerId string) (*_playerEntity.Player, error)
-	UpdatePlayer(playerID string, updatePlayerEntity *_playerEntity.UpdatePlayer) (string, error)
+	UpdatePlayer(playerID string, updatePlayerDto *_playerEntity.UpdatePlayerDto) (string, error)
 }
