@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	_playerException "github.com/Rayato159/isekai-shop-api/modules/player/exception"
 	_playerModel "github.com/Rayato159/isekai-shop-api/modules/player/model"
 	_playerService "github.com/Rayato159/isekai-shop-api/modules/player/service"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
@@ -25,7 +26,10 @@ func NewPlayerControllerImpl(
 }
 
 func (c *playerControllerImpl) GetPlayerProfile(pctx echo.Context) error {
-	playerID := pctx.Get("playerID").(string)
+	playerID, err := c.getPlayerID(pctx)
+	if err != nil {
+		return writter.CustomError(pctx, http.StatusInternalServerError, err)
+	}
 
 	playerProfile, err := c.playerService.GetPlayerProfile(playerID)
 	if err != nil {
@@ -36,7 +40,10 @@ func (c *playerControllerImpl) GetPlayerProfile(pctx echo.Context) error {
 }
 
 func (c *playerControllerImpl) EditPlayerProfile(pctx echo.Context) error {
-	playerID := pctx.Get("playerID").(string)
+	playerID, err := c.getPlayerID(pctx)
+	if err != nil {
+		return writter.CustomError(pctx, http.StatusInternalServerError, err)
+	}
 
 	updatePlayerReq := new(_playerModel.UpdatePlayerProfile)
 	if err := pctx.Bind(updatePlayerReq); err != nil {
@@ -49,4 +56,12 @@ func (c *playerControllerImpl) EditPlayerProfile(pctx echo.Context) error {
 	}
 
 	return pctx.JSON(http.StatusOK, playerProfile)
+}
+
+func (c *playerControllerImpl) getPlayerID(pctx echo.Context) (string, error) {
+	if playerID, ok := pctx.Get("playerID").(string); !ok || playerID == "" {
+		return "", &_playerException.PlayerIDNotfoundException{}
+	} else {
+		return playerID, nil
+	}
 }
