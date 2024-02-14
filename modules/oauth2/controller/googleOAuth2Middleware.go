@@ -48,7 +48,7 @@ func (c *googleOAuth2Controller) Authorize(pctx echo.Context, next echo.HandlerF
 
 	}
 
-	pctx.Set("userID", userInfo.ID)
+	pctx.Set("playerID", userInfo.ID)
 
 	return next(pctx)
 }

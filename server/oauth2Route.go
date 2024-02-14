@@ -26,14 +26,14 @@ func (s *echoServer) initOAuth2Router() {
 		s.app.Logger,
 	)
 
-	controller := _oauth2Controller.NewGoogleOAuth2Controller(
+	oauth2Controller := _oauth2Controller.NewGoogleOAuth2Controller(
 		oauth2Service,
 		s.conf.OAuth2Config,
 		stateProvider,
 		s.app.Logger,
 	)
 
-	router.GET("/login", controller.Login)
-	router.GET("/login/callback", controller.LoginCallback)
-	router.DELETE("/logout", controller.Logout)
+	router.GET("/login", oauth2Controller.Login)
+	router.GET("/login/callback", oauth2Controller.LoginCallback)
+	router.DELETE("/logout", oauth2Controller.Logout)
 }

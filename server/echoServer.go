@@ -68,9 +68,10 @@ func (s *echoServer) Start() {
 	middlewares := s.getMiddlewares()
 
 	// Initialzie all routers
-	s.baseRouter.GET("/health", s.healthCheck, middlewares.Authorize)
+	s.baseRouter.GET("/health", s.healthCheck)
 
 	s.initOAuth2Router()
+	s.initPlayerRouter(middlewares)
 
 	// Graceful shutdown
 	quit := make(chan os.Signal, 1)
