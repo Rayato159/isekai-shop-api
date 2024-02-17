@@ -11,4 +11,5 @@ type OAuth2Controller interface {
 
 	// Middlewares
 	PlayerAuthorize(pctx echo.Context, next echo.HandlerFunc) error
+	AdminAuthorize(pctx echo.Context, next echo.HandlerFunc) error
 }
