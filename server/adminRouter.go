@@ -7,7 +7,7 @@ import (
 	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 )
 
-func (s *echoServer) initAdminRoute(customMiddleware customMiddleware.CustomMiddleware) {
+func (s *echoServer) initAdminRouter(customMiddleware customMiddleware.CustomMiddleware) {
 	router := s.baseRouter.Group("/admin/item")
 
 	itemRepository := _itemRepository.NewItemRepositoryImpl(s.db, s.app.Logger)

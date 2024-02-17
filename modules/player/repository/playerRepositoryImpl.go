@@ -20,15 +20,15 @@ func NewPlayerRepositoryImpl(db *gorm.DB, logger echo.Logger) PlayerRepository {
 	}
 }
 
-func (r *playerRepositoryImpl) InsertPlayer(playerEntitiy *_playerEntity.Player) (string, error) {
-	tx := r.db.Create(playerEntitiy)
+func (r *playerRepositoryImpl) InsertPlayer(playerEntity *_playerEntity.Player) (*_playerEntity.Player, error) {
+	insertedPlayer := new(_playerEntity.Player)
 
-	if tx.Error != nil {
-		r.logger.Errorf("Error inserting player: %s", tx.Error.Error())
-		return "", &_playerException.InsertPlayerException{PlayerID: playerEntitiy.ID}
+	if err := r.db.Create(playerEntity).Scan(insertedPlayer).Error; err != nil {
+		r.logger.Error("Failed to insert item", err.Error())
+		return nil, &_playerException.InsertPlayerException{PlayerID: playerEntity.ID}
 	}
 
-	return playerEntitiy.ID, nil
+	return insertedPlayer, nil
 }
 
 func (r *playerRepositoryImpl) FindPlayerByID(playerID string) (*_playerEntity.Player, error) {

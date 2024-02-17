@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
-	_adminException "github.com/Rayato159/isekai-shop-api/modules/admin/exception"
 	_adminService "github.com/Rayato159/isekai-shop-api/modules/admin/service"
 	_itemModel "github.com/Rayato159/isekai-shop-api/modules/item/model"
+	"github.com/Rayato159/isekai-shop-api/modules/utils"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
 	"github.com/labstack/echo/v4"
 )
@@ -24,7 +24,7 @@ func NewAdminControllerImpl(adminService _adminService.AdminService, logger echo
 }
 
 func (c *adminControllerImpl) CreateItem(pctx echo.Context) error {
-	adminID, err := c.getAdminID(pctx)
+	adminID, err := utils.GetAdminID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
@@ -45,7 +45,7 @@ func (c *adminControllerImpl) CreateItem(pctx echo.Context) error {
 }
 
 func (c *adminControllerImpl) EditItem(pctx echo.Context) error {
-	adminID, err := c.getAdminID(pctx)
+	adminID, err := utils.GetAdminID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
@@ -71,7 +71,7 @@ func (c *adminControllerImpl) EditItem(pctx echo.Context) error {
 }
 
 func (c *adminControllerImpl) ArchiveItem(pctx echo.Context) error {
-	_, err := c.getAdminID(pctx)
+	_, err := utils.GetAdminID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
@@ -101,12 +101,4 @@ func (c *adminControllerImpl) getItemID(pctx echo.Context) (uint64, error) {
 	}
 
 	return itemIDUint64, nil
-}
-
-func (c *adminControllerImpl) getAdminID(pctx echo.Context) (string, error) {
-	if adminID, ok := pctx.Get("adminID").(string); !ok || adminID == "" {
-		return "", &_adminException.AdminIDNotfoundException{}
-	} else {
-		return adminID, nil
-	}
 }

@@ -74,10 +74,10 @@ func (r *itemRepositoryImpl) FindItemByID(itemID uint64) (*_itemEntity.Item, err
 
 }
 
-func (r *itemRepositoryImpl) InsertItem(item *_itemEntity.Item) (*_itemEntity.Item, error) {
+func (r *itemRepositoryImpl) InsertItem(itemEntity *_itemEntity.Item) (*_itemEntity.Item, error) {
 	insertedItem := new(_itemEntity.Item)
 
-	if err := r.db.Create(item).Scan(insertedItem).Error; err != nil {
+	if err := r.db.Create(itemEntity).Scan(insertedItem).Error; err != nil {
 		r.logger.Error("Failed to insert item", err.Error())
 		return nil, &_itemException.InsertItemException{}
 	}
