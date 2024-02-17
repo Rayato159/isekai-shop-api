@@ -21,7 +21,7 @@ func NewItemRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemRepository {
 }
 
 func (r *itemRepositoryImpl) FindItems(itemFilterDto *_itemEntity.ItemFilterDto) ([]*_itemEntity.Item, error) {
-	query := r.db.Model(&_itemEntity.Item{}).Where("1 = 1")
+	query := r.db.Model(&_itemEntity.Item{})
 	if itemFilterDto.Name != "" {
 		query = query.Where("name LIKE ?", "%"+itemFilterDto.Name+"%")
 	}
@@ -34,8 +34,8 @@ func (r *itemRepositoryImpl) FindItems(itemFilterDto *_itemEntity.ItemFilterDto)
 
 	items := make([]*_itemEntity.Item, 0)
 
-	if err := query.Offset(offset).Limit(size).Find(&items); err != nil {
-		r.logger.Error("Failed to find items", err.Error.Error())
+	if err := query.Offset(offset).Limit(size).Find(&items).Error; err != nil {
+		r.logger.Error("Failed to find items", err.Error())
 		return nil, &_itemException.ItemListingException{}
 	}
 
@@ -43,7 +43,7 @@ func (r *itemRepositoryImpl) FindItems(itemFilterDto *_itemEntity.ItemFilterDto)
 }
 
 func (r *itemRepositoryImpl) CountItems(itemFilterDto *_itemEntity.ItemFilterDto) (int64, error) {
-	query := r.db.Model(&_itemEntity.Item{}).Where("1 = 1")
+	query := r.db.Model(&_itemEntity.Item{})
 	if itemFilterDto.Name != "" {
 		query = query.Where("name LIKE ?", "%"+itemFilterDto.Name+"%")
 	}
@@ -53,8 +53,8 @@ func (r *itemRepositoryImpl) CountItems(itemFilterDto *_itemEntity.ItemFilterDto
 
 	var count int64
 
-	if err := query.Count(&count); err != nil {
-		r.logger.Error("Failed to count items", err.Error.Error())
+	if err := query.Count(&count).Error; err != nil {
+		r.logger.Error("Failed to count items", err.Error())
 		return -1, &_itemException.CountItemsException{}
 	}
 
