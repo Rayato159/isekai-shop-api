@@ -52,11 +52,6 @@ func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayerDto *_p
 		updatePlayerDto,
 	).Scan(updatedPlayer)
 
-	if tx.RowsAffected == 0 {
-		r.logger.Errorf("No updating player: %s", tx.Error.Error())
-		return "", &_playerException.PlayerNotFoundException{PlayerID: playerID}
-	}
-
 	if tx.Error != nil {
 		r.logger.Errorf("Error updating player: %s", tx.Error.Error())
 		return "", &_playerException.UpdatePlayerException{PlayerID: playerID}

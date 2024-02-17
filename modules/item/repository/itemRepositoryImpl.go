@@ -92,11 +92,6 @@ func (r *itemRepositoryImpl) UpdateItem(itemID uint64, updateItemDto *_itemEntit
 		updateItemDto,
 	)
 
-	if tx.RowsAffected == 0 {
-		r.logger.Error("Item not found", tx.Error.Error())
-		return 0, &_itemException.ItemNotFoundException{ItemID: itemID}
-	}
-
 	if tx.Error != nil {
 		r.logger.Error("Failed to update item", tx.Error.Error())
 		return 0, &_itemException.UpdateItemException{}
