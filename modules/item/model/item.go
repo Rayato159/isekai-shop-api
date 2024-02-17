@@ -8,8 +8,6 @@ type (
 		Description string  `json:"description"`
 		Picture     string  `json:"picture"`
 		Price       uint    `json:"price"`
-		CreatedAt   string  `json:"createdAt"`
-		UpdatedAt   string  `json:"updatedAt"`
 	}
 
 	ItemFilter struct {
