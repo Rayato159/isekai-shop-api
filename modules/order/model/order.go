@@ -9,8 +9,9 @@ type (
 		ItemID          uint64    `json:"itemID"`
 		ItemName        string    `json:"itemName"`
 		ItemDescription string    `json:"itemDescription"`
-		ItemPrice       int64     `json:"itemPrice"`
-		Quantity        int       `json:"quantity"`
+		ItemPicture     string    `json:"itemPicture"`
+		ItemPrice       uint      `json:"itemPrice"`
+		Quantity        uint      `json:"quantity"`
 		TotalPrice      int64     `json:"totalPrice"`
 		CreatedAt       time.Time `json:"createdAt"`
 	}
