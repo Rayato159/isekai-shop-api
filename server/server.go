@@ -76,6 +76,7 @@ func (s *echoServer) Start() {
 	s.initItemRouter()
 	s.initAdminRouter(customerMiddleware)
 	s.initPaymentRouter(customerMiddleware)
+	s.initInventoryRouter(customerMiddleware)
 
 	// Graceful shutdown
 	quit := make(chan os.Signal, 1)

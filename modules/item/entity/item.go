@@ -44,7 +44,6 @@ type (
 func (i *Item) ToItemModel() *_itemModel.Item {
 	return &_itemModel.Item{
 		ID:          i.ID,
-		AdminID:     i.AdminID,
 		Name:        i.Name,
 		Description: i.Description,
 		Picture:     i.Picture,

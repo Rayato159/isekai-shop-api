@@ -112,3 +112,14 @@ func (r *itemRepositoryImpl) ArchiveItem(itemID uint64) error {
 
 	return nil
 }
+
+func (r *itemRepositoryImpl) FindItemByIDs(itemIDs []uint64) ([]*_itemEntity.Item, error) {
+	items := make([]*_itemEntity.Item, 0)
+
+	if err := r.db.Model(&_itemEntity.Item{}).Where("id IN ?", itemIDs).Find(&items).Error; err != nil {
+		r.logger.Error("Failed to find items by IDs", err.Error())
+		return nil, &_itemException.ItemListingException{}
+	}
+
+	return items, nil
+}
