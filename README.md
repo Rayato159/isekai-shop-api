@@ -2,7 +2,7 @@
 Working is now on progress ...
 
 ### Architecture
-![alt text](./assets/arch-v1.png "Architecture")
+![alt text](./assets/arch-v2.png "Architecture")
 
 ### Start PostgreSQL on Docker
 
@@ -47,9 +47,10 @@ server:
   timeout: 30 # Seconds
 
 oauth2:
-  clientId: "xxxxx"
-  clientSecret: "xxxx"
-  redirectUrl: "http://localhost:8080/v1/oauth2/google/login/callback"
+  playerRedirectUrl: "http://localhost:8080/v1/oauth2/google/player/login/callback"
+  adminRedirectUrl: "http://localhost:8080/v1/oauth2/google/admin/login/callback"
+  clientId: "xxxxx.apps.googleusercontent.com"
+  clientSecret: "xxxxx"
   endpoints:
     authUrl: "https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force"
     tokenUrl: "https://oauth2.googleapis.com/token"
@@ -61,7 +62,7 @@ oauth2:
   revokeUrl: "https://accounts.google.com/o/oauth2/revoke"
 
 state:
-  secret: "supersecret"
+  secret: "xxxxx"
   expiresAt: 120 # Seconds
   issuer: "isekaishop"
   
