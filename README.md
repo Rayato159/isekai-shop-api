@@ -19,8 +19,6 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
 
 ## Features of Isekai Shop API
 
-**Domain of Isekai Shop API**
-
 - Player
     - Edit Profile
 - Admin
