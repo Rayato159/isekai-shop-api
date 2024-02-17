@@ -21,6 +21,6 @@ type (
 	}
 
 	EditPlayerReq struct {
-		Username string `json:"username"`
+		Username string `json:"username" validate:"omitempty,max=64"`
 	}
 )
