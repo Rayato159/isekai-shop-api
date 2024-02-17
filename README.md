@@ -1,13 +1,58 @@
-### Isekai Shop API
-Working is now on progress ...
+# Isekai Shop API
+**Published by** Ruangyot Nanchiang.
 
-### Architecture
+## Introduction
+
+Hi, my name is Ruangyot Nanchiang from Thailand, or you can call me Rayato159. I have been working as a backend developer for 2 years and am familiar with Golang.
+
+Before this, I had published two online courses about Golang backend, covering both monolithic and microservices. However, both courses are in the Thai language.
+
+I didn’t think it had gone too far. Some foreigners have purchased my course and requested English subtitles, which I initially planned for Thai people only.
+
+Therefore, this course will now include English subtitles and be an enhanced version, learning from my past mistakes.
+
+This course will guide you through the implementation of a Simple REST API in clean architecture using **Golang + Echo + Gorm (PostgreSQL)**, starting from scratch and designed to be beginner-friendly, taking you from zero to hero.
+
+## About Isekai Shop API
+
+This course project is named “Isekai Shop API.” “Isekai” means another world (If you are an anime fan, you probably already know this world, lol), So this project is going to act like CRUD project + OAuth2.
+
+## Features of Isekai Shop API
+
+**Domain of Isekai Shop API**
+
+- Player
+    - Edit Profile
+- Admin
+    - Add Item Into The System
+    - Remove Item From The System
+    - Edit Item in The System
+- Authentication
+    - Player Login
+    - Admin Login
+    - Logout
+    - Middleware
+        - Player Authorize
+        - Admin Authorize
+- Payment
+    - Top Up
+    - See Player’ Balance Info
+    - Buy Items
+    - Sell Items
+- Order
+    - Order Listing
+- Item
+    - Item Listing
+- Inventory
+    - Player Item Listing
+
+## Architecture
 ![alt text](./assets/arch-v2.png "Architecture")
 
-### ER Diagram
-![alt text](./assets/er-diagram-v1.png "ER-Diagram")
+## ER Diagram
+![alt text](./assets/er-diagram-v2.png "ER-Diagram")
 
-### Start PostgreSQL on Docker
+## Start PostgreSQL on Docker
 
 1. Pull the PostgreSQL image
 
@@ -33,13 +78,13 @@ Working is now on progress ...
     DROP DATABASE isekaishopdb;
     ```
 
-### Database Migration
+## Database Migration
 
 ```bash
 go run ./databases/migration/migratedb.go
 ```
 
-### config.yaml Example
+## config.yaml Example
 
 ```bash
 server:
@@ -78,3 +123,7 @@ database:
   sslmode: disable
   schema: public
 ```
+
+## Postman Collection and ENV
+- [Collection](./postman/isekai-shop-api.postman_collection.json)
+- [Environment](./postman/isekai-shop-api-local.postman_environment.json)
