@@ -8,6 +8,7 @@ import (
 	_orderEntity "github.com/Rayato159/isekai-shop-api/modules/order/entity"
 	_orderRepository "github.com/Rayato159/isekai-shop-api/modules/order/repository"
 	_paymentEntity "github.com/Rayato159/isekai-shop-api/modules/payment/entity"
+	_paymentException "github.com/Rayato159/isekai-shop-api/modules/payment/exception"
 	_paymentModel "github.com/Rayato159/isekai-shop-api/modules/payment/model"
 	_paymentRepository "github.com/Rayato159/isekai-shop-api/modules/payment/repository"
 	"github.com/labstack/echo/v4"
@@ -77,6 +78,10 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 
 	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), buyItemReq.Quantity)
 
+	if err := s.checkPlayerBalance(buyItemReq.PlayerID, totalPrice); err != nil {
+		return nil, err
+	}
+
 	insertedOrder, err := s.orderRepository.InsertOrder(&_orderEntity.Order{
 		PlayerID:        buyItemReq.PlayerID,
 		ItemID:          itemEntity.ID,
@@ -112,14 +117,63 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 	return insertedPayment.ToPaymentModel(), nil
 }
 
-// 1. Search item by ID
-// 2. Calculate total price
-// 3. Check if player has enough quantity
+// 1. Check if player has enough quantity
+// 2. Search item by ID
+// 3. Calculate total price
 // 4. Create order
 // 5. Create payment
 // 6. Delete item into player inventory
 func (s *paymentServiceImpl) SellItem(sellItemReq *_paymentModel.SellItemReq) (*_paymentModel.Payment, error) {
-	return nil, nil
+	if err := s.checkPlayerItemQuantity(
+		sellItemReq.PlayerID,
+		sellItemReq.ItemID,
+		sellItemReq.Quantity,
+	); err != nil {
+		return nil, err
+	}
+
+	itemEntity, err := s.itemRepository.FindItemByID(sellItemReq.ItemID)
+	if err != nil {
+		return nil, err
+	}
+
+	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), sellItemReq.Quantity)
+	totalPrice = totalPrice / 2
+
+	insertedOrder, err := s.orderRepository.InsertOrder(&_orderEntity.Order{
+		PlayerID:        sellItemReq.PlayerID,
+		ItemID:          itemEntity.ID,
+		ItemName:        itemEntity.Name,
+		ItemDescription: itemEntity.Description,
+		ItemPrice:       itemEntity.Price,
+		ItemPicture:     itemEntity.Picture,
+		Quantity:        sellItemReq.Quantity,
+		TotalPrice:      totalPrice,
+	})
+	if err != nil {
+		return nil, err
+	}
+	s.logger.Infof("Inserted order: %d", insertedOrder.ID)
+
+	insertedPayment, err := s.paymentRepository.InsertPayment(&_paymentEntity.Payment{
+		PlayerID: sellItemReq.PlayerID,
+		Amount:   totalPrice,
+	})
+	if err != nil {
+		return nil, err
+	}
+	s.logger.Infof("Payment entity: %d", insertedPayment.ID)
+
+	if err := s.inventoryRepository.DeleteItemByLimit(
+		sellItemReq.PlayerID,
+		sellItemReq.ItemID,
+		int(sellItemReq.Quantity),
+	); err != nil {
+		return nil, err
+	}
+	s.logger.Infof("Deleted inventories for %d records", sellItemReq.Quantity)
+
+	return insertedPayment.ToPaymentModel(), nil
 }
 
 func (s *paymentServiceImpl) groupInventoryEntities(buyItemReq *_paymentModel.BuyItemReq) []*_inventoryEntity.Inventory {
@@ -134,6 +188,31 @@ func (s *paymentServiceImpl) groupInventoryEntities(buyItemReq *_paymentModel.Bu
 
 	return inventoryEntities
 
+}
+
+func (s *paymentServiceImpl) checkPlayerItemQuantity(playerID string, itemID uint64, quantity uint) error {
+	inventoryCount := s.inventoryRepository.CountPlayerItem(playerID, itemID)
+
+	if int(inventoryCount) < int(quantity) {
+		s.logger.Infof("Player %s has not enough item with id: %d", playerID, itemID)
+		return &_paymentException.NotEnoughItemException{ItemID: itemID}
+	}
+
+	return nil
+}
+
+func (s *paymentServiceImpl) checkPlayerBalance(playerID string, amount int64) error {
+	balanceDto, err := s.paymentRepository.CalculatePlayerBalance(playerID)
+	if err != nil {
+		return err
+	}
+
+	if balanceDto.Balance < amount {
+		s.logger.Infof("Player %s has not enough balance", playerID)
+		return &_paymentException.NotEnoughBalanceException{}
+	}
+
+	return nil
 }
 
 func (s *paymentServiceImpl) calculateTotalPrice(item *_itemModel.Item, quantity uint) int64 {

@@ -5,8 +5,8 @@ import (
 )
 
 type InventoryRepository interface {
-	InsertInventory(inventoryEntity *_inventoryEntity.Inventory) (*_inventoryEntity.Inventory, error)
 	InsertInventoryInBluk(inventoryEntities []*_inventoryEntity.Inventory) ([]*_inventoryEntity.Inventory, error)
 	FindPlayerInventories(playerID string) ([]*_inventoryEntity.Inventory, error)
-	DeleteItem(playerID string, itemID uint64) error
+	DeleteItemByLimit(playerID string, itemID uint64, limit int) error
+	CountPlayerItem(playerID string, itemID uint64) int64
 }

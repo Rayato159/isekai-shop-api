@@ -6,4 +6,5 @@ type PaymentController interface {
 	TopUp(pctx echo.Context) error
 	CalculatePlayerBalance(pctx echo.Context) error
 	BuyItem(pctx echo.Context) error
+	SellItem(pctx echo.Context) error
 }

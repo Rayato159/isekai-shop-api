@@ -30,4 +30,5 @@ func (s *echoServer) initPaymentRouter(customMiddleware customMiddleware.CustomM
 	router.POST("", paymentController.TopUp, customMiddleware.PlayerAuthorize)
 	router.GET("/balance", paymentController.CalculatePlayerBalance, customMiddleware.PlayerAuthorize)
 	router.POST("/buy", paymentController.BuyItem, customMiddleware.PlayerAuthorize)
+	router.POST("/sell", paymentController.SellItem, customMiddleware.PlayerAuthorize)
 }

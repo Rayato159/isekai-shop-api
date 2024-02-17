@@ -77,3 +77,25 @@ func (c *paymentControllerImpl) BuyItem(pctx echo.Context) error {
 
 	return pctx.JSON(http.StatusOK, payment)
 }
+
+func (c *paymentControllerImpl) SellItem(pctx echo.Context) error {
+	playerID, err := utils.GetPlayerID(pctx)
+	if err != nil {
+		return writter.CustomError(pctx, http.StatusBadRequest, err)
+	}
+
+	sellItemReq := new(_paymentModel.SellItemReq)
+
+	if err := pctx.Bind(sellItemReq); err != nil {
+		c.logger.Error("Failed to bind sell item request", err.Error())
+		return writter.CustomError(pctx, http.StatusBadRequest, err)
+	}
+	sellItemReq.PlayerID = playerID
+
+	payment, err := c.paymentService.SellItem(sellItemReq)
+	if err != nil {
+		return writter.CustomError(pctx, http.StatusInternalServerError, err)
+	}
+
+	return pctx.JSON(http.StatusOK, payment)
+}
