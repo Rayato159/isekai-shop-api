@@ -1,6 +1,8 @@
 package service
 
 import (
+	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
+	_orderRepository "github.com/Rayato159/isekai-shop-api/modules/order/repository"
 	_paymentEntity "github.com/Rayato159/isekai-shop-api/modules/payment/entity"
 	_paymentModel "github.com/Rayato159/isekai-shop-api/modules/payment/model"
 	_paymentRepository "github.com/Rayato159/isekai-shop-api/modules/payment/repository"
@@ -9,12 +11,21 @@ import (
 
 type paymentServiceImpl struct {
 	paymentRepository _paymentRepository.PaymentRepository
+	itemRepository    _itemRepository.ItemRepository
+	orderRepository   _orderRepository.OrderRepository
 	logger            echo.Logger
 }
 
-func NewPaymentServiceImpl(paymentRepository _paymentRepository.PaymentRepository, logger echo.Logger) PaymentService {
+func NewPaymentServiceImpl(
+	paymentRepository _paymentRepository.PaymentRepository,
+	itemRepository _itemRepository.ItemRepository,
+	orderRepository _orderRepository.OrderRepository,
+	logger echo.Logger,
+) PaymentService {
 	return &paymentServiceImpl{
 		paymentRepository: paymentRepository,
+		itemRepository:    itemRepository,
+		orderRepository:   orderRepository,
 		logger:            logger,
 	}
 }
