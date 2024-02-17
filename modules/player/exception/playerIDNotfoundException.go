@@ -1,7 +1,7 @@
 package exception
 
-type PlayerIDNotfoundException struct{}
+type PlayerIDNotFoundException struct{}
 
-func (e *PlayerIDNotfoundException) Error() string {
+func (e *PlayerIDNotFoundException) Error() string {
 	return "Player ID not found"
 }

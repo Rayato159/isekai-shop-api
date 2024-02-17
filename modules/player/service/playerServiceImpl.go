@@ -19,13 +19,13 @@ func NewPlayerServiceImpl(playerRepository _playerRepository.PlayerRepository, l
 	}
 }
 
-func (s *playerServiceImpl) GetPlayerProfile(playerID string) (*_playerModel.PlayerProfile, error) {
+func (s *playerServiceImpl) GetPlayer(playerID string) (*_playerModel.Player, error) {
 	player, err := s.playerRepository.FindPlayerByID(playerID)
 	if err != nil {
 		return nil, err
 	}
 
-	return &_playerModel.PlayerProfile{
+	return &_playerModel.Player{
 		ID:       player.ID,
 		Username: player.Username,
 		Email:    player.Email,
@@ -34,20 +34,15 @@ func (s *playerServiceImpl) GetPlayerProfile(playerID string) (*_playerModel.Pla
 	}, nil
 }
 
-func (s *playerServiceImpl) EditPlayerProfile(playerID string, updatePlayer *_playerModel.UpdatePlayerProfile) (*_playerModel.PlayerProfile, error) {
-	updatePlayerDto := &_playerEntity.UpdatePlayerDto{
-		Username: updatePlayer.Username,
+func (s *playerServiceImpl) EditPlayer(playerID string, editPlayerReq *_playerModel.EditPlayerReq) (*_playerModel.Player, error) {
+	editPlayerReqDto := &_playerEntity.UpdatePlayerDto{
+		Username: editPlayerReq.Username,
 	}
 
-	_, err := s.playerRepository.UpdatePlayer(playerID, updatePlayerDto)
+	updatedPlayer, err := s.playerRepository.UpdatePlayer(playerID, editPlayerReqDto)
 	if err != nil {
 		return nil, err
 	}
 
-	player, err := s.playerRepository.FindPlayerByID(playerID)
-	if err != nil {
-		return nil, err
-	}
-
-	return player.ToPlayerProfile(), nil
+	return updatedPlayer.ToPlayerModel(), nil
 }

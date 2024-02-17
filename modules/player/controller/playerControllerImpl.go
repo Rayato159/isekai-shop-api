@@ -25,42 +25,42 @@ func NewPlayerControllerImpl(
 	}
 }
 
-func (c *playerControllerImpl) GetPlayerProfile(pctx echo.Context) error {
+func (c *playerControllerImpl) GetPlayer(pctx echo.Context) error {
 	playerID, err := c.getPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
-	playerProfile, err := c.playerService.GetPlayerProfile(playerID)
+	player, err := c.playerService.GetPlayer(playerID)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
-	return pctx.JSON(http.StatusOK, playerProfile)
+	return pctx.JSON(http.StatusOK, player)
 }
 
-func (c *playerControllerImpl) EditPlayerProfile(pctx echo.Context) error {
+func (c *playerControllerImpl) EditPlayer(pctx echo.Context) error {
 	playerID, err := c.getPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
-	updatePlayerReq := new(_playerModel.UpdatePlayerProfile)
-	if err := pctx.Bind(updatePlayerReq); err != nil {
+	editPlayerReq := new(_playerModel.EditPlayerReq)
+	if err := pctx.Bind(editPlayerReq); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	playerProfile, err := c.playerService.EditPlayerProfile(playerID, updatePlayerReq)
+	player, err := c.playerService.EditPlayer(playerID, editPlayerReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
-	return pctx.JSON(http.StatusOK, playerProfile)
+	return pctx.JSON(http.StatusOK, player)
 }
 
 func (c *playerControllerImpl) getPlayerID(pctx echo.Context) (string, error) {
 	if playerID, ok := pctx.Get("playerID").(string); !ok || playerID == "" {
-		return "", &_playerException.PlayerIDNotfoundException{}
+		return "", &_playerException.PlayerIDNotFoundException{}
 	} else {
 		return playerID, nil
 	}

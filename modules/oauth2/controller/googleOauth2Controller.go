@@ -8,9 +8,11 @@ import (
 	"net/http"
 	"sync"
 
+	_adminModel "github.com/Rayato159/isekai-shop-api/modules/admin/model"
 	_oauth2Exception "github.com/Rayato159/isekai-shop-api/modules/oauth2/exception"
 	_oauth2Model "github.com/Rayato159/isekai-shop-api/modules/oauth2/model"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/modules/oauth2/service"
+	_playerModel "github.com/Rayato159/isekai-shop-api/modules/player/model"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
 
 	"github.com/Rayato159/isekai-shop-api/config"
@@ -128,14 +130,14 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 
 	}
 
-	createPlayerInfo := &_oauth2Model.CreatePlayerInfo{
+	createPlayerReq := &_playerModel.CreatePlayerReq{
 		ID:     userInfo.ID,
 		Email:  userInfo.Email,
 		Name:   userInfo.Name,
 		Avatar: userInfo.Picture,
 	}
 
-	if err := c.oauth2Service.CreatePlayerAccount(createPlayerInfo); err != nil {
+	if err := c.oauth2Service.CreatePlayerAccount(createPlayerReq); err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.Oauth2Exception{})
 	}
 
@@ -168,14 +170,14 @@ func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 
 	}
 
-	createAdminInfo := &_oauth2Model.CreateAdminInfo{
+	createAdminReq := &_adminModel.CreateAdminReq{
 		ID:     userInfo.ID,
 		Email:  userInfo.Email,
 		Name:   userInfo.Name,
 		Avatar: userInfo.Picture,
 	}
 
-	if err := c.oauth2Service.CreateAdminAccount(createAdminInfo); err != nil {
+	if err := c.oauth2Service.CreateAdminAccount(createAdminReq); err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.Oauth2Exception{})
 	}
 

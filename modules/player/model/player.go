@@ -3,7 +3,7 @@ package model
 import "time"
 
 type (
-	PlayerProfile struct {
+	Player struct {
 		ID        string    `json:"id"`
 		Email     string    `json:"email"`
 		Username  *string   `json:"username"`
@@ -13,7 +13,14 @@ type (
 		UpdatedAt time.Time `json:"updatedAt"`
 	}
 
-	UpdatePlayerProfile struct {
+	CreatePlayerReq struct {
+		ID     string
+		Email  string
+		Name   string
+		Avatar string
+	}
+
+	EditPlayerReq struct {
 		Username string `json:"username"`
 	}
 )

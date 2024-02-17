@@ -43,7 +43,8 @@ func (r *itemRepositoryImpl) FindItems(itemFilterDto *_itemEntity.ItemFilterDto)
 }
 
 func (r *itemRepositoryImpl) CountItems(itemFilterDto *_itemEntity.ItemFilterDto) (int64, error) {
-	query := r.db.Model(&_itemEntity.Item{})
+	query := r.db.Model(&_itemEntity.Item{}).Where("is_archive = ?", false)
+
 	if itemFilterDto.Name != "" {
 		query = query.Where("name LIKE ?", "%"+itemFilterDto.Name+"%")
 	}
@@ -59,4 +60,45 @@ func (r *itemRepositoryImpl) CountItems(itemFilterDto *_itemEntity.ItemFilterDto
 	}
 
 	return count, nil
+}
+
+func (r *itemRepositoryImpl) InsertItem(item *_itemEntity.Item) (*_itemEntity.Item, error) {
+	insertedItem := new(_itemEntity.Item)
+
+	if err := r.db.Create(item).Scan(insertedItem).Error; err != nil {
+		r.logger.Error("Failed to insert item", err.Error())
+		return nil, &_itemException.InsertItemException{}
+	}
+
+	return insertedItem, nil
+}
+
+func (r *itemRepositoryImpl) UpdateItem(itemID uint64, item *_itemEntity.UpdateItemDto) (*_itemEntity.Item, error) {
+	updatedItem := new(_itemEntity.Item)
+
+	if err := r.db.Model(&_itemEntity.Item{}).Where(
+		"id = ?", itemID,
+	).Updates(
+		item,
+	).Scan(
+		updatedItem,
+	).Error; err != nil {
+		r.logger.Error("Failed to update item", err.Error())
+		return nil, &_itemException.UpdateItemException{}
+	}
+
+	return updatedItem, nil
+}
+
+func (r *itemRepositoryImpl) ArchiveItem(itemID uint64) error {
+	if err := r.db.Model(&_itemEntity.Item{}).Where(
+		"id = ?", itemID,
+	).Update(
+		"is_archive", true,
+	).Error; err != nil {
+		r.logger.Error("Failed to archive item", err.Error())
+		return &_itemException.ArchiveItemException{ItemID: itemID}
+	}
+
+	return nil
 }

@@ -43,26 +43,24 @@ func (r *playerRepositoryImpl) FindPlayerByID(playerID string) (*_playerEntity.P
 	return player, nil
 }
 
-func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayerDto *_playerEntity.UpdatePlayerDto) (string, error) {
-	player := new(_playerEntity.Player)
+func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayerDto *_playerEntity.UpdatePlayerDto) (*_playerEntity.Player, error) {
+	updatedPlayer := new(_playerEntity.Player)
 
-	tx := r.db.Model(
-		player,
-	).Where(
+	tx := r.db.Model(&_playerEntity.Player{}).Where(
 		"id = ?", playerID,
 	).Updates(
 		updatePlayerDto,
-	)
+	).Scan(updatedPlayer)
 
 	if tx.RowsAffected == 0 {
 		r.logger.Errorf("No updating player: %s", tx.Error.Error())
-		return "", &_playerException.FindPlayerException{PlayerID: playerID}
+		return nil, &_playerException.FindPlayerException{PlayerID: playerID}
 	}
 
 	if tx.Error != nil {
 		r.logger.Errorf("Error updating player: %s", tx.Error.Error())
-		return "", &_playerException.UpdatePlayerException{PlayerID: playerID}
+		return nil, &_playerException.UpdatePlayerException{PlayerID: playerID}
 	}
 
-	return playerID, nil
+	return updatedPlayer, nil
 }

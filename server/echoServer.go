@@ -74,6 +74,7 @@ func (s *echoServer) Start() {
 	s.initOAuth2Router()
 	s.initPlayerRouter(customerMiddleware)
 	s.initItemRouter()
+	s.initAdminRoute(customerMiddleware)
 
 	// Graceful shutdown
 	quit := make(chan os.Signal, 1)

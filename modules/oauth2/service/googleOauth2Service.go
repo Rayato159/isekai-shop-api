@@ -2,9 +2,10 @@ package service
 
 import (
 	_adminEntity "github.com/Rayato159/isekai-shop-api/modules/admin/entity"
+	_adminModel "github.com/Rayato159/isekai-shop-api/modules/admin/model"
 	_adminRepository "github.com/Rayato159/isekai-shop-api/modules/admin/repository"
-	_oauth2Model "github.com/Rayato159/isekai-shop-api/modules/oauth2/model"
 	_playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
+	_playerModel "github.com/Rayato159/isekai-shop-api/modules/player/model"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
 	"github.com/labstack/echo/v4"
 )
@@ -27,13 +28,13 @@ func NewGoogleOAuth2Service(
 	}
 }
 
-func (s *googleOAuth2Service) CreatePlayerAccount(createPlayerInfo *_oauth2Model.CreatePlayerInfo) error {
-	if !s.isPlayerIsExists(createPlayerInfo.ID) {
+func (s *googleOAuth2Service) CreatePlayerAccount(createPlayerReq *_playerModel.CreatePlayerReq) error {
+	if !s.isPlayerIsExists(createPlayerReq.ID) {
 		playerEntity := &_playerEntity.Player{
-			ID:     createPlayerInfo.ID,
-			Email:  createPlayerInfo.Email,
-			Name:   createPlayerInfo.Name,
-			Avatar: createPlayerInfo.Avatar,
+			ID:     createPlayerReq.ID,
+			Email:  createPlayerReq.Email,
+			Name:   createPlayerReq.Name,
+			Avatar: createPlayerReq.Avatar,
 		}
 
 		_, err := s.playerRepository.InsertPlayer(playerEntity)
@@ -42,12 +43,12 @@ func (s *googleOAuth2Service) CreatePlayerAccount(createPlayerInfo *_oauth2Model
 		}
 	}
 
-	s.logger.Infof("Player created: %s", createPlayerInfo.ID)
+	s.logger.Infof("Player created: %s", createPlayerReq.ID)
 
 	return nil
 }
 
-func (s *googleOAuth2Service) CreateAdminAccount(createAdminInfo *_oauth2Model.CreateAdminInfo) error {
+func (s *googleOAuth2Service) CreateAdminAccount(createAdminInfo *_adminModel.CreateAdminReq) error {
 	if !s.isAdminIsExists(createAdminInfo.ID) {
 		adminEntity := &_adminEntity.Admin{
 			ID:     createAdminInfo.ID,

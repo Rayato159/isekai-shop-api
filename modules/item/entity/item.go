@@ -11,7 +11,7 @@ type (
 		Name        string  `gorm:"type:varchar(64);unique;not null;"`
 		Description string  `gorm:"type:varchar(256);not null;"`
 		Picture     string  `gorm:"type:varchar(256);not null;"`
-		Price       int     `gorm:"not null;"`
+		Price       uint    `gorm:"not null;"`
 		IsArchive   bool    `gorm:"not null;default:false;"`
 		CreatedAt   string  `gorm:"not null;autoCreateTime;"`
 		UpdatedAt   string  `gorm:"not null;autoUpdateTime;"`
@@ -26,6 +26,14 @@ type (
 	PaginateDto struct {
 		Page int64
 		Size int64
+	}
+
+	UpdateItemDto struct {
+		AdminID     *string
+		Name        string
+		Description string
+		Picture     string
+		Price       uint
 	}
 )
 

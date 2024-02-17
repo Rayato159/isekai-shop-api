@@ -22,8 +22,8 @@ type (
 	}
 )
 
-func (p *Player) ToPlayerProfile() *_playerModel.PlayerProfile {
-	return &_playerModel.PlayerProfile{
+func (p *Player) ToPlayerModel() *_playerModel.Player {
+	return &_playerModel.Player{
 		ID:        p.ID,
 		Email:     p.Email,
 		Name:      p.Name,

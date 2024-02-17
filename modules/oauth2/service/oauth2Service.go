@@ -1,10 +1,11 @@
 package service
 
 import (
-	_oauth2Model "github.com/Rayato159/isekai-shop-api/modules/oauth2/model"
+	_adminModel "github.com/Rayato159/isekai-shop-api/modules/admin/model"
+	_playerModel "github.com/Rayato159/isekai-shop-api/modules/player/model"
 )
 
 type OAuth2Service interface {
-	CreatePlayerAccount(createPlayerInfo *_oauth2Model.CreatePlayerInfo) error
-	CreateAdminAccount(createAdminInfo *_oauth2Model.CreateAdminInfo) error
+	CreatePlayerAccount(createPlayerReq *_playerModel.CreatePlayerReq) error
+	CreateAdminAccount(createAdminReq *_adminModel.CreateAdminReq) error
 }
