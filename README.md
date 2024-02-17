@@ -4,6 +4,9 @@ Working is now on progress ...
 ### Architecture
 ![alt text](./assets/arch-v2.png "Architecture")
 
+### ER Diagram
+![alt text](./assets/er-diagram-v1.png "ER-Diagram")
+
 ### Start PostgreSQL on Docker
 
 1. Pull the PostgreSQL image
