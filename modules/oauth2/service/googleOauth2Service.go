@@ -69,6 +69,20 @@ func (s *googleOAuth2Service) CreateAdminAccount(createAdminInfo *_adminModel.Cr
 
 }
 
+func (s *googleOAuth2Service) IsThisGuyIsReallyAdmin(adminID string) bool {
+	if _, err := s.adminRepository.FindAdminByID(adminID); err != nil {
+		return false
+	}
+	return true
+}
+
+func (s *googleOAuth2Service) IsThisGuyIsReallyPlayer(playerID string) bool {
+	if _, err := s.playerRepository.FindPlayerByID(playerID); err != nil {
+		return false
+	}
+	return true
+}
+
 func (s *googleOAuth2Service) isPlayerIsExists(palyerId string) bool {
 	player, err := s.playerRepository.FindPlayerByID(palyerId)
 	if err != nil {

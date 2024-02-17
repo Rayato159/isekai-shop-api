@@ -28,7 +28,7 @@ func NewPlayerControllerImpl(
 func (c *playerControllerImpl) GetPlayer(pctx echo.Context) error {
 	playerID, err := c.getPlayerID(pctx)
 	if err != nil {
-		return writter.CustomError(pctx, http.StatusInternalServerError, err)
+		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
 
 	player, err := c.playerService.GetPlayer(playerID)

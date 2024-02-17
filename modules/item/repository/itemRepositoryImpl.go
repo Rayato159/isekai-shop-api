@@ -91,7 +91,7 @@ func (r *itemRepositoryImpl) UpdateItem(itemID uint64, item *_itemEntity.UpdateI
 }
 
 func (r *itemRepositoryImpl) ArchiveItem(itemID uint64) error {
-	if err := r.db.Model(&_itemEntity.Item{}).Where(
+	if err := r.db.Table("items").Where(
 		"id = ?", itemID,
 	).Update(
 		"is_archive", true,

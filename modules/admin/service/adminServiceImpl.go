@@ -38,6 +38,7 @@ func (s *adminServiceImpl) CreateItem(createItemReq *_itemModel.CreateItemReq) (
 
 func (s *adminServiceImpl) EditItem(itemID uint64, updateItemReq *_itemModel.EditItemReq) (*_itemModel.Item, error) {
 	updateItemDto := &_itemEntity.UpdateItemDto{
+		AdminID:     &updateItemReq.AdminID,
 		Name:        updateItemReq.Name,
 		Description: updateItemReq.Description,
 		Picture:     updateItemReq.Picture,

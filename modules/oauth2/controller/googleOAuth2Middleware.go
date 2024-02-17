@@ -48,6 +48,10 @@ func (c *googleOAuth2Controller) PlayerAuthorize(pctx echo.Context, next echo.Ha
 
 	}
 
+	if !c.oauth2Service.IsThisGuyIsReallyPlayer(userInfo.ID) {
+		return writter.CustomError(pctx, http.StatusUnauthorized, &_oauth2Exception.NoPermissionException{})
+	}
+
 	pctx.Set("playerID", userInfo.ID)
 
 	return next(pctx)
@@ -91,7 +95,10 @@ func (c *googleOAuth2Controller) AdminAuthorize(pctx echo.Context, next echo.Han
 
 	}
 
-	pctx.Set("playerID", userInfo.ID)
+	if !c.oauth2Service.IsThisGuyIsReallyAdmin(userInfo.ID) {
+		return writter.CustomError(pctx, http.StatusUnauthorized, &_oauth2Exception.NoPermissionException{})
+	}
+
 	pctx.Set("adminID", userInfo.ID)
 
 	return next(pctx)

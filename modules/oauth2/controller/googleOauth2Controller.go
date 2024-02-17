@@ -59,9 +59,9 @@ func NewGoogleOAuth2Controller(
 
 func setGooleOAuth2Config(oauth2Conf *config.OAuth2Config) {
 	playerGoogleOAuth2 = &oauth2.Config{
-		ClientID:     oauth2Conf.Player.ClientId,
-		ClientSecret: oauth2Conf.Player.ClientSecret,
-		RedirectURL:  oauth2Conf.Player.RedirectUrl,
+		ClientID:     oauth2Conf.ClientId,
+		ClientSecret: oauth2Conf.ClientSecret,
+		RedirectURL:  oauth2Conf.PlayerRedirectUrl,
 		Scopes:       oauth2Conf.Scopes,
 		Endpoint: oauth2.Endpoint{
 			AuthURL:       oauth2Conf.Endpoints.AuthUrl,
@@ -72,9 +72,9 @@ func setGooleOAuth2Config(oauth2Conf *config.OAuth2Config) {
 	}
 
 	adminGoogleOAuth2 = &oauth2.Config{
-		ClientID:     oauth2Conf.Admin.ClientId,
-		ClientSecret: oauth2Conf.Admin.ClientSecret,
-		RedirectURL:  oauth2Conf.Admin.RedirectUrl,
+		ClientID:     oauth2Conf.ClientId,
+		ClientSecret: oauth2Conf.ClientSecret,
+		RedirectURL:  oauth2Conf.AdminRedirectUrl,
 		Scopes:       oauth2Conf.Scopes,
 		Endpoint: oauth2.Endpoint{
 			AuthURL:       oauth2Conf.Endpoints.AuthUrl,
