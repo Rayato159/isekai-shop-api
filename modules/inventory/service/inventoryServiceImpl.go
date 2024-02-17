@@ -6,24 +6,20 @@ import (
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/modules/inventory/repository"
 	_itemModel "github.com/Rayato159/isekai-shop-api/modules/item/model"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
-	"github.com/labstack/echo/v4"
 )
 
 type inventoryServiceImpl struct {
 	inventoryRepository _inventoryRepository.InventoryRepository
 	itemRepository      _itemRepository.ItemRepository
-	logger              echo.Logger
 }
 
 func NewInventoryService(
 	inventoryRepository _inventoryRepository.InventoryRepository,
 	itemRepository _itemRepository.ItemRepository,
-	logger echo.Logger,
 ) InventoryService {
 	return &inventoryServiceImpl{
 		inventoryRepository: inventoryRepository,
 		itemRepository:      itemRepository,
-		logger:              logger,
 	}
 }
 
@@ -49,7 +45,6 @@ func (s *inventoryServiceImpl) buildInventoryListingResult(
 
 	itemEntities, err := s.itemRepository.FindItemByIDs(uniqueItemIDList)
 	if err != nil {
-		s.logger.Error("Failed to find items", err.Error())
 		return make([]*_inventoryModel.Inventory, 0)
 	}
 

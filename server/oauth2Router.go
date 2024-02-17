@@ -26,7 +26,6 @@ func (s *echoServer) initOAuth2Router() {
 	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(
 		playerRepository,
 		adminRepository,
-		s.app.Logger,
 	)
 
 	oauth2Controller := _oauth2Controller.NewGoogleOAuth2Controller(

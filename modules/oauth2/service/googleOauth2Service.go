@@ -7,24 +7,20 @@ import (
 	_playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
 	_playerModel "github.com/Rayato159/isekai-shop-api/modules/player/model"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
-	"github.com/labstack/echo/v4"
 )
 
 type googleOAuth2Service struct {
 	playerRepository _playerRepository.PlayerRepository
 	adminRepository  _adminRepository.AdminRepository
-	logger           echo.Logger
 }
 
 func NewGoogleOAuth2Service(
 	playerRepository _playerRepository.PlayerRepository,
 	adminRepository _adminRepository.AdminRepository,
-	logger echo.Logger,
 ) OAuth2Service {
 	return &googleOAuth2Service{
 		playerRepository: playerRepository,
 		adminRepository:  adminRepository,
-		logger:           logger,
 	}
 }
 
@@ -43,8 +39,6 @@ func (s *googleOAuth2Service) CreatePlayerAccount(createPlayerReq *_playerModel.
 		}
 	}
 
-	s.logger.Infof("Player created: %s", createPlayerReq.ID)
-
 	return nil
 }
 
@@ -62,8 +56,6 @@ func (s *googleOAuth2Service) CreateAdminAccount(createAdminInfo *_adminModel.Cr
 			return err
 		}
 	}
-
-	s.logger.Infof("Admin created: %s", createAdminInfo.ID)
 
 	return nil
 

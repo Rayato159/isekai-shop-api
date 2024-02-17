@@ -4,19 +4,15 @@ import (
 	_itemEntity "github.com/Rayato159/isekai-shop-api/modules/item/entity"
 	_itemModel "github.com/Rayato159/isekai-shop-api/modules/item/model"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
-
-	"github.com/labstack/echo/v4"
 )
 
 type itemServiceImpl struct {
 	itemRepository _itemRepository.ItemRepository
-	logger         echo.Logger
 }
 
-func NewItemServiceImpl(itemRepository _itemRepository.ItemRepository, logger echo.Logger) ItemService {
+func NewItemServiceImpl(itemRepository _itemRepository.ItemRepository) ItemService {
 	return &itemServiceImpl{
 		itemRepository: itemRepository,
-		logger:         logger,
 	}
 }
 

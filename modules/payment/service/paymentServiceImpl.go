@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log"
+
 	_inventoryEntity "github.com/Rayato159/isekai-shop-api/modules/inventory/entity"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/modules/inventory/repository"
 	_itemModel "github.com/Rayato159/isekai-shop-api/modules/item/model"
@@ -11,7 +13,6 @@ import (
 	_paymentException "github.com/Rayato159/isekai-shop-api/modules/payment/exception"
 	_paymentModel "github.com/Rayato159/isekai-shop-api/modules/payment/model"
 	_paymentRepository "github.com/Rayato159/isekai-shop-api/modules/payment/repository"
-	"github.com/labstack/echo/v4"
 )
 
 type paymentServiceImpl struct {
@@ -19,7 +20,6 @@ type paymentServiceImpl struct {
 	itemRepository      _itemRepository.ItemRepository
 	orderRepository     _orderRepository.OrderRepository
 	inventoryRepository _inventoryRepository.InventoryRepository
-	logger              echo.Logger
 }
 
 func NewPaymentServiceImpl(
@@ -27,14 +27,12 @@ func NewPaymentServiceImpl(
 	itemRepository _itemRepository.ItemRepository,
 	orderRepository _orderRepository.OrderRepository,
 	inventoryRepository _inventoryRepository.InventoryRepository,
-	logger echo.Logger,
 ) PaymentService {
 	return &paymentServiceImpl{
 		paymentRepository:   paymentRepository,
 		itemRepository:      itemRepository,
 		orderRepository:     orderRepository,
 		inventoryRepository: inventoryRepository,
-		logger:              logger,
 	}
 }
 
@@ -95,7 +93,7 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 	if err != nil {
 		return nil, err
 	}
-	s.logger.Infof("Inserted order: %s", insertedOrder.ID)
+	log.Printf("Inserted order: %s", insertedOrder.ID)
 
 	inventoryEntities := s.groupInventoryEntities(buyItemReq)
 
@@ -103,7 +101,7 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 	if err != nil {
 		return nil, err
 	}
-	s.logger.Infof("Inserted inventories: %d", len(inventory))
+	log.Printf("Inserted inventories: %d", len(inventory))
 
 	insertedPayment, err := s.paymentRepository.InsertPayment(&_paymentEntity.Payment{
 		PlayerID: buyItemReq.PlayerID,
@@ -112,7 +110,7 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 	if err != nil {
 		return nil, err
 	}
-	s.logger.Infof("Payment entity: %s", insertedPayment.ID)
+	log.Printf("Payment entity: %s", insertedPayment.ID)
 
 	return insertedPayment.ToPaymentModel(), nil
 }
@@ -153,7 +151,7 @@ func (s *paymentServiceImpl) SellItem(sellItemReq *_paymentModel.SellItemReq) (*
 	if err != nil {
 		return nil, err
 	}
-	s.logger.Infof("Inserted order: %d", insertedOrder.ID)
+	log.Printf("Inserted order: %d", insertedOrder.ID)
 
 	insertedPayment, err := s.paymentRepository.InsertPayment(&_paymentEntity.Payment{
 		PlayerID: sellItemReq.PlayerID,
@@ -162,7 +160,7 @@ func (s *paymentServiceImpl) SellItem(sellItemReq *_paymentModel.SellItemReq) (*
 	if err != nil {
 		return nil, err
 	}
-	s.logger.Infof("Payment entity: %d", insertedPayment.ID)
+	log.Printf("Payment entity: %d", insertedPayment.ID)
 
 	if err := s.inventoryRepository.DeleteItemByLimit(
 		sellItemReq.PlayerID,
@@ -171,7 +169,7 @@ func (s *paymentServiceImpl) SellItem(sellItemReq *_paymentModel.SellItemReq) (*
 	); err != nil {
 		return nil, err
 	}
-	s.logger.Infof("Deleted inventories for %d records", sellItemReq.Quantity)
+	log.Printf("Deleted inventories for %d records", sellItemReq.Quantity)
 
 	return insertedPayment.ToPaymentModel(), nil
 }
@@ -194,7 +192,7 @@ func (s *paymentServiceImpl) checkPlayerItemQuantity(playerID string, itemID uin
 	inventoryCount := s.inventoryRepository.CountPlayerItem(playerID, itemID)
 
 	if int(inventoryCount) < int(quantity) {
-		s.logger.Infof("Player %s has not enough item with id: %d", playerID, itemID)
+		log.Printf("Player %s has not enough item with id: %d", playerID, itemID)
 		return &_paymentException.NotEnoughItemException{ItemID: itemID}
 	}
 
@@ -208,7 +206,7 @@ func (s *paymentServiceImpl) checkPlayerBalance(playerID string, amount int64) e
 	}
 
 	if balanceDto.Balance < amount {
-		s.logger.Infof("Player %s has not enough balance", playerID)
+		log.Printf("Player %s has not enough balance", playerID)
 		return &_paymentException.NotEnoughBalanceException{}
 	}
 

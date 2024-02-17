@@ -4,18 +4,15 @@ import (
 	_playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
 	_playerModel "github.com/Rayato159/isekai-shop-api/modules/player/model"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
-	"github.com/labstack/echo/v4"
 )
 
 type playerServiceImpl struct {
 	playerRepository _playerRepository.PlayerRepository
-	logger           echo.Logger
 }
 
-func NewPlayerServiceImpl(playerRepository _playerRepository.PlayerRepository, logger echo.Logger) PlayerService {
+func NewPlayerServiceImpl(playerRepository _playerRepository.PlayerRepository) PlayerService {
 	return &playerServiceImpl{
 		playerRepository: playerRepository,
-		logger:           logger,
 	}
 }
 

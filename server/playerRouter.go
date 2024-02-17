@@ -11,7 +11,7 @@ func (s *echoServer) initPlayerRouter(customMiddleware customMiddleware.CustomMi
 	router := s.baseRouter.Group("/player")
 
 	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
-	playerService := _playerService.NewPlayerServiceImpl(playerRepository, s.app.Logger)
+	playerService := _playerService.NewPlayerServiceImpl(playerRepository)
 	playerController := _playerController.NewPlayerControllerImpl(playerService, s.app.Logger)
 
 	router.GET("", playerController.GetPlayer, customMiddleware.PlayerAuthorize)

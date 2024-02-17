@@ -13,7 +13,7 @@ func (s *echoServer) initInventoryRouter(customMiddleware customMiddleware.Custo
 
 	itemRepository := _itemRepository.NewItemRepositoryImpl(s.db, s.app.Logger)
 	inventoryRepository := _inventoryRepository.NewInventoryRepository(s.db, s.app.Logger)
-	inventoryService := _inventoryService.NewInventoryService(inventoryRepository, itemRepository, s.app.Logger)
+	inventoryService := _inventoryService.NewInventoryService(inventoryRepository, itemRepository)
 	itemController := _inventoryController.NewInventoryController(inventoryService, s.app.Logger)
 
 	router.GET("", itemController.PlayerInventoryListing, customMiddleware.PlayerAuthorize)

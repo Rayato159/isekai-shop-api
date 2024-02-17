@@ -23,7 +23,6 @@ func (s *echoServer) initPaymentRouter(customMiddleware customMiddleware.CustomM
 		itemRepository,
 		orderRepository,
 		inventoryRepository,
-		s.app.Logger,
 	)
 	paymentController := _paymentController.NewPaymentControllerImpl(paymentService, s.app.Logger)
 

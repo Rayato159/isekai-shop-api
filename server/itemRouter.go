@@ -10,7 +10,7 @@ func (s *echoServer) initItemRouter() {
 	router := s.baseRouter.Group("/item")
 
 	itemRepository := _itemRepository.NewItemRepositoryImpl(s.db, s.app.Logger)
-	itemService := _itemService.NewItemServiceImpl(itemRepository, s.app.Logger)
+	itemService := _itemService.NewItemServiceImpl(itemRepository)
 	itemController := _itemController.NewItemControllerImpl(itemService, s.app.Logger)
 
 	router.GET("", itemController.ItemListing)

@@ -11,7 +11,7 @@ func (s *echoServer) initAdminRouter(customMiddleware customMiddleware.CustomMid
 	router := s.baseRouter.Group("/admin/item")
 
 	itemRepository := _itemRepository.NewItemRepositoryImpl(s.db, s.app.Logger)
-	adminService := _adminService.NewAdminServiceImpl(itemRepository, s.app.Logger)
+	adminService := _adminService.NewAdminServiceImpl(itemRepository)
 	adminController := _adminController.NewAdminControllerImpl(adminService, s.app.Logger)
 
 	router.POST("", adminController.CreateItem, customMiddleware.AdminAuthorize)

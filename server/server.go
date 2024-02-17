@@ -123,7 +123,6 @@ func (s *echoServer) getCustomMiddleware() customMiddleware.CustomMiddleware {
 	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(
 		playerRepository,
 		adminRepository,
-		s.app.Logger,
 	)
 
 	controller := _oauth2Controller.NewGoogleOAuth2Controller(
