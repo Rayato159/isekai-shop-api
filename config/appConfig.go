@@ -30,13 +30,18 @@ type (
 	}
 
 	OAuth2Config struct {
-		ClientId     string           `mapstructure:"clientId"`
-		ClientSecret string           `mapstructure:"clientSecret"`
-		RedirectUrl  string           `mapstructure:"redirectUrl"`
-		Endpoints    *oauth2Endpoints `mapstructure:"endpoints"`
-		Scopes       []string         `mapstructure:"scopes"` // https://developers.google.com/identity/protocols/oauth2/scopes
-		UserInfoUrl  string           `mapstructure:"userInfoUrl"`
-		RevokeUrl    string           `mapstructure:"revokeUrl"`
+		Player      *oauth2App       `mapstructure:"player"`
+		Admin       *oauth2App       `mapstructure:"admin"`
+		Endpoints   *oauth2Endpoints `mapstructure:"endpoints"`
+		Scopes      []string         `mapstructure:"scopes"` // https://developers.google.com/identity/protocols/oauth2/scopes
+		UserInfoUrl string           `mapstructure:"userInfoUrl"`
+		RevokeUrl   string           `mapstructure:"revokeUrl"`
+	}
+
+	oauth2App struct {
+		ClientId     string `mapstructure:"clientId"`
+		ClientSecret string `mapstructure:"clientSecret"`
+		RedirectUrl  string `mapstructure:"redirectUrl"`
 	}
 
 	oauth2Endpoints struct {

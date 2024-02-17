@@ -29,8 +29,9 @@ type (
 )
 
 var (
-	googleOAuth2 *oauth2.Config
-	once         sync.Once
+	playerGoogleOAuth2 *oauth2.Config
+	adminGoogleOAuth2  *oauth2.Config
+	once               sync.Once
 
 	oauth2AccessTokenCookieName  = "act"
 	oauth2RefreshTokenCookieName = "rft"
@@ -43,18 +44,7 @@ func NewGoogleOAuth2Controller(
 	logger echo.Logger,
 ) OAuth2Controller {
 	once.Do(func() {
-		googleOAuth2 = &oauth2.Config{
-			ClientID:     oauth2Conf.ClientId,
-			ClientSecret: oauth2Conf.ClientSecret,
-			RedirectURL:  oauth2Conf.RedirectUrl,
-			Scopes:       oauth2Conf.Scopes,
-			Endpoint: oauth2.Endpoint{
-				AuthURL:       oauth2Conf.Endpoints.AuthUrl,
-				TokenURL:      oauth2Conf.Endpoints.TokenUrl,
-				DeviceAuthURL: oauth2Conf.Endpoints.DeviceAuthUrl,
-				AuthStyle:     oauth2.AuthStyleInParams,
-			},
-		}
+		setGooleOAuth2Config(oauth2Conf)
 	})
 
 	return &googleOAuth2Controller{
@@ -65,7 +55,35 @@ func NewGoogleOAuth2Controller(
 	}
 }
 
-func (c *googleOAuth2Controller) Login(pctx echo.Context) error {
+func setGooleOAuth2Config(oauth2Conf *config.OAuth2Config) {
+	playerGoogleOAuth2 = &oauth2.Config{
+		ClientID:     oauth2Conf.Player.ClientId,
+		ClientSecret: oauth2Conf.Player.ClientSecret,
+		RedirectURL:  oauth2Conf.Player.RedirectUrl,
+		Scopes:       oauth2Conf.Scopes,
+		Endpoint: oauth2.Endpoint{
+			AuthURL:       oauth2Conf.Endpoints.AuthUrl,
+			TokenURL:      oauth2Conf.Endpoints.TokenUrl,
+			DeviceAuthURL: oauth2Conf.Endpoints.DeviceAuthUrl,
+			AuthStyle:     oauth2.AuthStyleInParams,
+		},
+	}
+
+	adminGoogleOAuth2 = &oauth2.Config{
+		ClientID:     oauth2Conf.Admin.ClientId,
+		ClientSecret: oauth2Conf.Admin.ClientSecret,
+		RedirectURL:  oauth2Conf.Admin.RedirectUrl,
+		Scopes:       oauth2Conf.Scopes,
+		Endpoint: oauth2.Endpoint{
+			AuthURL:       oauth2Conf.Endpoints.AuthUrl,
+			TokenURL:      oauth2Conf.Endpoints.TokenUrl,
+			DeviceAuthURL: oauth2Conf.Endpoints.DeviceAuthUrl,
+			AuthStyle:     oauth2.AuthStyleInParams,
+		},
+	}
+}
+
+func (c *googleOAuth2Controller) PlayerLogin(pctx echo.Context) error {
 	state, err := c.stateProvider.GenerateRandomState()
 
 	if err != nil {
@@ -73,10 +91,21 @@ func (c *googleOAuth2Controller) Login(pctx echo.Context) error {
 		return err
 	}
 
-	return pctx.Redirect(http.StatusFound, googleOAuth2.AuthCodeURL(state))
+	return pctx.Redirect(http.StatusFound, playerGoogleOAuth2.AuthCodeURL(state))
 }
 
-func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
+func (c *googleOAuth2Controller) AdminLogin(pctx echo.Context) error {
+	state, err := c.stateProvider.GenerateRandomState()
+
+	if err != nil {
+		c.logger.Errorf("Error generating state: %s", err.Error())
+		return err
+	}
+
+	return pctx.Redirect(http.StatusFound, adminGoogleOAuth2.AuthCodeURL(state))
+}
+
+func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 	ctx := context.Background()
 
 	if err := c.callbackValidate(pctx); err != nil {
@@ -84,13 +113,13 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
 	}
 
-	token, err := googleOAuth2.Exchange(ctx, pctx.QueryParam("code"))
+	token, err := playerGoogleOAuth2.Exchange(ctx, pctx.QueryParam("code"))
 	if err != nil {
 		c.logger.Errorf("Error exchanging code for token: %s", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
 	}
 
-	client := googleOAuth2.Client(ctx, token)
+	client := playerGoogleOAuth2.Client(ctx, token)
 
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
@@ -100,13 +129,53 @@ func (c *googleOAuth2Controller) LoginCallback(pctx echo.Context) error {
 	}
 
 	createPlayerInfo := &_oauth2Model.CreatePlayerInfo{
-		ID:      userInfo.ID,
-		Email:   userInfo.Email,
-		Name:    userInfo.Name,
-		Picture: userInfo.Picture,
+		ID:     userInfo.ID,
+		Email:  userInfo.Email,
+		Name:   userInfo.Name,
+		Avatar: userInfo.Picture,
 	}
 
 	if err := c.oauth2Service.CreatePlayerAccount(createPlayerInfo); err != nil {
+		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.Oauth2Exception{})
+	}
+
+	c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, token.AccessToken)
+	c.setSameSiteCookie(pctx, oauth2RefreshTokenCookieName, token.RefreshToken)
+
+	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{Message: "Login successful"})
+}
+
+func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
+	ctx := context.Background()
+
+	if err := c.callbackValidate(pctx); err != nil {
+		c.logger.Errorf("Error validating callback: %s", err.Error())
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
+	}
+
+	token, err := adminGoogleOAuth2.Exchange(ctx, pctx.QueryParam("code"))
+	if err != nil {
+		c.logger.Errorf("Error exchanging code for token: %s", err.Error())
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
+	}
+
+	client := adminGoogleOAuth2.Client(ctx, token)
+
+	userInfo, err := c.getUserInfo(client)
+	if err != nil {
+		c.logger.Errorf("Error reading user info: %s", err.Error())
+		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2Exception.Oauth2Exception{})
+
+	}
+
+	createAdminInfo := &_oauth2Model.CreateAdminInfo{
+		ID:     userInfo.ID,
+		Email:  userInfo.Email,
+		Name:   userInfo.Name,
+		Avatar: userInfo.Picture,
+	}
+
+	if err := c.oauth2Service.CreateAdminAccount(createAdminInfo); err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.Oauth2Exception{})
 	}
 

@@ -1,6 +1,7 @@
 package server
 
 import (
+	_adminRepository "github.com/Rayato159/isekai-shop-api/modules/admin/repository"
 	_oauth2Controller "github.com/Rayato159/isekai-shop-api/modules/oauth2/controller"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/modules/oauth2/service"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
@@ -20,9 +21,11 @@ func (s *echoServer) initOAuth2Router() {
 	)
 
 	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
+	adminRepository := _adminRepository.NewAdminRepositoryImpl(s.db, s.app.Logger)
 
 	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(
 		playerRepository,
+		adminRepository,
 		s.app.Logger,
 	)
 
@@ -33,7 +36,9 @@ func (s *echoServer) initOAuth2Router() {
 		s.app.Logger,
 	)
 
-	router.GET("/login", oauth2Controller.Login)
-	router.GET("/login/callback", oauth2Controller.LoginCallback)
+	router.GET("/player/login", oauth2Controller.PlayerLogin)
+	router.GET("/admin/login", oauth2Controller.AdminLogin)
+	router.GET("/player/login/callback", oauth2Controller.PlayerLoginCallback)
+	router.GET("/admin/login/callback", oauth2Controller.AdminLoginCallback)
 	router.DELETE("/logout", oauth2Controller.Logout)
 }

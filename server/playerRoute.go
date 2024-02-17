@@ -14,6 +14,6 @@ func (s *echoServer) initPlayerRouter(customMiddleware customMiddleware.CustomMi
 	playerService := _playerService.NewPlayerServiceImpl(playerRepository, s.app.Logger)
 	playerController := _playerController.NewPlayerControllerImpl(playerService, s.app.Logger)
 
-	router.GET("", playerController.GetPlayerProfile, customMiddleware.Authorize)
-	router.PATCH("", playerController.EditPlayerProfile, customMiddleware.Authorize)
+	router.GET("", playerController.GetPlayerProfile, customMiddleware.PlayerAuthorize)
+	router.PATCH("", playerController.EditPlayerProfile, customMiddleware.PlayerAuthorize)
 }

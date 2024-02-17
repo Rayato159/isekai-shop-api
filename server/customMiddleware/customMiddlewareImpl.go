@@ -25,8 +25,8 @@ func NewCustomMiddlewaresImpl(
 	}
 }
 
-func (m *customMiddlewaresImpl) Authorize(next echo.HandlerFunc) echo.HandlerFunc {
+func (m *customMiddlewaresImpl) PlayerAuthorize(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(pctx echo.Context) error {
-		return m.oauth2Controller.Authorize(pctx, next)
+		return m.oauth2Controller.PlayerAuthorize(pctx, next)
 	}
 }

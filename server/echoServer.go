@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/Rayato159/isekai-shop-api/config"
+	_adminRepository "github.com/Rayato159/isekai-shop-api/modules/admin/repository"
 	_oauth2Controller "github.com/Rayato159/isekai-shop-api/modules/oauth2/controller"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/modules/oauth2/service"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
@@ -114,9 +115,11 @@ func (s *echoServer) getCustomMiddleware() customMiddleware.CustomMiddleware {
 	)
 
 	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
+	adminRepository := _adminRepository.NewAdminRepositoryImpl(s.db, s.app.Logger)
 
 	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(
 		playerRepository,
+		adminRepository,
 		s.app.Logger,
 	)
 

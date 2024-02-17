@@ -20,7 +20,7 @@ func NewPlayerServiceImpl(playerRepository _playerRepository.PlayerRepository, l
 }
 
 func (s *playerServiceImpl) GetPlayerProfile(playerID string) (*_playerModel.PlayerProfile, error) {
-	player, err := s.playerRepository.FindPlayerById(playerID)
+	player, err := s.playerRepository.FindPlayerByID(playerID)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (s *playerServiceImpl) EditPlayerProfile(playerID string, updatePlayer *_pl
 		return nil, err
 	}
 
-	player, err := s.playerRepository.FindPlayerById(playerID)
+	player, err := s.playerRepository.FindPlayerByID(playerID)
 	if err != nil {
 		return nil, err
 	}
