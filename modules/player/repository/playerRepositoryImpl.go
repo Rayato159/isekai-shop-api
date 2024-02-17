@@ -37,13 +37,13 @@ func (r *playerRepositoryImpl) FindPlayerByID(playerID string) (*_playerEntity.P
 
 	if tx.Error != nil {
 		r.logger.Errorf("Error finding player: %s", tx.Error.Error())
-		return nil, &_playerException.FindPlayerException{PlayerID: playerID}
+		return nil, &_playerException.PlayerNotFoundException{PlayerID: playerID}
 	}
 
 	return player, nil
 }
 
-func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayerDto *_playerEntity.UpdatePlayerDto) (*_playerEntity.Player, error) {
+func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayerDto *_playerEntity.UpdatePlayerDto) (string, error) {
 	updatedPlayer := new(_playerEntity.Player)
 
 	tx := r.db.Model(&_playerEntity.Player{}).Where(
@@ -54,13 +54,13 @@ func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayerDto *_p
 
 	if tx.RowsAffected == 0 {
 		r.logger.Errorf("No updating player: %s", tx.Error.Error())
-		return nil, &_playerException.FindPlayerException{PlayerID: playerID}
+		return "", &_playerException.PlayerNotFoundException{PlayerID: playerID}
 	}
 
 	if tx.Error != nil {
 		r.logger.Errorf("Error updating player: %s", tx.Error.Error())
-		return nil, &_playerException.UpdatePlayerException{PlayerID: playerID}
+		return "", &_playerException.UpdatePlayerException{PlayerID: playerID}
 	}
 
-	return updatedPlayer, nil
+	return playerID, nil
 }

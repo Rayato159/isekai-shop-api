@@ -45,7 +45,12 @@ func (s *adminServiceImpl) EditItem(itemID uint64, updateItemReq *_itemModel.Edi
 		Price:       updateItemReq.Price,
 	}
 
-	itemEntity, err := s.itemRepository.UpdateItem(itemID, updateItemDto)
+	updatedItemID, err := s.itemRepository.UpdateItem(itemID, updateItemDto)
+	if err != nil {
+		return nil, err
+	}
+
+	itemEntity, err := s.itemRepository.FindItemByID(updatedItemID)
 	if err != nil {
 		return nil, err
 	}

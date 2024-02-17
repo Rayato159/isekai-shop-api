@@ -62,6 +62,18 @@ func (r *itemRepositoryImpl) CountItems(itemFilterDto *_itemEntity.ItemFilterDto
 	return count, nil
 }
 
+func (r *itemRepositoryImpl) FindItemByID(itemID uint64) (*_itemEntity.Item, error) {
+	item := new(_itemEntity.Item)
+
+	if err := r.db.First(item, itemID).Error; err != nil {
+		r.logger.Error("Failed to find item", err.Error())
+		return nil, &_itemException.ItemNotFoundException{ItemID: itemID}
+	}
+
+	return item, nil
+
+}
+
 func (r *itemRepositoryImpl) InsertItem(item *_itemEntity.Item) (*_itemEntity.Item, error) {
 	insertedItem := new(_itemEntity.Item)
 
@@ -73,21 +85,24 @@ func (r *itemRepositoryImpl) InsertItem(item *_itemEntity.Item) (*_itemEntity.It
 	return insertedItem, nil
 }
 
-func (r *itemRepositoryImpl) UpdateItem(itemID uint64, item *_itemEntity.UpdateItemDto) (*_itemEntity.Item, error) {
-	updatedItem := new(_itemEntity.Item)
-
-	if err := r.db.Model(&_itemEntity.Item{}).Where(
+func (r *itemRepositoryImpl) UpdateItem(itemID uint64, updateItemDto *_itemEntity.UpdateItemDto) (uint64, error) {
+	tx := r.db.Model(&_itemEntity.Item{}).Where(
 		"id = ?", itemID,
 	).Updates(
-		item,
-	).Scan(
-		updatedItem,
-	).Error; err != nil {
-		r.logger.Error("Failed to update item", err.Error())
-		return nil, &_itemException.UpdateItemException{}
+		updateItemDto,
+	)
+
+	if tx.RowsAffected == 0 {
+		r.logger.Error("Item not found", tx.Error.Error())
+		return 0, &_itemException.ItemNotFoundException{ItemID: itemID}
 	}
 
-	return updatedItem, nil
+	if tx.Error != nil {
+		r.logger.Error("Failed to update item", tx.Error.Error())
+		return 0, &_itemException.UpdateItemException{}
+	}
+
+	return itemID, nil
 }
 
 func (r *itemRepositoryImpl) ArchiveItem(itemID uint64) error {

@@ -39,10 +39,15 @@ func (s *playerServiceImpl) EditPlayer(playerID string, editPlayerReq *_playerMo
 		Username: editPlayerReq.Username,
 	}
 
-	updatedPlayer, err := s.playerRepository.UpdatePlayer(playerID, editPlayerReqDto)
+	updatedPlayerID, err := s.playerRepository.UpdatePlayer(playerID, editPlayerReqDto)
 	if err != nil {
 		return nil, err
 	}
 
-	return updatedPlayer.ToPlayerModel(), nil
+	playerEntitiy, err := s.playerRepository.FindPlayerByID(updatedPlayerID)
+	if err != nil {
+		return nil, err
+	}
+
+	return playerEntitiy.ToPlayerModel(), nil
 }

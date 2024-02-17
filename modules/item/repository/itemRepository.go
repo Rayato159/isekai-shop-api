@@ -6,8 +6,9 @@ import (
 
 type ItemRepository interface {
 	FindItems(itemFilterDto *_itemEntity.ItemFilterDto) ([]*_itemEntity.Item, error)
+	FindItemByID(itemID uint64) (*_itemEntity.Item, error)
 	CountItems(itemFilterDto *_itemEntity.ItemFilterDto) (int64, error)
 	InsertItem(item *_itemEntity.Item) (*_itemEntity.Item, error)
-	UpdateItem(itemID uint64, item *_itemEntity.UpdateItemDto) (*_itemEntity.Item, error)
+	UpdateItem(itemID uint64, updateItemDto *_itemEntity.UpdateItemDto) (uint64, error)
 	ArchiveItem(itemID uint64) error // Soft delete
 }
