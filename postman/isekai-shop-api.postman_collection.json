@@ -1,0 +1,1105 @@
+{
+	"info": {
+		"_postman_id": "4b92f98a-4b90-415d-8e07-0f0966f20694",
+		"name": "isekai-shop-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18192292"
+	},
+	"item": [
+		{
+			"name": "oauth2",
+			"item": [
+				{
+					"name": "logout",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/oauth2/google/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"oauth2",
+								"google",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "player",
+			"item": [
+				{
+					"name": "get player profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/player",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"player"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/player",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"player"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 14 Feb 2024 15:35:07 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "281"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"101772256434591099298\",\n    \"email\": \"rayato159@gmail.com\",\n    \"username\": null,\n    \"name\": \"Ruangyot Nanchiang\",\n    \"picture\": \"https://lh3.googleusercontent.com/a/ACg8ocKNDoTrX_RCpEeKmVvrB7kubuHtwaNFQezacLI07DWMQuw=s96-c\",\n    \"createdAt\": \"0001-01-01T00:00:00Z\",\n    \"updatedAt\": \"0001-01-01T00:00:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "edit profile",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Rayato159\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/player",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"player"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"Rayato159\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/player",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"player"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 16:04:10 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "312"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"101772256434591099298\",\n    \"email\": \"rayato159@gmail.com\",\n    \"username\": \"Rayato159\",\n    \"name\": \"Ruangyot Nanchiang\",\n    \"picture\": \"https://lh3.googleusercontent.com/a/ACg8ocKNDoTrX_RCpEeKmVvrB7kubuHtwaNFQezacLI07DWMQuw=s96-c\",\n    \"createdAt\": \"2024-02-17T20:17:50.221059+07:00\",\n    \"updatedAt\": \"2024-02-17T20:17:50.221059+07:00\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "item",
+			"item": [
+				{
+					"name": "item listing",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/item?name=&description&page=1&size=5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"item"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": ""
+								},
+								{
+									"key": "description",
+									"value": null
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/item?name=&description&page=1&size=5",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"item"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": ""
+										},
+										{
+											"key": "description",
+											"value": null
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 12:11:03 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1472"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"items\": [\n        {\n            \"id\": 1,\n            \"adminID\": null,\n            \"name\": \"Sword of the Dragon\",\n            \"description\": \"A powerful sword imbued with dragon magic.\",\n            \"picture\": \"https://i.pinimg.com/564x/e2/66/1d/e2661d03a8a519125d63bffb130f57a9.jpg\",\n            \"price\": 100,\n            \"createdAt\": \"2024-02-17 15:34:46.03173+07\",\n            \"updatedAt\": \"2024-02-17 15:34:46.03173+07\"\n        },\n        {\n            \"id\": 2,\n            \"adminID\": null,\n            \"name\": \"Mage Robe\",\n            \"description\": \"Enchanted robe for magical protection.\",\n            \"picture\": \"https://i.pinimg.com/564x/fb/cb/df/fbcbdf78714649a0c03337300340b6ba.jpg\",\n            \"price\": 80,\n            \"createdAt\": \"2024-02-17 15:34:46.03173+07\",\n            \"updatedAt\": \"2024-02-17 15:34:46.03173+07\"\n        },\n        {\n            \"id\": 3,\n            \"adminID\": null,\n            \"name\": \"Healing Potion\",\n            \"description\": \"Restores health when consumed.\",\n            \"picture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n            \"price\": 20,\n            \"createdAt\": \"2024-02-17 15:34:46.03173+07\",\n            \"updatedAt\": \"2024-02-17 15:34:46.03173+07\"\n        },\n        {\n            \"id\": 4,\n            \"adminID\": null,\n            \"name\": \"Elven Bow\",\n            \"description\": \"Crafted by skilled elves for precise shooting.\",\n            \"picture\": \"https://i.pinimg.com/564x/93/dc/ac/93dcaceb02008fc4d2bc7e609b89adb0.jpg\",\n            \"price\": 150,\n            \"createdAt\": \"2024-02-17 15:34:46.03173+07\",\n            \"updatedAt\": \"2024-02-17 15:34:46.03173+07\"\n        },\n        {\n            \"id\": 5,\n            \"adminID\": null,\n            \"name\": \"Orcish Shield\",\n            \"description\": \"Sturdy shield made from orcish materials.\",\n            \"picture\": \"https://i.pinimg.com/564x/a1/a5/a2/a1a5a24c75c8bdadbe17bfecaa43d866.jpg\",\n            \"price\": 120,\n            \"createdAt\": \"2024-02-17 15:34:46.03173+07\",\n            \"updatedAt\": \"2024-02-17 15:34:46.03173+07\"\n        }\n    ],\n    \"paginate\": {\n        \"page\": 1,\n        \"totalPage\": 2\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "create item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Red Rose of The Dead\",\r\n    \"description\": \"For red rose party of the death\",\r\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\r\n    \"price\": 1000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/admin/item",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"admin",
+								"item"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "201 - ok",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Red Rose of The Dead\",\r\n    \"description\": \"For red rose party of the death\",\r\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\r\n    \"price\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/admin/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"admin",
+										"item"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 15:52:32 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "218"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"adminID\": \"101772256434591099298\",\n    \"name\": \"Red Rose of The Dead\",\n    \"description\": \"For red rose party of the death\",\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\n    \"price\": 1000\n}"
+						}
+					]
+				},
+				{
+					"name": "edit item",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Black Rose of The Dead\",\r\n    \"description\": \"For black rose party of the death\",\r\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\r\n    \"price\": 2000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/admin/item/:itemID",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"admin",
+								"item",
+								":itemID"
+							],
+							"variable": [
+								{
+									"key": "itemID",
+									"value": "12"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Black Rose of The Dead\",\r\n    \"description\": \"For black rose party of the death\",\r\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\r\n    \"price\": 2000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/admin/item/:itemID",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"admin",
+										"item",
+										":itemID"
+									],
+									"variable": [
+										{
+											"key": "itemID",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 15:58:35 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "222"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"adminID\": \"101772256434591099298\",\n    \"name\": \"Black Rose of The Dead\",\n    \"description\": \"For black rose party of the death\",\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\n    \"price\": 2000\n}"
+						},
+						{
+							"name": "500 - item not found",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Black Rose of The Dead\",\r\n    \"description\": \"For black rose party of the death\",\r\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\r\n    \"price\": 2000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/admin/item/:itemID",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"admin",
+										"item",
+										":itemID"
+									],
+									"variable": [
+										{
+											"key": "itemID",
+											"value": "12"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 16:07:17 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "38"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"Item with ID 12 not found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "archive item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/admin/item/:itemID",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"admin",
+								"item",
+								":itemID"
+							],
+							"variable": [
+								{
+									"key": "itemID",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "204 - no content",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/admin/item/:itemID",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"admin",
+										"item",
+										":itemID"
+									],
+									"variable": [
+										{
+											"key": "itemID",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 13:30:05 GMT"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "payment",
+			"item": [
+				{
+					"name": "top up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 1000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/payment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"payment"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "201 - ok",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"amount\": 5000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/payment",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"payment"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 17:00:35 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "150"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"playerID\": \"101772256434591099298\",\n    \"amount\": 5000,\n    \"createdAt\": \"2024-02-18T00:00:35.72617+07:00\",\n    \"updatedAt\": \"2024-02-18T00:00:35.72617+07:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "player balance",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/payment/balance",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"payment",
+								"balance"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/payment/balance",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"payment",
+										"balance"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 17:02:45 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "52"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"playerID\": \"101772256434591099298\",\n    \"balance\": 6000\n}"
+						}
+					]
+				},
+				{
+					"name": "buy item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/payment/buy",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"payment",
+								"buy"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"itemID\": 3,\r\n    \"quantity\": 10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/payment/buy",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"payment",
+										"buy"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 20:07:57 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "152"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 3,\n    \"playerID\": \"101772256434591099298\",\n    \"amount\": -200,\n    \"createdAt\": \"2024-02-18T03:07:57.424378+07:00\",\n    \"updatedAt\": \"2024-02-18T03:07:57.424378+07:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "sell item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"itemID\": 3,\r\n    \"quantity\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/payment/sell",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"payment",
+								"sell"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"itemID\": 3,\r\n    \"quantity\": 10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/payment/buy",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"payment",
+										"buy"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 20:07:57 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "152"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 3,\n    \"playerID\": \"101772256434591099298\",\n    \"amount\": -200,\n    \"createdAt\": \"2024-02-18T03:07:57.424378+07:00\",\n    \"updatedAt\": \"2024-02-18T03:07:57.424378+07:00\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "inventory",
+			"item": [
+				{
+					"name": "player item listing",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/inventory",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"inventory"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/inventory",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"inventory"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 21:08:40 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "415"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"item\": {\n            \"id\": 1,\n            \"name\": \"Sword of the Dragon\",\n            \"description\": \"A powerful sword imbued with dragon magic.\",\n            \"picture\": \"https://i.pinimg.com/564x/e2/66/1d/e2661d03a8a519125d63bffb130f57a9.jpg\",\n            \"price\": 100\n        },\n        \"quantity\": 2\n    },\n    {\n        \"item\": {\n            \"id\": 3,\n            \"name\": \"Healing Potion\",\n            \"description\": \"Restores health when consumed.\",\n            \"picture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n            \"price\": 20\n        },\n        \"quantity\": 11\n    }\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "player order listing",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/order",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"order"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/order",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"order"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 21:30:15 GMT"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 15,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 3,\n        \"itemName\": \"Healing Potion\",\n        \"itemDescription\": \"Restores health when consumed.\",\n        \"itemPicture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n        \"itemPrice\": 20,\n        \"quantity\": 10,\n        \"totalPrice\": -200,\n        \"createdAt\": \"2024-02-18T04:06:56.624218+07:00\"\n    },\n    {\n        \"id\": 17,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 3,\n        \"itemName\": \"Healing Potion\",\n        \"itemDescription\": \"Restores health when consumed.\",\n        \"itemPicture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n        \"itemPrice\": 20,\n        \"quantity\": 5,\n        \"totalPrice\": 50,\n        \"createdAt\": \"2024-02-18T04:08:06.269779+07:00\"\n    },\n    {\n        \"id\": 18,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 3,\n        \"itemName\": \"Healing Potion\",\n        \"itemDescription\": \"Restores health when consumed.\",\n        \"itemPicture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n        \"itemPrice\": 20,\n        \"quantity\": 4,\n        \"totalPrice\": 40,\n        \"createdAt\": \"2024-02-18T04:08:22.264299+07:00\"\n    },\n    {\n        \"id\": 19,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 3,\n        \"itemName\": \"Healing Potion\",\n        \"itemDescription\": \"Restores health when consumed.\",\n        \"itemPicture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n        \"itemPrice\": 20,\n        \"quantity\": 10,\n        \"totalPrice\": -200,\n        \"createdAt\": \"2024-02-18T04:08:28.411785+07:00\"\n    },\n    {\n        \"id\": 20,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 1,\n        \"itemName\": \"Sword of the Dragon\",\n        \"itemDescription\": \"A powerful sword imbued with dragon magic.\",\n        \"itemPicture\": \"https://i.pinimg.com/564x/e2/66/1d/e2661d03a8a519125d63bffb130f57a9.jpg\",\n        \"itemPrice\": 100,\n        \"quantity\": 2,\n        \"totalPrice\": -200,\n        \"createdAt\": \"2024-02-18T04:08:34.549708+07:00\"\n    },\n    {\n        \"id\": 21,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 1,\n        \"itemName\": \"Sword of the Dragon\",\n        \"itemDescription\": \"A powerful sword imbued with dragon magic.\",\n        \"itemPicture\": \"https://i.pinimg.com/564x/e2/66/1d/e2661d03a8a519125d63bffb130f57a9.jpg\",\n        \"itemPrice\": 100,\n        \"quantity\": 2,\n        \"totalPrice\": -200,\n        \"createdAt\": \"2024-02-18T04:17:50.671728+07:00\"\n    },\n    {\n        \"id\": 22,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 3,\n        \"itemName\": \"Healing Potion\",\n        \"itemDescription\": \"Restores health when consumed.\",\n        \"itemPicture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n        \"itemPrice\": 20,\n        \"quantity\": 2,\n        \"totalPrice\": 20,\n        \"createdAt\": \"2024-02-18T04:17:59.678262+07:00\"\n    }\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "health check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/v1/health",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"v1",
+						"health"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 - ok",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=UTF-8"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 11 Feb 2024 18:00:12 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2"
+						}
+					],
+					"cookie": [],
+					"body": "OK"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
