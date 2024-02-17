@@ -29,3 +29,14 @@ func (r *orderRepositoryImpl) InsertOrder(orderEntity *_orderEntity.Order) (*_or
 
 	return insertedOrder, nil
 }
+
+func (r *orderRepositoryImpl) FindPlayerOrders(playerID string) ([]*_orderEntity.Order, error) {
+	orders := make([]*_orderEntity.Order, 0)
+
+	if err := r.db.Where("player_id = ?", playerID).Find(&orders).Error; err != nil {
+		r.logger.Errorf("Error finding player orders: %s", err.Error())
+		return nil, &_orderException.FindPlayerOrdersException{}
+	}
+
+	return orders, nil
+}

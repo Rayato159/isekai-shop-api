@@ -7,4 +7,6 @@ import (
 type PaymentService interface {
 	TopUp(topUpReq *_paymentModel.TopUpReq) (*_paymentModel.Payment, error)
 	CalculatePlayerBalance(playerID string) *_paymentModel.PlayerBalance
+	BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_paymentModel.Payment, error)
+	SellItem(sellItemReq *_paymentModel.SellItemReq) (*_paymentModel.Payment, error)
 }

@@ -21,14 +21,14 @@ func NewInventoryController(inventoryService _inventoryService.InventoryService,
 	}
 }
 
-func (c *inventoryControllerImpl) InventoryListing(pctx echo.Context) error {
+func (c *inventoryControllerImpl) PlayerInventoryListing(pctx echo.Context) error {
 	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		c.logger.Error("Failed to get playerID", err.Error())
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
 
-	inventories, err := c.inventoryService.InventoryListing(playerID)
+	inventories, err := c.inventoryService.PlayerInventoryListing(playerID)
 	if err != nil {
 		return pctx.JSON(http.StatusInternalServerError, err)
 	}

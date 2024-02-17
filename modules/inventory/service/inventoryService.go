@@ -5,5 +5,5 @@ import (
 )
 
 type InventoryService interface {
-	InventoryListing(playerID string) ([]*_inventoryModel.Inventory, error)
+	PlayerInventoryListing(playerID string) ([]*_inventoryModel.Inventory, error)
 }

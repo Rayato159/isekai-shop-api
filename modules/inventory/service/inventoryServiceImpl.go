@@ -27,8 +27,8 @@ func NewInventoryService(
 	}
 }
 
-func (s *inventoryServiceImpl) InventoryListing(playerID string) ([]*_inventoryModel.Inventory, error) {
-	inventories, err := s.inventoryRepository.FindInventories(playerID)
+func (s *inventoryServiceImpl) PlayerInventoryListing(playerID string) ([]*_inventoryModel.Inventory, error) {
+	inventories, err := s.inventoryRepository.FindPlayerInventories(playerID)
 	if err != nil {
 		return nil, err
 	}
@@ -62,6 +62,7 @@ func (s *inventoryServiceImpl) buildInventoryListingResult(
 				ID:          itemEntity.ID,
 				Name:        itemEntity.Name,
 				Description: itemEntity.Description,
+				Picture:     itemEntity.Picture,
 				Price:       itemEntity.Price,
 			},
 			Quantity: itemMapWithQuantity[itemEntity.ID],

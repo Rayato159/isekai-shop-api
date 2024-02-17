@@ -33,7 +33,7 @@ func (r *inventoryRepositoryImpl) InsertInventory(inventoryEntity *_inventoryEnt
 	return insertedInventory, nil
 }
 
-func (r *inventoryRepositoryImpl) FindInventories(playerID string) ([]*_inventoryEntity.Inventory, error) {
+func (r *inventoryRepositoryImpl) FindPlayerInventories(playerID string) ([]*_inventoryEntity.Inventory, error) {
 	inventories := make([]*_inventoryEntity.Inventory, 0)
 
 	if err := r.db.Where("player_id = ?", playerID).Find(&inventories).Error; err != nil {
@@ -59,4 +59,15 @@ func (r *inventoryRepositoryImpl) DeleteItem(playerID string, itemID uint64) err
 	}
 
 	return nil
+}
+
+func (r *inventoryRepositoryImpl) InsertInventoryInBluk(inventoryEntities []*_inventoryEntity.Inventory) ([]*_inventoryEntity.Inventory, error) {
+	insertedInventories := make([]*_inventoryEntity.Inventory, 0)
+
+	if err := r.db.Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
+		r.logger.Error("Failed to insert items", err.Error())
+		return nil, &_inventoryException.InsertInventoryException{}
+	}
+
+	return insertedInventories, nil
 }
