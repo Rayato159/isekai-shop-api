@@ -93,7 +93,7 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Inserted order: %s", insertedOrder.ID)
+	log.Printf("Inserted order: %d", insertedOrder.ID)
 
 	inventoryEntities := s.groupInventoryEntities(buyItemReq)
 
@@ -110,7 +110,7 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Payment entity: %s", insertedPayment.ID)
+	log.Printf("Payment entity: %d", insertedPayment.ID)
 
 	return insertedPayment.ToPaymentModel(), nil
 }
