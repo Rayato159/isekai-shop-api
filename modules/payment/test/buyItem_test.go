@@ -8,6 +8,7 @@ import (
 	_orderEntity "github.com/Rayato159/isekai-shop-api/modules/order/entity"
 	_orderRepository "github.com/Rayato159/isekai-shop-api/modules/order/repository"
 	_paymentEntity "github.com/Rayato159/isekai-shop-api/modules/payment/entity"
+	_paymentException "github.com/Rayato159/isekai-shop-api/modules/payment/exception"
 	_paymentModel "github.com/Rayato159/isekai-shop-api/modules/payment/model"
 	_paymentRepository "github.com/Rayato159/isekai-shop-api/modules/payment/repository"
 	_paymentService "github.com/Rayato159/isekai-shop-api/modules/payment/service"
@@ -111,4 +112,40 @@ func TestBuyItemSuccess(t *testing.T) {
 		PlayerID: "P001",
 		Amount:   -3000,
 	}, result)
+}
+
+func TestBuyItemFail(t *testing.T) {
+	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
+	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
+	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
+	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
+
+	paymentService := _paymentService.NewPaymentServiceImpl(
+		paymentRepositoryMock,
+		itemRepositoryMock,
+		orderRepositoryMock,
+		inventoryRepositoryMock,
+	)
+
+	itemRepositoryMock.On("FindItemByID", uint64(1)).Return(&_itemEntity.Item{
+		ID:          1,
+		Name:        "Sword of Tester",
+		Price:       1000,
+		Description: "A sword that can be used to test the enemy's defense",
+		Picture:     "https://www.google.com/sword-of-tester.jpg",
+	}, nil)
+
+	paymentRepositoryMock.On("CalculatePlayerBalance", "P001").Return(&_paymentEntity.PlayerBalanceDto{
+		PlayerID: "P001",
+		Balance:  2000,
+	}, nil)
+
+	buyItemReq := &_paymentModel.BuyItemReq{
+		PlayerID: "P001",
+		ItemID:   1,
+		Quantity: 3,
+	}
+
+	_, err := paymentService.BuyItem(buyItemReq)
+	assert.EqualValues(t, &_paymentException.NotEnoughBalanceException{}, err)
 }
