@@ -97,12 +97,6 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 
 	inventoryEntities := s.groupInventoryEntities(buyItemReq)
 
-	inventory, err := s.inventoryRepository.InsertInventoryInBluk(inventoryEntities)
-	if err != nil {
-		return nil, err
-	}
-	log.Printf("Inserted inventories: %d", len(inventory))
-
 	insertedPayment, err := s.paymentRepository.InsertPayment(&_paymentEntity.Payment{
 		PlayerID: buyItemReq.PlayerID,
 		Amount:   -totalPrice,
@@ -111,6 +105,12 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 		return nil, err
 	}
 	log.Printf("Payment entity: %d", insertedPayment.ID)
+
+	inventory, err := s.inventoryRepository.InsertInventoryInBluk(inventoryEntities)
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("Inserted inventories: %d", len(inventory))
 
 	return insertedPayment.ToPaymentModel(), nil
 }
