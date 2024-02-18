@@ -122,6 +122,26 @@ database:
   schema: public
 ```
 
+## Start Isekai Shop API using Docker
+
+Let's see the IPv4 of our database container first by this follwing command.
+
+```bash
+docker network inspect bridge
+```
+
+Then copy the IPv4 of isekaishopdb to change the host of database in the config.yaml.
+
+And now let's build and start the isekai-shop-api through the Docker.
+
+```bash
+docker build -t isekai-shop-api:v1.0.0 .
+```
+
+```bash
+docker run --name isekai-shop-api -v /path/to/etc:/app/etc -d isekai-shop-api:v1.0.0
+```
+
 ## Postman Collection and ENV
 - [Collection](./postman/isekai-shop-api.postman_collection.json)
 - [Environment](./postman/isekai-shop-api-local.postman_environment.json)
