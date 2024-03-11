@@ -5,7 +5,7 @@ import (
 )
 
 type AdminService interface {
-	CreateItem(createItemReq *_itemModel.CreateItemReq) (*_itemModel.Item, error)
-	EditItem(itemID uint64, editItemReq *_itemModel.EditItemReq) (*_itemModel.Item, error)
-	ArchiveItem(itemID uint64) error
+	ItemCreating(createItemReq *_itemModel.ItemCreatingReq) (*_itemModel.Item, error)
+	ItemEditing(itemID uint64, editItemReq *_itemModel.ItemEditingReq) (*_itemModel.Item, error)
+	ItemArchiving(itemID uint64) error
 }

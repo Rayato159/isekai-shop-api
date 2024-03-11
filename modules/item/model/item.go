@@ -30,7 +30,7 @@ type (
 		TotalPage int64 `json:"totalPage"`
 	}
 
-	CreateItemReq struct {
+	ItemCreatingReq struct {
 		AdminID     string
 		Name        string `json:"name" validate:"required,max=64"`
 		Description string `json:"description" validate:"required,max=128"`
@@ -38,7 +38,7 @@ type (
 		Price       uint   `json:"price" validate:"required"`
 	}
 
-	EditItemReq struct {
+	ItemEditingReq struct {
 		AdminID     string
 		Name        string `json:"name" validate:"omitempty,max=64"`
 		Description string `json:"description" validate:"omitempty,max=128"`

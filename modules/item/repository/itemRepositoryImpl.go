@@ -100,14 +100,14 @@ func (r *itemRepositoryImpl) UpdateItem(itemID uint64, updateItemDto *_itemEntit
 	return itemID, nil
 }
 
-func (r *itemRepositoryImpl) ArchiveItem(itemID uint64) error {
+func (r *itemRepositoryImpl) ItemArchiving(itemID uint64) error {
 	if err := r.db.Table("items").Where(
 		"id = ?", itemID,
 	).Update(
 		"is_archive", true,
 	).Error; err != nil {
 		r.logger.Error("Failed to archive item", err.Error())
-		return &_itemException.ArchiveItemException{ItemID: itemID}
+		return &_itemException.ItemArchivingException{ItemID: itemID}
 	}
 
 	return nil

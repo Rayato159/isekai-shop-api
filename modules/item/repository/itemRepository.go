@@ -11,5 +11,5 @@ type ItemRepository interface {
 	CountItems(itemFilterDto *_itemEntity.ItemFilterDto) (int64, error)
 	InsertItem(itemEntity *_itemEntity.Item) (*_itemEntity.Item, error)
 	UpdateItem(itemID uint64, updateItemDto *_itemEntity.UpdateItemDto) (uint64, error)
-	ArchiveItem(itemID uint64) error // Soft delete
+	ItemArchiving(itemID uint64) error // Soft delete
 }

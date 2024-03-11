@@ -40,7 +40,7 @@ func (m *ItemRepositoryMock) UpdateItem(itemID uint64, updateItemDto *_itemEntit
 	return args.Get(0).(uint64), args.Error(1)
 }
 
-func (m *ItemRepositoryMock) ArchiveItem(itemID uint64) error {
+func (m *ItemRepositoryMock) ItemArchiving(itemID uint64) error {
 	args := m.Called(itemID)
 	return args.Error(0)
 }

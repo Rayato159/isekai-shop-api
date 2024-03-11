@@ -23,20 +23,20 @@ func NewAdminControllerImpl(adminService _adminService.AdminService, logger echo
 	}
 }
 
-func (c *adminControllerImpl) CreateItem(pctx echo.Context) error {
+func (c *adminControllerImpl) ItemCreating(pctx echo.Context) error {
 	adminID, err := utils.GetAdminID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
 
-	createItemReq := new(_itemModel.CreateItemReq)
+	createItemReq := new(_itemModel.ItemCreatingReq)
 
 	if err := pctx.Bind(createItemReq); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	createItemReq.AdminID = adminID
 
-	item, err := c.adminService.CreateItem(createItemReq)
+	item, err := c.adminService.ItemCreating(createItemReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
@@ -44,7 +44,7 @@ func (c *adminControllerImpl) CreateItem(pctx echo.Context) error {
 	return pctx.JSON(http.StatusCreated, item)
 }
 
-func (c *adminControllerImpl) EditItem(pctx echo.Context) error {
+func (c *adminControllerImpl) ItemEditing(pctx echo.Context) error {
 	adminID, err := utils.GetAdminID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
@@ -55,14 +55,14 @@ func (c *adminControllerImpl) EditItem(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	editItemReq := new(_itemModel.EditItemReq)
+	editItemReq := new(_itemModel.ItemEditingReq)
 
 	if err := pctx.Bind(editItemReq); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	editItemReq.AdminID = adminID
 
-	item, err := c.adminService.EditItem(itemID, editItemReq)
+	item, err := c.adminService.ItemEditing(itemID, editItemReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
@@ -70,7 +70,7 @@ func (c *adminControllerImpl) EditItem(pctx echo.Context) error {
 	return pctx.JSON(http.StatusOK, item)
 }
 
-func (c *adminControllerImpl) ArchiveItem(pctx echo.Context) error {
+func (c *adminControllerImpl) ItemArchiving(pctx echo.Context) error {
 	_, err := utils.GetAdminID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
@@ -81,11 +81,7 @@ func (c *adminControllerImpl) ArchiveItem(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	if err != nil {
-		return writter.CustomError(pctx, http.StatusBadRequest, err)
-	}
-
-	err = c.adminService.ArchiveItem(itemID)
+	err = c.adminService.ItemArchiving(itemID)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}

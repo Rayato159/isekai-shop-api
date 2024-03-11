@@ -16,7 +16,7 @@ func NewAdminServiceImpl(itemRepository _itemRepository.ItemRepository) AdminSer
 	}
 }
 
-func (s *adminServiceImpl) CreateItem(createItemReq *_itemModel.CreateItemReq) (*_itemModel.Item, error) {
+func (s *adminServiceImpl) ItemCreating(createItemReq *_itemModel.ItemCreatingReq) (*_itemModel.Item, error) {
 	item := &_itemEntity.Item{
 		AdminID:     &createItemReq.AdminID,
 		Name:        createItemReq.Name,
@@ -33,7 +33,7 @@ func (s *adminServiceImpl) CreateItem(createItemReq *_itemModel.CreateItemReq) (
 	return itemEntity.ToItemModel(), nil
 }
 
-func (s *adminServiceImpl) EditItem(itemID uint64, updateItemReq *_itemModel.EditItemReq) (*_itemModel.Item, error) {
+func (s *adminServiceImpl) ItemEditing(itemID uint64, updateItemReq *_itemModel.ItemEditingReq) (*_itemModel.Item, error) {
 	updateItemDto := &_itemEntity.UpdateItemDto{
 		AdminID:     &updateItemReq.AdminID,
 		Name:        updateItemReq.Name,
@@ -55,6 +55,6 @@ func (s *adminServiceImpl) EditItem(itemID uint64, updateItemReq *_itemModel.Edi
 	return itemEntity.ToItemModel(), nil
 }
 
-func (s *adminServiceImpl) ArchiveItem(itemID uint64) error {
-	return s.itemRepository.ArchiveItem(itemID)
+func (s *adminServiceImpl) ItemArchiving(itemID uint64) error {
+	return s.itemRepository.ItemArchiving(itemID)
 }

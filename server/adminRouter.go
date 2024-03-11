@@ -14,7 +14,7 @@ func (s *echoServer) initAdminRouter(customMiddleware customMiddleware.CustomMid
 	adminService := _adminService.NewAdminServiceImpl(itemRepository)
 	adminController := _adminController.NewAdminControllerImpl(adminService, s.app.Logger)
 
-	router.POST("", adminController.CreateItem, customMiddleware.AdminAuthorize)
-	router.PATCH("/:itemID", adminController.EditItem, customMiddleware.AdminAuthorize)
-	router.DELETE("/:itemID", adminController.ArchiveItem, customMiddleware.AdminAuthorize)
+	router.POST("", adminController.ItemCreating, customMiddleware.AdminAuthorize)
+	router.PATCH("/:itemID", adminController.ItemEditing, customMiddleware.AdminAuthorize)
+	router.DELETE("/:itemID", adminController.ItemArchiving, customMiddleware.AdminAuthorize)
 }
