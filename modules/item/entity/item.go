@@ -3,22 +3,22 @@ package entity
 import (
 	"time"
 
-	_inventoryEntity "github.com/Rayato159/isekai-shop-api/modules/inventory/entity"
 	_itemModel "github.com/Rayato159/isekai-shop-api/modules/item/model"
+	_playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
 )
 
 type (
 	Item struct {
-		ID          uint64                       `gorm:"primaryKey;autoIncrement"`
-		AdminID     *string                      `gorm:"type:varchar(64);"`
-		Name        string                       `gorm:"type:varchar(64);unique;not null;"`
-		Description string                       `gorm:"type:varchar(128);not null;"`
-		Picture     string                       `gorm:"type:varchar(256);not null;"`
-		Price       uint                         `gorm:"not null;"`
-		IsArchive   bool                         `gorm:"not null;default:false;"`
-		Inventories []_inventoryEntity.Inventory `gorm:"foreignKey:ItemID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-		CreatedAt   time.Time                    `gorm:"not null;autoCreateTime;"`
-		UpdatedAt   time.Time                    `gorm:"not null;autoUpdateTime;"`
+		ID          uint64                    `gorm:"primaryKey;autoIncrement"`
+		AdminID     *string                   `gorm:"type:varchar(64);"`
+		Name        string                    `gorm:"type:varchar(64);unique;not null;"`
+		Description string                    `gorm:"type:varchar(128);not null;"`
+		Picture     string                    `gorm:"type:varchar(256);not null;"`
+		Price       uint                      `gorm:"not null;"`
+		IsArchive   bool                      `gorm:"not null;default:false;"`
+		Inventories []_playerEntity.Inventory `gorm:"foreignKey:ItemID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+		CreatedAt   time.Time                 `gorm:"not null;autoCreateTime;"`
+		UpdatedAt   time.Time                 `gorm:"not null;autoUpdateTime;"`
 	}
 
 	ItemFilterDto struct {

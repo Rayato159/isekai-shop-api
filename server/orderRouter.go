@@ -10,7 +10,7 @@ import (
 func (s *echoServer) initOrderRouter(customMiddleware customMiddleware.CustomMiddleware) {
 	router := s.baseRouter.Group("/order")
 
-	orderRepository := _orderRepository.NewOrderRepository(s.db, s.app.Logger)
+	orderRepository := _orderRepository.NewOrderRepositoryImpl(s.db, s.app.Logger)
 	orderService := _orderService.NewOrderServiceImpl(orderRepository)
 	orderController := _orderController.NewOrderControllerImpl(orderService, s.app.Logger)
 

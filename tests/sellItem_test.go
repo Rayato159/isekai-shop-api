@@ -1,7 +1,6 @@
 package tests
 
 import (
-	_inventoryRepository "github.com/Rayato159/isekai-shop-api/modules/inventory/repository"
 	_itemEntity "github.com/Rayato159/isekai-shop-api/modules/item/entity"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
 	_orderEntity "github.com/Rayato159/isekai-shop-api/modules/order/entity"
@@ -11,6 +10,7 @@ import (
 	_paymentModel "github.com/Rayato159/isekai-shop-api/modules/payment/model"
 	_paymentRepository "github.com/Rayato159/isekai-shop-api/modules/payment/repository"
 	_paymentService "github.com/Rayato159/isekai-shop-api/modules/payment/service"
+	_playerSource "github.com/Rayato159/isekai-shop-api/modules/player/repository"
 	"github.com/stretchr/testify/assert"
 
 	"testing"
@@ -20,7 +20,7 @@ func TestItemSellingSuccess(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
 	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
-	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
+	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 
 	paymentService := _paymentService.NewPaymentServiceImpl(
 		paymentRepositoryMock,
@@ -99,7 +99,7 @@ func TestItemSellingFailed(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
 	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
-	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
+	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 
 	paymentService := _paymentService.NewPaymentServiceImpl(
 		paymentRepositoryMock,

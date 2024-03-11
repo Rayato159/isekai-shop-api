@@ -7,4 +7,5 @@ import (
 type PlayerService interface {
 	PlayerProfiling(playerID string) (*_playerModel.Player, error)
 	PlayerProfileEditing(playerID string, editPlayerReq *_playerModel.PlayerProfileEditingReq) (*_playerModel.Player, error)
+	PlayerInventoryListing(playerID string) ([]*_playerModel.Inventory, error)
 }

@@ -6,16 +6,16 @@ import (
 	_adminRepository "github.com/Rayato159/isekai-shop-api/modules/admin/repository"
 	_playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
 	_playerModel "github.com/Rayato159/isekai-shop-api/modules/player/model"
-	_playerRepository "github.com/Rayato159/isekai-shop-api/modules/player/repository"
+	_playerSource "github.com/Rayato159/isekai-shop-api/modules/player/repository"
 )
 
 type googleOAuth2Service struct {
-	playerRepository _playerRepository.PlayerRepository
+	playerRepository _playerSource.PlayerRepository
 	adminRepository  _adminRepository.AdminRepository
 }
 
 func NewGoogleOAuth2Service(
-	playerRepository _playerRepository.PlayerRepository,
+	playerRepository _playerSource.PlayerRepository,
 	adminRepository _adminRepository.AdminRepository,
 ) OAuth2Service {
 	return &googleOAuth2Service{
@@ -24,7 +24,7 @@ func NewGoogleOAuth2Service(
 	}
 }
 
-func (s *googleOAuth2Service) CreatePlayerAccount(playerCreatingReq *_playerModel.CreatePlayerReq) error {
+func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerModel.CreatePlayerReq) error {
 	if !s.isPlayerIsExists(playerCreatingReq.ID) {
 		playerEntity := &_playerEntity.Player{
 			ID:     playerCreatingReq.ID,
@@ -42,7 +42,7 @@ func (s *googleOAuth2Service) CreatePlayerAccount(playerCreatingReq *_playerMode
 	return nil
 }
 
-func (s *googleOAuth2Service) CreateAdminAccount(createAdminInfo *_adminModel.CreateAdminReq) error {
+func (s *googleOAuth2Service) AdminAccountCreating(createAdminInfo *_adminModel.CreateAdminReq) error {
 	if !s.isAdminIsExists(createAdminInfo.ID) {
 		adminEntity := &_adminEntity.Admin{
 			ID:     createAdminInfo.ID,

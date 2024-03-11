@@ -1,8 +1,8 @@
 package repository
 
 import (
-	_inventoryEntity "github.com/Rayato159/isekai-shop-api/modules/inventory/entity"
-	_inventoryException "github.com/Rayato159/isekai-shop-api/modules/inventory/exception"
+	_playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
+	_playerException "github.com/Rayato159/isekai-shop-api/modules/player/exception"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -12,21 +12,21 @@ type inventoryRepositoryImpl struct {
 	logger echo.Logger
 }
 
-func NewInventoryRepository(db *gorm.DB, logger echo.Logger) InventoryRepository {
+func NewInventoryRepositoryImpl(db *gorm.DB, logger echo.Logger) InventoryRepository {
 	return &inventoryRepositoryImpl{
 		db:     db,
 		logger: logger,
 	}
 }
 
-func (r *inventoryRepositoryImpl) InventorySearching(playerID string) ([]*_inventoryEntity.Inventory, error) {
-	inventories := make([]*_inventoryEntity.Inventory, 0)
+func (r *inventoryRepositoryImpl) InventorySearching(playerID string) ([]*_playerEntity.Inventory, error) {
+	inventories := make([]*_playerEntity.Inventory, 0)
 
 	if err := r.db.Where(
 		"player_id = ? AND is_deleted = ?", playerID, false,
 	).Find(&inventories).Error; err != nil {
 		r.logger.Error("Failed to find inventories", err.Error())
-		return nil, &_inventoryException.FindInventoriesException{
+		return nil, &_playerException.FindInventoriesException{
 			PlayerID: playerID,
 		}
 	}
@@ -42,26 +42,26 @@ func (r *inventoryRepositoryImpl) DeleteItemByLimit(playerID string, itemID uint
 
 	for _, inventory := range inventories {
 		if err := r.db.Model(
-			&_inventoryEntity.Inventory{},
+			&_playerEntity.Inventory{},
 		).Where(
 			"id = ?", inventory.ID,
 		).Updates(
 			inventory,
 		).Error; err != nil {
 			r.logger.Error("Failed to delete items", err.Error())
-			return &_inventoryException.DeleteInventoryException{ItemID: itemID}
+			return &_playerException.DeleteInventoryException{ItemID: itemID}
 		}
 	}
 
 	return nil
 }
 
-func (r *inventoryRepositoryImpl) InventoryFilling(inventoryEntities []*_inventoryEntity.Inventory) ([]*_inventoryEntity.Inventory, error) {
-	insertedInventories := make([]*_inventoryEntity.Inventory, 0)
+func (r *inventoryRepositoryImpl) InventoryFilling(inventoryEntities []*_playerEntity.Inventory) ([]*_playerEntity.Inventory, error) {
+	insertedInventories := make([]*_playerEntity.Inventory, 0)
 
 	if err := r.db.Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
 		r.logger.Error("Failed to insert items", err.Error())
-		return nil, &_inventoryException.InsertInventoryException{}
+		return nil, &_playerException.InsertInventoryException{}
 	}
 
 	return insertedInventories, nil
@@ -71,7 +71,7 @@ func (r *inventoryRepositoryImpl) PlayerItemCounting(playerID string, itemID uin
 	var count int64
 
 	if err := r.db.Model(
-		&_inventoryEntity.Inventory{},
+		&_playerEntity.Inventory{},
 	).Where(
 		"player_id = ? AND item_id = ? AND is_deleted = ?", playerID, itemID, false,
 	).Count(&count).Error; err != nil {
@@ -86,8 +86,8 @@ func (r *inventoryRepositoryImpl) findInventoriesToDeleteByItemIDAndPlayerIDByLi
 	playerID string,
 	itemID uint64,
 	limit int,
-) ([]*_inventoryEntity.Inventory, error) {
-	inventories := make([]*_inventoryEntity.Inventory, 0)
+) ([]*_playerEntity.Inventory, error) {
+	inventories := make([]*_playerEntity.Inventory, 0)
 
 	if err := r.db.Where(
 		"player_id = ? AND item_id = ? AND is_deleted = ?", playerID, itemID, false,
@@ -95,7 +95,7 @@ func (r *inventoryRepositoryImpl) findInventoriesToDeleteByItemIDAndPlayerIDByLi
 		limit,
 	).Find(&inventories).Error; err != nil {
 		r.logger.Error("Failed to find inventories", err.Error())
-		return nil, &_inventoryException.FindInventoriesException{PlayerID: playerID}
+		return nil, &_playerException.FindInventoriesException{PlayerID: playerID}
 	}
 
 	for _, inventory := range inventories {

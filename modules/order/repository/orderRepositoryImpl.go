@@ -12,7 +12,7 @@ type orderRepositoryImpl struct {
 	logger echo.Logger
 }
 
-func NewOrderRepository(db *gorm.DB, logger echo.Logger) OrderRepository {
+func NewOrderRepositoryImpl(db *gorm.DB, logger echo.Logger) OrderRepository {
 	return &orderRepositoryImpl{
 		db:     db,
 		logger: logger,

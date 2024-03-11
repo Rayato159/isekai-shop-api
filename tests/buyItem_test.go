@@ -1,8 +1,6 @@
 package tests
 
 import (
-	_inventoryEntity "github.com/Rayato159/isekai-shop-api/modules/inventory/entity"
-	_inventoryRepository "github.com/Rayato159/isekai-shop-api/modules/inventory/repository"
 	_itemEntity "github.com/Rayato159/isekai-shop-api/modules/item/entity"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
 	_orderEntity "github.com/Rayato159/isekai-shop-api/modules/order/entity"
@@ -12,6 +10,8 @@ import (
 	_paymentModel "github.com/Rayato159/isekai-shop-api/modules/payment/model"
 	_paymentRepository "github.com/Rayato159/isekai-shop-api/modules/payment/repository"
 	_paymentService "github.com/Rayato159/isekai-shop-api/modules/payment/service"
+	_playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
+	_playerSource "github.com/Rayato159/isekai-shop-api/modules/player/repository"
 	"github.com/stretchr/testify/assert"
 
 	"testing"
@@ -21,7 +21,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
 	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
-	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
+	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 
 	paymentService := _paymentService.NewPaymentServiceImpl(
 		paymentRepositoryMock,
@@ -63,7 +63,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		TotalPrice:      -3000,
 	}, nil)
 
-	inventoryRepositoryMock.On("InventoryFilling", []*_inventoryEntity.Inventory{
+	inventoryRepositoryMock.On("InventoryFilling", []*_playerEntity.Inventory{
 		{
 			PlayerID: "P001",
 			ItemID:   1,
@@ -76,7 +76,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 			PlayerID: "P001",
 			ItemID:   1,
 		},
-	}).Return([]*_inventoryEntity.Inventory{
+	}).Return([]*_playerEntity.Inventory{
 		{
 			PlayerID: "P001",
 			ItemID:   1,
@@ -128,7 +128,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 func TestItemBuyingFail(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
 	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
-	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
+	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
 
 	paymentService := _paymentService.NewPaymentServiceImpl(

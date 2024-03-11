@@ -3,8 +3,6 @@ package service
 import (
 	"log"
 
-	_inventoryEntity "github.com/Rayato159/isekai-shop-api/modules/inventory/entity"
-	_inventoryRepository "github.com/Rayato159/isekai-shop-api/modules/inventory/repository"
 	_itemModel "github.com/Rayato159/isekai-shop-api/modules/item/model"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
 	_orderEntity "github.com/Rayato159/isekai-shop-api/modules/order/entity"
@@ -13,20 +11,22 @@ import (
 	_paymentException "github.com/Rayato159/isekai-shop-api/modules/payment/exception"
 	_paymentModel "github.com/Rayato159/isekai-shop-api/modules/payment/model"
 	_paymentRepository "github.com/Rayato159/isekai-shop-api/modules/payment/repository"
+	_inventoryEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
+	_playerSource "github.com/Rayato159/isekai-shop-api/modules/player/repository"
 )
 
 type paymentServiceImpl struct {
 	paymentRepository   _paymentRepository.PaymentRepository
 	itemRepository      _itemRepository.ItemRepository
 	orderRepository     _orderRepository.OrderRepository
-	inventoryRepository _inventoryRepository.InventoryRepository
+	inventoryRepository _playerSource.InventoryRepository
 }
 
 func NewPaymentServiceImpl(
 	paymentRepository _paymentRepository.PaymentRepository,
 	itemRepository _itemRepository.ItemRepository,
 	orderRepository _orderRepository.OrderRepository,
-	inventoryRepository _inventoryRepository.InventoryRepository,
+	inventoryRepository _playerSource.InventoryRepository,
 ) PaymentService {
 	return &paymentServiceImpl{
 		paymentRepository:   paymentRepository,

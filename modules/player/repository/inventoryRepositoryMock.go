@@ -1,7 +1,7 @@
 package repository
 
 import (
-	_inventoryEntity "github.com/Rayato159/isekai-shop-api/modules/inventory/entity"
+	_playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
 
 	"github.com/stretchr/testify/mock"
 )
@@ -11,15 +11,15 @@ type InventoryRepositoryMock struct {
 }
 
 func (m *InventoryRepositoryMock) InventoryFilling(
-	inventoryEntities []*_inventoryEntity.Inventory,
-) ([]*_inventoryEntity.Inventory, error) {
+	inventoryEntities []*_playerEntity.Inventory,
+) ([]*_playerEntity.Inventory, error) {
 	args := m.Called(inventoryEntities)
-	return args.Get(0).([]*_inventoryEntity.Inventory), args.Error(1)
+	return args.Get(0).([]*_playerEntity.Inventory), args.Error(1)
 }
 
-func (m *InventoryRepositoryMock) InventorySearching(playerID string) ([]*_inventoryEntity.Inventory, error) {
+func (m *InventoryRepositoryMock) InventorySearching(playerID string) ([]*_playerEntity.Inventory, error) {
 	args := m.Called(playerID)
-	return args.Get(0).([]*_inventoryEntity.Inventory), args.Error(1)
+	return args.Get(0).([]*_playerEntity.Inventory), args.Error(1)
 }
 
 func (m *InventoryRepositoryMock) DeleteItemByLimit(playerID string, itemID uint64, limit int) error {

@@ -57,3 +57,18 @@ func (c *playerControllerImpl) PlayerProfileEditing(pctx echo.Context) error {
 
 	return pctx.JSON(http.StatusOK, player)
 }
+
+func (c *playerControllerImpl) PlayerInventoryListing(pctx echo.Context) error {
+	playerID, err := utils.GetPlayerID(pctx)
+	if err != nil {
+		c.logger.Error("Failed to get playerID", err.Error())
+		return writter.CustomError(pctx, http.StatusUnauthorized, err)
+	}
+
+	inventories, err := c.playerService.PlayerInventoryListing(playerID)
+	if err != nil {
+		return pctx.JSON(http.StatusInternalServerError, err)
+	}
+
+	return pctx.JSON(http.StatusOK, inventories)
+}

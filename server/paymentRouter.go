@@ -1,12 +1,12 @@
 package server
 
 import (
-	_inventoryRepository "github.com/Rayato159/isekai-shop-api/modules/inventory/repository"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
 	_orderRepository "github.com/Rayato159/isekai-shop-api/modules/order/repository"
 	_paymentController "github.com/Rayato159/isekai-shop-api/modules/payment/controller"
 	_paymentRepository "github.com/Rayato159/isekai-shop-api/modules/payment/repository"
 	_paymentService "github.com/Rayato159/isekai-shop-api/modules/payment/service"
+	_playerSouce "github.com/Rayato159/isekai-shop-api/modules/player/repository"
 	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 )
 
@@ -15,8 +15,8 @@ func (s *echoServer) initPaymentRouter(customMiddleware customMiddleware.CustomM
 
 	paymentRepository := _paymentRepository.NewPaymentRepositoryImpl(s.db, s.app.Logger)
 	itemRepository := _itemRepository.NewItemRepositoryImpl(s.db, s.app.Logger)
-	orderRepository := _orderRepository.NewOrderRepository(s.db, s.app.Logger)
-	inventoryRepository := _inventoryRepository.NewInventoryRepository(s.db, s.app.Logger)
+	orderRepository := _orderRepository.NewOrderRepositoryImpl(s.db, s.app.Logger)
+	inventoryRepository := _playerSouce.NewInventoryRepositoryImpl(s.db, s.app.Logger)
 
 	paymentService := _paymentService.NewPaymentServiceImpl(
 		paymentRepository,

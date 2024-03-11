@@ -137,7 +137,7 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 		Avatar: userInfo.Picture,
 	}
 
-	if err := c.oauth2Service.CreatePlayerAccount(playerCreatingReq); err != nil {
+	if err := c.oauth2Service.PlayerAccountCreating(playerCreatingReq); err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.Oauth2Exception{})
 	}
 
@@ -177,7 +177,7 @@ func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 		Avatar: userInfo.Picture,
 	}
 
-	if err := c.oauth2Service.CreateAdminAccount(createAdminReq); err != nil {
+	if err := c.oauth2Service.AdminAccountCreating(createAdminReq); err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.Oauth2Exception{})
 	}
 

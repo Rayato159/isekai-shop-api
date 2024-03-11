@@ -4,7 +4,6 @@ import (
 	"github.com/Rayato159/isekai-shop-api/config"
 	"github.com/Rayato159/isekai-shop-api/databases"
 	_adminEntity "github.com/Rayato159/isekai-shop-api/modules/admin/entity"
-	_inventoryEntity "github.com/Rayato159/isekai-shop-api/modules/inventory/entity"
 	_itemEntity "github.com/Rayato159/isekai-shop-api/modules/item/entity"
 	_orderEntity "github.com/Rayato159/isekai-shop-api/modules/order/entity"
 	_paymentEntity "github.com/Rayato159/isekai-shop-api/modules/payment/entity"
@@ -45,7 +44,7 @@ func paymentMigrate(db databases.Database) {
 }
 
 func inventoryMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&_inventoryEntity.Inventory{})
+	db.GetDb().Migrator().CreateTable(&_playerEntity.Inventory{})
 }
 
 func orderMigrate(db databases.Database) {

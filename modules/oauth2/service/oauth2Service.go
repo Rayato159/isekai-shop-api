@@ -6,8 +6,8 @@ import (
 )
 
 type OAuth2Service interface {
-	CreatePlayerAccount(playerCreatingReq *_playerModel.CreatePlayerReq) error
-	CreateAdminAccount(createAdminReq *_adminModel.CreateAdminReq) error
+	PlayerAccountCreating(playerCreatingReq *_playerModel.CreatePlayerReq) error
+	AdminAccountCreating(createAdminReq *_adminModel.CreateAdminReq) error
 	IsThisGuyIsReallyPlayer(playerID string) bool
 	IsThisGuyIsReallyAdmin(adminID string) bool
 }
