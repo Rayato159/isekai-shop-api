@@ -2,10 +2,10 @@ package exception
 
 import "fmt"
 
-type CalculatePlayerBalanceException struct {
+type PlayerBalanceShowingException struct {
 	PlayerID string
 }
 
-func (e *CalculatePlayerBalanceException) Error() string {
+func (e *PlayerBalanceShowingException) Error() string {
 	return fmt.Sprintf("Failed to calculate player balance for playerID: %s", e.PlayerID)
 }

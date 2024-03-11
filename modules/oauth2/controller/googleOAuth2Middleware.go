@@ -10,7 +10,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-func (c *googleOAuth2Controller) PlayerAuthorize(pctx echo.Context, next echo.HandlerFunc) error {
+func (c *googleOAuth2Controller) PlayerAuthorizing(pctx echo.Context, next echo.HandlerFunc) error {
 	ctx := context.Background()
 
 	tokenSource, err := c.getToken(pctx)
@@ -57,7 +57,7 @@ func (c *googleOAuth2Controller) PlayerAuthorize(pctx echo.Context, next echo.Ha
 	return next(pctx)
 }
 
-func (c *googleOAuth2Controller) AdminAuthorize(pctx echo.Context, next echo.HandlerFunc) error {
+func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.HandlerFunc) error {
 	ctx := context.Background()
 
 	tokenSource, err := c.getToken(pctx)

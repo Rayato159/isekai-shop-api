@@ -29,14 +29,14 @@ func (c *adminControllerImpl) ItemCreating(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
 
-	createItemReq := new(_itemModel.ItemCreatingReq)
+	itemCreatingReq := new(_itemModel.ItemCreatingReq)
 
-	if err := pctx.Bind(createItemReq); err != nil {
+	if err := pctx.Bind(itemCreatingReq); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
-	createItemReq.AdminID = adminID
+	itemCreatingReq.AdminID = adminID
 
-	item, err := c.adminService.ItemCreating(createItemReq)
+	item, err := c.adminService.ItemCreating(itemCreatingReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}

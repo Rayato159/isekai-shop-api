@@ -24,13 +24,13 @@ func NewGoogleOAuth2Service(
 	}
 }
 
-func (s *googleOAuth2Service) CreatePlayerAccount(createPlayerReq *_playerModel.CreatePlayerReq) error {
-	if !s.isPlayerIsExists(createPlayerReq.ID) {
+func (s *googleOAuth2Service) CreatePlayerAccount(playerCreatingReq *_playerModel.CreatePlayerReq) error {
+	if !s.isPlayerIsExists(playerCreatingReq.ID) {
 		playerEntity := &_playerEntity.Player{
-			ID:     createPlayerReq.ID,
-			Email:  createPlayerReq.Email,
-			Name:   createPlayerReq.Name,
-			Avatar: createPlayerReq.Avatar,
+			ID:     playerCreatingReq.ID,
+			Email:  playerCreatingReq.Email,
+			Name:   playerCreatingReq.Name,
+			Avatar: playerCreatingReq.Avatar,
 		}
 
 		_, err := s.playerRepository.InsertPlayer(playerEntity)

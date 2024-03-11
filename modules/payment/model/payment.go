@@ -21,13 +21,13 @@ type (
 		Balance  int64  `json:"balance"`
 	}
 
-	BuyItemReq struct {
+	ItemBuyingReq struct {
 		PlayerID string
 		ItemID   uint64 `json:"itemID" validate:"required,gt=0"`
 		Quantity uint   `json:"quantity" validate:"required,gt=0"`
 	}
 
-	SellItemReq struct {
+	ItemSellingReq struct {
 		PlayerID string
 		ItemID   uint64 `json:"itemID" validate:"required,gt=0"`
 		Quantity uint   `json:"quantity" validate:"required,gt=0"`

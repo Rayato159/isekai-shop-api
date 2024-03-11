@@ -4,5 +4,5 @@ import _paymentEntity "github.com/Rayato159/isekai-shop-api/modules/payment/enti
 
 type PaymentRepository interface {
 	InsertPayment(paymentEntity *_paymentEntity.Payment) (*_paymentEntity.Payment, error)
-	CalculatePlayerBalance(playerID string) (*_paymentEntity.PlayerBalanceDto, error)
+	PlayerBalanceShowing(playerID string) (*_paymentEntity.PlayerBalanceDto, error)
 }

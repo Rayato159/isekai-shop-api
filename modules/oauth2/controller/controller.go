@@ -10,6 +10,6 @@ type OAuth2Controller interface {
 	Logout(pctx echo.Context) error
 
 	// Middlewares
-	PlayerAuthorize(pctx echo.Context, next echo.HandlerFunc) error
-	AdminAuthorize(pctx echo.Context, next echo.HandlerFunc) error
+	PlayerAuthorizing(pctx echo.Context, next echo.HandlerFunc) error
+	AdminAuthorizing(pctx echo.Context, next echo.HandlerFunc) error
 }

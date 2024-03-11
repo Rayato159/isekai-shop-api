@@ -16,7 +16,7 @@ func NewPlayerServiceImpl(playerRepository _playerRepository.PlayerRepository) P
 	}
 }
 
-func (s *playerServiceImpl) GetPlayer(playerID string) (*_playerModel.Player, error) {
+func (s *playerServiceImpl) PlayerProfiling(playerID string) (*_playerModel.Player, error) {
 	player, err := s.playerRepository.FindPlayerByID(playerID)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (s *playerServiceImpl) GetPlayer(playerID string) (*_playerModel.Player, er
 	}, nil
 }
 
-func (s *playerServiceImpl) EditPlayer(playerID string, editPlayerReq *_playerModel.EditPlayerReq) (*_playerModel.Player, error) {
+func (s *playerServiceImpl) PlayerProfileEditing(playerID string, editPlayerReq *_playerModel.PlayerProfileEditingReq) (*_playerModel.Player, error) {
 	editPlayerReqDto := &_playerEntity.UpdatePlayerDto{
 		Username: editPlayerReq.Username,
 	}

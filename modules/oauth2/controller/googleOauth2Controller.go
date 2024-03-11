@@ -130,14 +130,14 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 
 	}
 
-	createPlayerReq := &_playerModel.CreatePlayerReq{
+	playerCreatingReq := &_playerModel.CreatePlayerReq{
 		ID:     userInfo.ID,
 		Email:  userInfo.Email,
 		Name:   userInfo.Name,
 		Avatar: userInfo.Picture,
 	}
 
-	if err := c.oauth2Service.CreatePlayerAccount(createPlayerReq); err != nil {
+	if err := c.oauth2Service.CreatePlayerAccount(playerCreatingReq); err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2Exception.Oauth2Exception{})
 	}
 

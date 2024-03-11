@@ -17,7 +17,7 @@ import (
 	"testing"
 )
 
-func TestBuyItemSuccess(t *testing.T) {
+func TestItemBuyingSuccess(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
 	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
@@ -38,7 +38,7 @@ func TestBuyItemSuccess(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	paymentRepositoryMock.On("CalculatePlayerBalance", "P001").Return(&_paymentEntity.PlayerBalanceDto{
+	paymentRepositoryMock.On("PlayerBalanceShowing", "P001").Return(&_paymentEntity.PlayerBalanceDto{
 		PlayerID: "P001",
 		Balance:  5000,
 	}, nil)
@@ -100,13 +100,13 @@ func TestBuyItemSuccess(t *testing.T) {
 	}, nil)
 
 	type args struct {
-		in       *_paymentModel.BuyItemReq
+		in       *_paymentModel.ItemBuyingReq
 		expected *_paymentModel.Payment
 	}
 
 	cases := []args{
 		{
-			in: &_paymentModel.BuyItemReq{
+			in: &_paymentModel.ItemBuyingReq{
 				PlayerID: "P001",
 				ItemID:   1,
 				Quantity: 3,
@@ -119,13 +119,13 @@ func TestBuyItemSuccess(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := paymentService.BuyItem(c.in)
+		result, err := paymentService.ItemBuying(c.in)
 		assert.NoError(t, err)
 		assert.EqualValues(t, c.expected, result)
 	}
 }
 
-func TestBuyItemFail(t *testing.T) {
+func TestItemBuyingFail(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
 	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
@@ -146,19 +146,19 @@ func TestBuyItemFail(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	paymentRepositoryMock.On("CalculatePlayerBalance", "P001").Return(&_paymentEntity.PlayerBalanceDto{
+	paymentRepositoryMock.On("PlayerBalanceShowing", "P001").Return(&_paymentEntity.PlayerBalanceDto{
 		PlayerID: "P001",
 		Balance:  2000,
 	}, nil)
 
 	type args struct {
-		in       *_paymentModel.BuyItemReq
+		in       *_paymentModel.ItemBuyingReq
 		expected error
 	}
 
 	cases := []args{
 		{
-			in: &_paymentModel.BuyItemReq{
+			in: &_paymentModel.ItemBuyingReq{
 				PlayerID: "P001",
 				ItemID:   1,
 				Quantity: 3,
@@ -168,7 +168,7 @@ func TestBuyItemFail(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := paymentService.BuyItem(c.in)
+		result, err := paymentService.ItemBuying(c.in)
 		assert.Nil(t, result)
 		assert.Error(t, err)
 		assert.EqualValues(t, c.expected, err)

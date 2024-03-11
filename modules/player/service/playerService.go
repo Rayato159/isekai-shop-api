@@ -5,6 +5,6 @@ import (
 )
 
 type PlayerService interface {
-	GetPlayer(playerID string) (*_playerModel.Player, error)
-	EditPlayer(playerID string, editPlayerReq *_playerModel.EditPlayerReq) (*_playerModel.Player, error)
+	PlayerProfiling(playerID string) (*_playerModel.Player, error)
+	PlayerProfileEditing(playerID string, editPlayerReq *_playerModel.PlayerProfileEditingReq) (*_playerModel.Player, error)
 }

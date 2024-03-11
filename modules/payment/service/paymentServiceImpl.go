@@ -50,8 +50,8 @@ func (s *paymentServiceImpl) TopUp(topUpReq *_paymentModel.TopUpReq) (*_paymentM
 	return insertedPayment.ToPaymentModel(), nil
 }
 
-func (s *paymentServiceImpl) CalculatePlayerBalance(playerID string) *_paymentModel.PlayerBalance {
-	balanceDto, err := s.paymentRepository.CalculatePlayerBalance(playerID)
+func (s *paymentServiceImpl) PlayerBalanceShowing(playerID string) *_paymentModel.PlayerBalance {
+	balanceDto, err := s.paymentRepository.PlayerBalanceShowing(playerID)
 	if err != nil {
 		return &_paymentModel.PlayerBalance{
 			PlayerID: playerID,
@@ -68,26 +68,26 @@ func (s *paymentServiceImpl) CalculatePlayerBalance(playerID string) *_paymentMo
 // 4. Create order
 // 5. Create payment
 // 6. Add item into player inventory
-func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_paymentModel.Payment, error) {
-	itemEntity, err := s.itemRepository.FindItemByID(buyItemReq.ItemID)
+func (s *paymentServiceImpl) ItemBuying(itemBuyingReq *_paymentModel.ItemBuyingReq) (*_paymentModel.Payment, error) {
+	itemEntity, err := s.itemRepository.FindItemByID(itemBuyingReq.ItemID)
 	if err != nil {
 		return nil, err
 	}
 
-	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), buyItemReq.Quantity)
+	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), itemBuyingReq.Quantity)
 
-	if err := s.checkPlayerBalance(buyItemReq.PlayerID, totalPrice); err != nil {
+	if err := s.checkPlayerBalance(itemBuyingReq.PlayerID, totalPrice); err != nil {
 		return nil, err
 	}
 
 	insertedOrder, err := s.orderRepository.InsertOrder(&_orderEntity.Order{
-		PlayerID:        buyItemReq.PlayerID,
+		PlayerID:        itemBuyingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
 		ItemDescription: itemEntity.Description,
 		ItemPrice:       itemEntity.Price,
 		ItemPicture:     itemEntity.Picture,
-		Quantity:        buyItemReq.Quantity,
+		Quantity:        itemBuyingReq.Quantity,
 		TotalPrice:      -totalPrice,
 	})
 	if err != nil {
@@ -95,10 +95,10 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 	}
 	log.Printf("Inserted order: %d", insertedOrder.ID)
 
-	inventoryEntities := s.groupInventoryEntities(buyItemReq)
+	inventoryEntities := s.groupInventoryEntities(itemBuyingReq)
 
 	insertedPayment, err := s.paymentRepository.InsertPayment(&_paymentEntity.Payment{
-		PlayerID: buyItemReq.PlayerID,
+		PlayerID: itemBuyingReq.PlayerID,
 		Amount:   -totalPrice,
 	})
 	if err != nil {
@@ -121,31 +121,31 @@ func (s *paymentServiceImpl) BuyItem(buyItemReq *_paymentModel.BuyItemReq) (*_pa
 // 4. Create order
 // 5. Create payment
 // 6. Delete item into player inventory
-func (s *paymentServiceImpl) SellItem(sellItemReq *_paymentModel.SellItemReq) (*_paymentModel.Payment, error) {
+func (s *paymentServiceImpl) ItemSelling(itemSellingReq *_paymentModel.ItemSellingReq) (*_paymentModel.Payment, error) {
 	if err := s.checkPlayerItemQuantity(
-		sellItemReq.PlayerID,
-		sellItemReq.ItemID,
-		sellItemReq.Quantity,
+		itemSellingReq.PlayerID,
+		itemSellingReq.ItemID,
+		itemSellingReq.Quantity,
 	); err != nil {
 		return nil, err
 	}
 
-	itemEntity, err := s.itemRepository.FindItemByID(sellItemReq.ItemID)
+	itemEntity, err := s.itemRepository.FindItemByID(itemSellingReq.ItemID)
 	if err != nil {
 		return nil, err
 	}
 
-	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), sellItemReq.Quantity)
+	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), itemSellingReq.Quantity)
 	totalPrice = totalPrice / 2
 
 	insertedOrder, err := s.orderRepository.InsertOrder(&_orderEntity.Order{
-		PlayerID:        sellItemReq.PlayerID,
+		PlayerID:        itemSellingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
 		ItemDescription: itemEntity.Description,
 		ItemPrice:       itemEntity.Price,
 		ItemPicture:     itemEntity.Picture,
-		Quantity:        sellItemReq.Quantity,
+		Quantity:        itemSellingReq.Quantity,
 		TotalPrice:      totalPrice,
 	})
 	if err != nil {
@@ -154,7 +154,7 @@ func (s *paymentServiceImpl) SellItem(sellItemReq *_paymentModel.SellItemReq) (*
 	log.Printf("Inserted order: %d", insertedOrder.ID)
 
 	insertedPayment, err := s.paymentRepository.InsertPayment(&_paymentEntity.Payment{
-		PlayerID: sellItemReq.PlayerID,
+		PlayerID: itemSellingReq.PlayerID,
 		Amount:   totalPrice,
 	})
 	if err != nil {
@@ -163,24 +163,24 @@ func (s *paymentServiceImpl) SellItem(sellItemReq *_paymentModel.SellItemReq) (*
 	log.Printf("Payment entity: %d", insertedPayment.ID)
 
 	if err := s.inventoryRepository.DeleteItemByLimit(
-		sellItemReq.PlayerID,
-		sellItemReq.ItemID,
-		int(sellItemReq.Quantity),
+		itemSellingReq.PlayerID,
+		itemSellingReq.ItemID,
+		int(itemSellingReq.Quantity),
 	); err != nil {
 		return nil, err
 	}
-	log.Printf("Deleted inventories for %d records", sellItemReq.Quantity)
+	log.Printf("Deleted inventories for %d records", itemSellingReq.Quantity)
 
 	return insertedPayment.ToPaymentModel(), nil
 }
 
-func (s *paymentServiceImpl) groupInventoryEntities(buyItemReq *_paymentModel.BuyItemReq) []*_inventoryEntity.Inventory {
+func (s *paymentServiceImpl) groupInventoryEntities(itemBuyingReq *_paymentModel.ItemBuyingReq) []*_inventoryEntity.Inventory {
 	inventoryEntities := make([]*_inventoryEntity.Inventory, 0)
 
-	for i := 0; i < int(buyItemReq.Quantity); i++ {
+	for i := 0; i < int(itemBuyingReq.Quantity); i++ {
 		inventoryEntities = append(inventoryEntities, &_inventoryEntity.Inventory{
-			PlayerID: buyItemReq.PlayerID,
-			ItemID:   buyItemReq.ItemID,
+			PlayerID: itemBuyingReq.PlayerID,
+			ItemID:   itemBuyingReq.ItemID,
 		})
 	}
 
@@ -200,7 +200,7 @@ func (s *paymentServiceImpl) checkPlayerItemQuantity(playerID string, itemID uin
 }
 
 func (s *paymentServiceImpl) checkPlayerBalance(playerID string, amount int64) error {
-	balanceDto, err := s.paymentRepository.CalculatePlayerBalance(playerID)
+	balanceDto, err := s.paymentRepository.PlayerBalanceShowing(playerID)
 	if err != nil {
 		return err
 	}

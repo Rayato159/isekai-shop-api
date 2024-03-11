@@ -25,14 +25,14 @@ func NewCustomMiddlewaresImpl(
 	}
 }
 
-func (m *customMiddlewaresImpl) PlayerAuthorize(next echo.HandlerFunc) echo.HandlerFunc {
+func (m *customMiddlewaresImpl) PlayerAuthorizing(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(pctx echo.Context) error {
-		return m.oauth2Controller.PlayerAuthorize(pctx, next)
+		return m.oauth2Controller.PlayerAuthorizing(pctx, next)
 	}
 }
 
-func (m *customMiddlewaresImpl) AdminAuthorize(next echo.HandlerFunc) echo.HandlerFunc {
+func (m *customMiddlewaresImpl) AdminAuthorizing(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(pctx echo.Context) error {
-		return m.oauth2Controller.AdminAuthorize(pctx, next)
+		return m.oauth2Controller.AdminAuthorizing(pctx, next)
 	}
 }

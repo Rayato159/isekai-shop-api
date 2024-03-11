@@ -25,13 +25,13 @@ func NewPlayerControllerImpl(
 	}
 }
 
-func (c *playerControllerImpl) GetPlayer(pctx echo.Context) error {
+func (c *playerControllerImpl) PlayerProfiling(pctx echo.Context) error {
 	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
 
-	player, err := c.playerService.GetPlayer(playerID)
+	player, err := c.playerService.PlayerProfiling(playerID)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
@@ -39,18 +39,18 @@ func (c *playerControllerImpl) GetPlayer(pctx echo.Context) error {
 	return pctx.JSON(http.StatusOK, player)
 }
 
-func (c *playerControllerImpl) EditPlayer(pctx echo.Context) error {
+func (c *playerControllerImpl) PlayerProfileEditing(pctx echo.Context) error {
 	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
-	editPlayerReq := new(_playerModel.EditPlayerReq)
+	editPlayerReq := new(_playerModel.PlayerProfileEditingReq)
 	if err := pctx.Bind(editPlayerReq); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	player, err := c.playerService.EditPlayer(playerID, editPlayerReq)
+	player, err := c.playerService.PlayerProfileEditing(playerID, editPlayerReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}

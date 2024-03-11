@@ -26,8 +26,8 @@ func (s *echoServer) initPaymentRouter(customMiddleware customMiddleware.CustomM
 	)
 	paymentController := _paymentController.NewPaymentControllerImpl(paymentService, s.app.Logger)
 
-	router.POST("", paymentController.TopUp, customMiddleware.PlayerAuthorize)
-	router.GET("/balance", paymentController.CalculatePlayerBalance, customMiddleware.PlayerAuthorize)
-	router.POST("/buy", paymentController.BuyItem, customMiddleware.PlayerAuthorize)
-	router.POST("/sell", paymentController.SellItem, customMiddleware.PlayerAuthorize)
+	router.POST("", paymentController.TopUp, customMiddleware.PlayerAuthorizing)
+	router.GET("/balance", paymentController.PlayerBalanceShowing, customMiddleware.PlayerAuthorizing)
+	router.POST("/buy", paymentController.ItemBuying, customMiddleware.PlayerAuthorizing)
+	router.POST("/sell", paymentController.ItemSelling, customMiddleware.PlayerAuthorizing)
 }

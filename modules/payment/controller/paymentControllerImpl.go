@@ -45,32 +45,32 @@ func (c *paymentControllerImpl) TopUp(pctx echo.Context) error {
 	return pctx.JSON(http.StatusCreated, payment)
 }
 
-func (c *paymentControllerImpl) CalculatePlayerBalance(pctx echo.Context) error {
+func (c *paymentControllerImpl) PlayerBalanceShowing(pctx echo.Context) error {
 	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	balance := c.paymentService.CalculatePlayerBalance(playerID)
+	balance := c.paymentService.PlayerBalanceShowing(playerID)
 
 	return pctx.JSON(http.StatusOK, balance)
 }
 
-func (c *paymentControllerImpl) BuyItem(pctx echo.Context) error {
+func (c *paymentControllerImpl) ItemBuying(pctx echo.Context) error {
 	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	buyItemReq := new(_paymentModel.BuyItemReq)
+	itemBuyingReq := new(_paymentModel.ItemBuyingReq)
 
-	if err := pctx.Bind(buyItemReq); err != nil {
+	if err := pctx.Bind(itemBuyingReq); err != nil {
 		c.logger.Error("Failed to bind buy item request", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
-	buyItemReq.PlayerID = playerID
+	itemBuyingReq.PlayerID = playerID
 
-	payment, err := c.paymentService.BuyItem(buyItemReq)
+	payment, err := c.paymentService.ItemBuying(itemBuyingReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
@@ -78,21 +78,21 @@ func (c *paymentControllerImpl) BuyItem(pctx echo.Context) error {
 	return pctx.JSON(http.StatusOK, payment)
 }
 
-func (c *paymentControllerImpl) SellItem(pctx echo.Context) error {
+func (c *paymentControllerImpl) ItemSelling(pctx echo.Context) error {
 	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	sellItemReq := new(_paymentModel.SellItemReq)
+	itemSellingReq := new(_paymentModel.ItemSellingReq)
 
-	if err := pctx.Bind(sellItemReq); err != nil {
+	if err := pctx.Bind(itemSellingReq); err != nil {
 		c.logger.Error("Failed to bind sell item request", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
-	sellItemReq.PlayerID = playerID
+	itemSellingReq.PlayerID = playerID
 
-	payment, err := c.paymentService.SellItem(sellItemReq)
+	payment, err := c.paymentService.ItemSelling(itemSellingReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}

@@ -16,7 +16,7 @@ import (
 	"testing"
 )
 
-func TestSellItemSuccess(t *testing.T) {
+func TestItemSellingSuccess(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
 	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
@@ -70,13 +70,13 @@ func TestSellItemSuccess(t *testing.T) {
 	inventoryRepositoryMock.On("DeleteItemByLimit", "P001", uint64(1), 3).Return(nil)
 
 	type args struct {
-		in       *_paymentModel.SellItemReq
+		in       *_paymentModel.ItemSellingReq
 		expected *_paymentModel.Payment
 	}
 
 	cases := []args{
 		{
-			&_paymentModel.SellItemReq{
+			&_paymentModel.ItemSellingReq{
 				PlayerID: "P001",
 				ItemID:   1,
 				Quantity: 3,
@@ -89,13 +89,13 @@ func TestSellItemSuccess(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := paymentService.SellItem(c.in)
+		result, err := paymentService.ItemSelling(c.in)
 		assert.NoError(t, err)
 		assert.Equal(t, c.expected, result)
 	}
 }
 
-func TestSellItemFailed(t *testing.T) {
+func TestItemSellingFailed(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
 	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
@@ -111,13 +111,13 @@ func TestSellItemFailed(t *testing.T) {
 	inventoryRepositoryMock.On("CountPlayerItem", "P001", uint64(1)).Return(int64(2), nil)
 
 	type args struct {
-		in       *_paymentModel.SellItemReq
+		in       *_paymentModel.ItemSellingReq
 		expected error
 	}
 
 	cases := []args{
 		{
-			&_paymentModel.SellItemReq{
+			&_paymentModel.ItemSellingReq{
 				PlayerID: "P001",
 				ItemID:   1,
 				Quantity: 3,
@@ -127,7 +127,7 @@ func TestSellItemFailed(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := paymentService.SellItem(c.in)
+		result, err := paymentService.ItemSelling(c.in)
 		assert.EqualValues(t, c.expected, err)
 		assert.Nil(t, result)
 	}

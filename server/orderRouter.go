@@ -14,5 +14,5 @@ func (s *echoServer) initOrderRouter(customMiddleware customMiddleware.CustomMid
 	orderService := _orderService.NewOrderServiceImpl(orderRepository)
 	orderController := _orderController.NewOrderControllerImpl(orderService, s.app.Logger)
 
-	router.GET("", orderController.PlayerOrderListing, customMiddleware.PlayerAuthorize)
+	router.GET("", orderController.PlayerOrderListing, customMiddleware.PlayerAuthorizing)
 }

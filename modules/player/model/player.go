@@ -20,7 +20,7 @@ type (
 		Avatar string
 	}
 
-	EditPlayerReq struct {
+	PlayerProfileEditingReq struct {
 		Username string `json:"username" validate:"omitempty,max=64"`
 	}
 )

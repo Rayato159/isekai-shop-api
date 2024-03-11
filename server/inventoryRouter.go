@@ -16,5 +16,5 @@ func (s *echoServer) initInventoryRouter(customMiddleware customMiddleware.Custo
 	inventoryService := _inventoryService.NewInventoryService(inventoryRepository, itemRepository)
 	itemController := _inventoryController.NewInventoryController(inventoryService, s.app.Logger)
 
-	router.GET("", itemController.PlayerInventoryListing, customMiddleware.PlayerAuthorize)
+	router.GET("", itemController.PlayerInventoryListing, customMiddleware.PlayerAuthorizing)
 }

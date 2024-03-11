@@ -10,7 +10,7 @@ type (
 		Quantity uint             `json:"quantity"`
 	}
 
-	ItemQuantityCounter struct {
+	ItemQuantityCounting struct {
 		ItemID   uint64
 		Quantity uint
 	}

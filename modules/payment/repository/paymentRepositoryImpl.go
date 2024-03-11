@@ -31,7 +31,7 @@ func (r *paymentRepositoryImpl) InsertPayment(paymentEntity *_paymentEntity.Paym
 	return insertedPayment, nil
 }
 
-func (r *paymentRepositoryImpl) CalculatePlayerBalance(playerID string) (*_paymentEntity.PlayerBalanceDto, error) {
+func (r *paymentRepositoryImpl) PlayerBalanceShowing(playerID string) (*_paymentEntity.PlayerBalanceDto, error) {
 	balanceDto := new(_paymentEntity.PlayerBalanceDto)
 
 	if err := r.db.Model(
@@ -44,7 +44,7 @@ func (r *paymentRepositoryImpl) CalculatePlayerBalance(playerID string) (*_payme
 		"player_id",
 	).Scan(&balanceDto).Error; err != nil {
 		r.logger.Error("Failed to calculate player balance", err.Error())
-		return nil, &_paymentException.CalculatePlayerBalanceException{PlayerID: playerID}
+		return nil, &_paymentException.PlayerBalanceShowingException{PlayerID: playerID}
 	}
 
 	return balanceDto, nil

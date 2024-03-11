@@ -39,7 +39,7 @@ func (s *inventoryServiceImpl) PlayerInventoryListing(playerID string) ([]*_inve
 
 func (s *inventoryServiceImpl) buildInventoryListingResult(
 	inventories []*_inventoryEntity.Inventory,
-	uniqueItemWithQuantityCounterList []_inventoryModel.ItemQuantityCounter,
+	uniqueItemWithQuantityCounterList []_inventoryModel.ItemQuantityCounting,
 ) []*_inventoryModel.Inventory {
 	uniqueItemIDList := s.getItemIDList(uniqueItemWithQuantityCounterList)
 
@@ -70,8 +70,8 @@ func (s *inventoryServiceImpl) buildInventoryListingResult(
 
 func (s *inventoryServiceImpl) getUniqueItemWithQuantityCounterList(
 	inventories []*_inventoryEntity.Inventory,
-) []_inventoryModel.ItemQuantityCounter {
-	itemQuantityCounterList := make([]_inventoryModel.ItemQuantityCounter, 0)
+) []_inventoryModel.ItemQuantityCounting {
+	itemQuantityCounterList := make([]_inventoryModel.ItemQuantityCounting, 0)
 
 	itemMapWithQuantity := make(map[uint64]uint)
 
@@ -80,7 +80,7 @@ func (s *inventoryServiceImpl) getUniqueItemWithQuantityCounterList(
 	}
 
 	for itemID, quantity := range itemMapWithQuantity {
-		itemQuantityCounterList = append(itemQuantityCounterList, _inventoryModel.ItemQuantityCounter{
+		itemQuantityCounterList = append(itemQuantityCounterList, _inventoryModel.ItemQuantityCounting{
 			ItemID:   itemID,
 			Quantity: quantity,
 		})
@@ -91,7 +91,7 @@ func (s *inventoryServiceImpl) getUniqueItemWithQuantityCounterList(
 }
 
 func (s *inventoryServiceImpl) getItemIDList(
-	uniqueItemWithQuantityCounterList []_inventoryModel.ItemQuantityCounter,
+	uniqueItemWithQuantityCounterList []_inventoryModel.ItemQuantityCounting,
 ) []uint64 {
 	uniqueItemIDList := make([]uint64, 0)
 
@@ -103,7 +103,7 @@ func (s *inventoryServiceImpl) getItemIDList(
 }
 
 func (s *inventoryServiceImpl) getItemMapWithQuantity(
-	uniqueItemWithQuantityCounterList []_inventoryModel.ItemQuantityCounter,
+	uniqueItemWithQuantityCounterList []_inventoryModel.ItemQuantityCounting,
 ) map[uint64]uint {
 	itemMapWithQuantity := make(map[uint64]uint)
 

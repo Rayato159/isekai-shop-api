@@ -16,13 +16,13 @@ func NewAdminServiceImpl(itemRepository _itemRepository.ItemRepository) AdminSer
 	}
 }
 
-func (s *adminServiceImpl) ItemCreating(createItemReq *_itemModel.ItemCreatingReq) (*_itemModel.Item, error) {
+func (s *adminServiceImpl) ItemCreating(itemCreatingReq *_itemModel.ItemCreatingReq) (*_itemModel.Item, error) {
 	item := &_itemEntity.Item{
-		AdminID:     &createItemReq.AdminID,
-		Name:        createItemReq.Name,
-		Description: createItemReq.Description,
-		Picture:     createItemReq.Picture,
-		Price:       createItemReq.Price,
+		AdminID:     &itemCreatingReq.AdminID,
+		Name:        itemCreatingReq.Name,
+		Description: itemCreatingReq.Description,
+		Picture:     itemCreatingReq.Picture,
+		Price:       itemCreatingReq.Price,
 	}
 
 	itemEntity, err := s.itemRepository.InsertItem(item)

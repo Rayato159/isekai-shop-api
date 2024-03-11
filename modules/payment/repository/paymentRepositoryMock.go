@@ -15,7 +15,7 @@ func (m *PaymentRepositoryMock) InsertPayment(paymentEntity *_paymentEntity.Paym
 	return args.Get(0).(*_paymentEntity.Payment), args.Error(1)
 }
 
-func (m *PaymentRepositoryMock) CalculatePlayerBalance(playerID string) (*_paymentEntity.PlayerBalanceDto, error) {
+func (m *PaymentRepositoryMock) PlayerBalanceShowing(playerID string) (*_paymentEntity.PlayerBalanceDto, error) {
 	args := m.Called(playerID)
 	return args.Get(0).(*_paymentEntity.PlayerBalanceDto), args.Error(1)
 }
