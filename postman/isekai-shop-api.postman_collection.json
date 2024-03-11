@@ -32,147 +32,6 @@
 			]
 		},
 		{
-			"name": "player",
-			"item": [
-				{
-					"name": "get player profile",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/v1/player",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"v1",
-								"player"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 - ok",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/v1/player",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"v1",
-										"player"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=UTF-8"
-								},
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Date",
-									"value": "Wed, 14 Feb 2024 15:35:07 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "281"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": \"101772256434591099298\",\n    \"email\": \"rayato159@gmail.com\",\n    \"username\": null,\n    \"name\": \"Ruangyot Nanchiang\",\n    \"picture\": \"https://lh3.googleusercontent.com/a/ACg8ocKNDoTrX_RCpEeKmVvrB7kubuHtwaNFQezacLI07DWMQuw=s96-c\",\n    \"createdAt\": \"0001-01-01T00:00:00Z\",\n    \"updatedAt\": \"0001-01-01T00:00:00Z\"\n}"
-						}
-					]
-				},
-				{
-					"name": "edit profile",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"Rayato159\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/v1/player",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"v1",
-								"player"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 - ok",
-							"originalRequest": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\": \"Rayato159\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/v1/player",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"v1",
-										"player"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=UTF-8"
-								},
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 17 Feb 2024 16:04:10 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "312"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": \"101772256434591099298\",\n    \"email\": \"rayato159@gmail.com\",\n    \"username\": \"Rayato159\",\n    \"name\": \"Ruangyot Nanchiang\",\n    \"picture\": \"https://lh3.googleusercontent.com/a/ACg8ocKNDoTrX_RCpEeKmVvrB7kubuHtwaNFQezacLI07DWMQuw=s96-c\",\n    \"createdAt\": \"2024-02-17T20:17:50.221059+07:00\",\n    \"updatedAt\": \"2024-02-17T20:17:50.221059+07:00\"\n}"
-						}
-					]
-				}
-			]
-		},
-		{
 			"name": "item",
 			"item": [
 				{
@@ -821,7 +680,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"itemID\": 3,\r\n    \"quantity\": 2\r\n}",
+							"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -896,7 +755,7 @@
 			]
 		},
 		{
-			"name": "inventory",
+			"name": "player",
 			"item": [
 				{
 					"name": "player item listing",
@@ -904,12 +763,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/inventory",
+							"raw": "{{baseUrl}}/v1/player/inventory",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"v1",
+								"player",
 								"inventory"
 							]
 						}

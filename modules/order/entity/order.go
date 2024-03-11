@@ -1,8 +1,6 @@
 package entity
 
 import (
-	_orderModel "github.com/Rayato159/isekai-shop-api/modules/order/model"
-
 	"time"
 )
 
@@ -20,18 +18,3 @@ type (
 		CreatedAt       time.Time `gorm:"not null;autoCreateTime;"`
 	}
 )
-
-func (o *Order) ToOrderModel() *_orderModel.Order {
-	return &_orderModel.Order{
-		ID:              o.ID,
-		PlayerID:        o.PlayerID,
-		ItemID:          o.ItemID,
-		ItemName:        o.ItemName,
-		ItemDescription: o.ItemDescription,
-		ItemPicture:     o.ItemPicture,
-		ItemPrice:       o.ItemPrice,
-		Quantity:        o.Quantity,
-		TotalPrice:      o.TotalPrice,
-		CreatedAt:       o.CreatedAt,
-	}
-}
