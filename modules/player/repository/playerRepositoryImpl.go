@@ -42,20 +42,3 @@ func (r *playerRepositoryImpl) FindPlayerByID(playerID string) (*_playerEntity.P
 
 	return player, nil
 }
-
-func (r *playerRepositoryImpl) ProfileEditing(playerID string, updatePlayerDto *_playerEntity.ProfileEditingDto) (string, error) {
-	updatedPlayer := new(_playerEntity.Player)
-
-	tx := r.db.Model(&_playerEntity.Player{}).Where(
-		"id = ?", playerID,
-	).Updates(
-		updatePlayerDto,
-	).Scan(updatedPlayer)
-
-	if tx.Error != nil {
-		r.logger.Errorf("Error updating player: %s", tx.Error.Error())
-		return "", &_playerException.ProfileEditingException{PlayerID: playerID}
-	}
-
-	return playerID, nil
-}

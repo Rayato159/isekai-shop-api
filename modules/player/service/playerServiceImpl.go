@@ -26,39 +26,6 @@ func NewPlayerServiceImpl(
 	}
 }
 
-func (s *playerServiceImpl) PlayerProfiling(playerID string) (*_playerModel.Player, error) {
-	player, err := s.playerRepository.FindPlayerByID(playerID)
-	if err != nil {
-		return nil, err
-	}
-
-	return &_playerModel.Player{
-		ID:       player.ID,
-		Username: player.Username,
-		Email:    player.Email,
-		Name:     player.Name,
-		Avatar:   player.Avatar,
-	}, nil
-}
-
-func (s *playerServiceImpl) PlayerProfileEditing(playerID string, editPlayerReq *_playerModel.PlayerProfileEditingReq) (*_playerModel.Player, error) {
-	editPlayerReqDto := &_playerEntity.ProfileEditingDto{
-		Username: editPlayerReq.Username,
-	}
-
-	updatedPlayerID, err := s.playerRepository.ProfileEditing(playerID, editPlayerReqDto)
-	if err != nil {
-		return nil, err
-	}
-
-	playerEntitiy, err := s.playerRepository.FindPlayerByID(updatedPlayerID)
-	if err != nil {
-		return nil, err
-	}
-
-	return playerEntitiy.ToPlayerModel(), nil
-}
-
 func (s *playerServiceImpl) PlayerInventoryListing(playerID string) ([]*_playerModel.Inventory, error) {
 	inventories, err := s.inventoryRepository.InventorySearching(playerID)
 	if err != nil {
@@ -68,13 +35,11 @@ func (s *playerServiceImpl) PlayerInventoryListing(playerID string) ([]*_playerM
 	uniqueItemWithQuantityCounterList := s.getUniqueItemWithQuantityCounterList(inventories)
 
 	return s.buildInventoryListingResult(
-		inventories,
 		uniqueItemWithQuantityCounterList,
 	), nil
 }
 
 func (s *playerServiceImpl) buildInventoryListingResult(
-	inventories []*_playerEntity.Inventory,
 	uniqueItemWithQuantityCounterList []_playerModel.ItemQuantityCounting,
 ) []*_playerModel.Inventory {
 	uniqueItemIDList := s.getItemIDList(uniqueItemWithQuantityCounterList)

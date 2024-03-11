@@ -17,7 +17,5 @@ func (s *echoServer) initPlayerRouter(customMiddleware customMiddleware.CustomMi
 	playerService := _playerService.NewPlayerServiceImpl(playerRepository, inventoryRepository, itemRepository)
 	playerController := _playerController.NewPlayerControllerImpl(playerService, s.app.Logger)
 
-	router.GET("", playerController.PlayerProfiling, customMiddleware.PlayerAuthorizing)
-	router.PATCH("", playerController.PlayerProfileEditing, customMiddleware.PlayerAuthorizing)
 	router.GET("/inventory", playerController.PlayerInventoryListing, customMiddleware.PlayerAuthorizing)
 }

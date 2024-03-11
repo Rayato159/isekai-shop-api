@@ -45,7 +45,7 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
     - Player Item Listing
 
 ## Architecture
-![alt text](./assets/arch-v3.png "Architecture")
+![alt text](./assets/IsekaiShopArchitectureV3.png "Architecture")
 
 ## ER Diagram
 ![alt text](./assets/er-diagram-v2.png "ER-Diagram")
