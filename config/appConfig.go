@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 )
 
@@ -13,50 +14,50 @@ var once sync.Once
 
 type (
 	DatabaseConfig struct {
-		Host     string `mapstructure:"host"`
-		Port     int    `mapstructure:"port"`
-		User     string `mapstructure:"user"`
-		Password string `mapstructure:"password"`
-		DBName   string `mapstructure:"dbname"`
-		SSLMode  string `mapstructure:"sslmode"`
-		Schema   string `mapstructure:"schema"`
+		Host     string `mapstructure:"host" validate:"required"`
+		Port     int    `mapstructure:"port" validate:"required"`
+		User     string `mapstructure:"user" validate:"required"`
+		Password string `mapstructure:"password" validate:"required"`
+		DBName   string `mapstructure:"dbname" validate:"required"`
+		SSLMode  string `mapstructure:"sslmode" validate:"required"`
+		Schema   string `mapstructure:"schema" validate:"required"`
 	}
 
 	ServerConfig struct {
-		Port         int           `mapstructure:"port"`
-		AllowOrigins []string      `mapstructure:"allowOrigins"`
-		Timeout      time.Duration `mapstructure:"timeout"`
-		BodyLimit    string        `mapstructure:"bodyLimit"`
+		Port         int           `mapstructure:"port" validate:"required"`
+		AllowOrigins []string      `mapstructure:"allowOrigins" validate:"required"`
+		Timeout      time.Duration `mapstructure:"timeout" validate:"required"`
+		BodyLimit    string        `mapstructure:"bodyLimit" validate:"required"`
 	}
 
 	OAuth2Config struct {
-		PlayerRedirectUrl string           `mapstructure:"playerRedirectUrl"`
-		AdminRedirectUrl  string           `mapstructure:"adminRedirectUrl"`
-		ClientId          string           `mapstructure:"clientId"`
-		ClientSecret      string           `mapstructure:"clientSecret"`
-		Endpoints         *oauth2Endpoints `mapstructure:"endpoints"`
-		Scopes            []string         `mapstructure:"scopes"` // https://developers.google.com/identity/protocols/oauth2/scopes
-		UserInfoUrl       string           `mapstructure:"userInfoUrl"`
-		RevokeUrl         string           `mapstructure:"revokeUrl"`
+		PlayerRedirectUrl string           `mapstructure:"playerRedirectUrl" validate:"required"`
+		AdminRedirectUrl  string           `mapstructure:"adminRedirectUrl" validate:"required"`
+		ClientId          string           `mapstructure:"clientId" validate:"required"`
+		ClientSecret      string           `mapstructure:"clientSecret" validate:"required"`
+		Endpoints         *oauth2Endpoints `mapstructure:"endpoints" validate:"required" `
+		Scopes            []string         `mapstructure:"scopes" validate:"required"` // https://developers.google.com/identity/protocols/oauth2/scopes
+		UserInfoUrl       string           `mapstructure:"userInfoUrl" validate:"required"`
+		RevokeUrl         string           `mapstructure:"revokeUrl" validate:"required"`
 	}
 
 	oauth2Endpoints struct {
-		AuthUrl       string `mapstructure:"authUrl"`
-		TokenUrl      string `mapstructure:"tokenUrl"`
-		DeviceAuthUrl string `mapstructure:"deviceAuthUrl"`
+		AuthUrl       string `mapstructure:"authUrl" validate:"required"`
+		TokenUrl      string `mapstructure:"tokenUrl" validate:"required"`
+		DeviceAuthUrl string `mapstructure:"deviceAuthUrl" validate:"required"`
 	}
 
 	StateConfig struct {
-		Secret    string        `mapstructure:"secret"`
-		ExpiresAt time.Duration `mapstructure:"expiresAt"`
-		Issuer    string        `mapstructure:"issuer"`
+		Secret    string        `mapstructure:"secret" validate:"required"`
+		ExpiresAt time.Duration `mapstructure:"expiresAt" validate:"required"`
+		Issuer    string        `mapstructure:"issuer" validate:"required"`
 	}
 
 	AppConfig struct {
-		DatabaseConfig *DatabaseConfig `mapstructure:"database"`
-		ServerConfig   *ServerConfig   `mapstructure:"server"`
-		OAuth2Config   *OAuth2Config   `mapstructure:"oauth2"`
-		StateConfig    *StateConfig    `mapstructure:"state"`
+		DatabaseConfig *DatabaseConfig `mapstructure:"database" validate:"required"`
+		ServerConfig   *ServerConfig   `mapstructure:"server" validate:"required"`
+		OAuth2Config   *OAuth2Config   `mapstructure:"oauth2" validate:"required"`
+		StateConfig    *StateConfig    `mapstructure:"state" validate:"required"`
 	}
 )
 
@@ -76,6 +77,12 @@ func GetAppConfig() *AppConfig {
 
 		if err := viper.Unmarshal(&appConfigInstance); err != nil {
 			panic(fmt.Errorf("unmarshalkey config file failed: %v", err))
+		}
+
+		validate := validator.New()
+
+		if err := validate.Struct(appConfigInstance); err != nil {
+			panic(fmt.Errorf("validate config file failed: %v", err))
 		}
 	})
 

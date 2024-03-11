@@ -60,6 +60,9 @@ func (s *echoServer) Start() {
 	corsMiddleware := getCorsMiddleware(s.conf.ServerConfig.AllowOrigins)
 	bodyLimitMiddleware := getBodyLimitMiddleware(s.conf.ServerConfig.BodyLimit)
 
+	// Prevent application from crashing
+	s.app.Use(middleware.Recover())
+
 	s.app.Use(loggerMiddleware)
 	s.app.Use(timeOutMiddleware)
 	s.app.Use(corsMiddleware)
