@@ -88,7 +88,6 @@ func (s *paymentServiceImpl) ItemBuying(itemBuyingReq *_paymentModel.ItemBuyingR
 		ItemPrice:       itemEntity.Price,
 		ItemPicture:     itemEntity.Picture,
 		Quantity:        itemBuyingReq.Quantity,
-		TotalPrice:      -totalPrice,
 	})
 	if err != nil {
 		return nil, err
@@ -146,7 +145,6 @@ func (s *paymentServiceImpl) ItemSelling(itemSellingReq *_paymentModel.ItemSelli
 		ItemPrice:       itemEntity.Price,
 		ItemPicture:     itemEntity.Picture,
 		Quantity:        itemSellingReq.Quantity,
-		TotalPrice:      totalPrice,
 	})
 	if err != nil {
 		return nil, err

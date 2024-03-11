@@ -14,7 +14,6 @@ type (
 		ItemPrice       uint      `gorm:"not null;"`
 		ItemPicture     string    `gorm:"type:varchar(128);not null;"`
 		Quantity        uint      `gorm:"not null;"`
-		TotalPrice      int64     `gorm:"not null;"`
 		CreatedAt       time.Time `gorm:"not null;autoCreateTime;"`
 	}
 )
