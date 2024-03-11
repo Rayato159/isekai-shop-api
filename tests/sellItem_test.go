@@ -29,7 +29,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		inventoryRepositoryMock,
 	)
 
-	inventoryRepositoryMock.On("CountPlayerItem", "P001", uint64(1)).Return(int64(3), nil)
+	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(3), nil)
 
 	itemRepositoryMock.On("FindItemByID", uint64(1)).Return(&_itemEntity.Item{
 		ID:          1,
@@ -39,7 +39,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	orderRepositoryMock.On("InsertOrder", &_orderEntity.Order{
+	orderRepositoryMock.On("OrderRecording", &_orderEntity.Order{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -59,7 +59,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		TotalPrice:      1500,
 	}, nil)
 
-	paymentRepositoryMock.On("InsertPayment", &_paymentEntity.Payment{
+	paymentRepositoryMock.On("PaymentRecording", &_paymentEntity.Payment{
 		PlayerID: "P001",
 		Amount:   1500,
 	}).Return(&_paymentEntity.Payment{
@@ -108,7 +108,7 @@ func TestItemSellingFailed(t *testing.T) {
 		inventoryRepositoryMock,
 	)
 
-	inventoryRepositoryMock.On("CountPlayerItem", "P001", uint64(1)).Return(int64(2), nil)
+	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(2), nil)
 
 	type args struct {
 		in       *_paymentModel.ItemSellingReq

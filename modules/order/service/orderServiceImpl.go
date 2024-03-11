@@ -16,7 +16,7 @@ func NewOrderServiceImpl(orderRepository _orderRepository.OrderRepository) Order
 }
 
 func (s *orderServiceImpl) PlayerOrderListing(playerID string) ([]*_orderModel.Order, error) {
-	orderEntites, err := s.orderRepository.FindPlayerOrders(playerID)
+	orderEntites, err := s.orderRepository.PlayerOrderListing(playerID)
 	if err != nil {
 		return nil, err
 	}

@@ -2,10 +2,10 @@ package exception
 
 import "fmt"
 
-type UpdateItemException struct {
+type ItemEditingException struct {
 	ItemID uint64
 }
 
-func (e *UpdateItemException) Error() string {
+func (e *ItemEditingException) Error() string {
 	return fmt.Sprintf("Failed to update item with id %d", e.ItemID)
 }

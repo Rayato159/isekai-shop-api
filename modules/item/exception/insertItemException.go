@@ -1,7 +1,7 @@
 package exception
 
-type InsertItemException struct{}
+type ItemCreatingException struct{}
 
-func (e *InsertItemException) Error() string {
+func (e *ItemCreatingException) Error() string {
 	return "Failed to insert item"
 }

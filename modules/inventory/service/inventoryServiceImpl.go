@@ -24,7 +24,7 @@ func NewInventoryService(
 }
 
 func (s *inventoryServiceImpl) PlayerInventoryListing(playerID string) ([]*_inventoryModel.Inventory, error) {
-	inventories, err := s.inventoryRepository.FindPlayerInventories(playerID)
+	inventories, err := s.inventoryRepository.InventorySearching(playerID)
 	if err != nil {
 		return nil, err
 	}

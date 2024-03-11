@@ -19,23 +19,23 @@ func NewOrderRepository(db *gorm.DB, logger echo.Logger) OrderRepository {
 	}
 }
 
-func (r *orderRepositoryImpl) InsertOrder(orderEntity *_orderEntity.Order) (*_orderEntity.Order, error) {
+func (r *orderRepositoryImpl) OrderRecording(orderEntity *_orderEntity.Order) (*_orderEntity.Order, error) {
 	insertedOrder := new(_orderEntity.Order)
 
 	if err := r.db.Create(orderEntity).Scan(insertedOrder).Error; err != nil {
 		r.logger.Errorf("Error inserting order: %s", err.Error())
-		return nil, &_orderException.InsertOrderException{}
+		return nil, &_orderException.OrderRecordingException{}
 	}
 
 	return insertedOrder, nil
 }
 
-func (r *orderRepositoryImpl) FindPlayerOrders(playerID string) ([]*_orderEntity.Order, error) {
+func (r *orderRepositoryImpl) PlayerOrderListing(playerID string) ([]*_orderEntity.Order, error) {
 	orders := make([]*_orderEntity.Order, 0)
 
 	if err := r.db.Where("player_id = ?", playerID).Find(&orders).Error; err != nil {
 		r.logger.Errorf("Error finding player orders: %s", err.Error())
-		return nil, &_orderException.FindPlayerOrdersException{}
+		return nil, &_orderException.PlayerOrderListingException{}
 	}
 
 	return orders, nil

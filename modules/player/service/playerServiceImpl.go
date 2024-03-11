@@ -32,11 +32,11 @@ func (s *playerServiceImpl) PlayerProfiling(playerID string) (*_playerModel.Play
 }
 
 func (s *playerServiceImpl) PlayerProfileEditing(playerID string, editPlayerReq *_playerModel.PlayerProfileEditingReq) (*_playerModel.Player, error) {
-	editPlayerReqDto := &_playerEntity.UpdatePlayerDto{
+	editPlayerReqDto := &_playerEntity.ProfileEditingDto{
 		Username: editPlayerReq.Username,
 	}
 
-	updatedPlayerID, err := s.playerRepository.UpdatePlayer(playerID, editPlayerReqDto)
+	updatedPlayerID, err := s.playerRepository.ProfileEditing(playerID, editPlayerReqDto)
 	if err != nil {
 		return nil, err
 	}

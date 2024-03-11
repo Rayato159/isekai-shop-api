@@ -33,7 +33,7 @@ func (s *googleOAuth2Service) CreatePlayerAccount(playerCreatingReq *_playerMode
 			Avatar: playerCreatingReq.Avatar,
 		}
 
-		_, err := s.playerRepository.InsertPlayer(playerEntity)
+		_, err := s.playerRepository.PlayerCreating(playerEntity)
 		if err != nil {
 			return err
 		}

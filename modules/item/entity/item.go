@@ -32,7 +32,7 @@ type (
 		Size int64
 	}
 
-	UpdateItemDto struct {
+	ItemEditingDto struct {
 		AdminID     *string
 		Name        string
 		Description string

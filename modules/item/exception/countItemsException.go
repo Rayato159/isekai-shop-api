@@ -1,7 +1,7 @@
 package exception
 
-type CountItemsException struct{}
+type ItemCountingException struct{}
 
-func (e *CountItemsException) Error() string {
+func (e *ItemCountingException) Error() string {
 	return "Count items failed"
 }

@@ -5,6 +5,6 @@ import (
 )
 
 type OrderRepository interface {
-	InsertOrder(orderEntity *_orderEntity.Order) (*_orderEntity.Order, error)
-	FindPlayerOrders(playerID string) ([]*_orderEntity.Order, error)
+	OrderRecording(orderEntity *_orderEntity.Order) (*_orderEntity.Order, error)
+	PlayerOrderListing(playerID string) ([]*_orderEntity.Order, error)
 }

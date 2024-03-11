@@ -3,6 +3,6 @@ package repository
 import _paymentEntity "github.com/Rayato159/isekai-shop-api/modules/payment/entity"
 
 type PaymentRepository interface {
-	InsertPayment(paymentEntity *_paymentEntity.Payment) (*_paymentEntity.Payment, error)
+	PaymentRecording(paymentEntity *_paymentEntity.Payment) (*_paymentEntity.Payment, error)
 	PlayerBalanceShowing(playerID string) (*_paymentEntity.PlayerBalanceDto, error)
 }

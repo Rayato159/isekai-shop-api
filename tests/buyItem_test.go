@@ -43,7 +43,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Balance:  5000,
 	}, nil)
 
-	orderRepositoryMock.On("InsertOrder", &_orderEntity.Order{
+	orderRepositoryMock.On("OrderRecording", &_orderEntity.Order{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -63,7 +63,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		TotalPrice:      -3000,
 	}, nil)
 
-	inventoryRepositoryMock.On("InsertInventoryInBluk", []*_inventoryEntity.Inventory{
+	inventoryRepositoryMock.On("InventoryFilling", []*_inventoryEntity.Inventory{
 		{
 			PlayerID: "P001",
 			ItemID:   1,
@@ -91,7 +91,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		},
 	}, nil)
 
-	paymentRepositoryMock.On("InsertPayment", &_paymentEntity.Payment{
+	paymentRepositoryMock.On("PaymentRecording", &_paymentEntity.Payment{
 		PlayerID: "P001",
 		Amount:   -3000,
 	}).Return(&_paymentEntity.Payment{

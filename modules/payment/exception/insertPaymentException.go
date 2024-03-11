@@ -1,7 +1,7 @@
 package exception
 
-type InsertPaymentException struct{}
+type PaymentRecordingException struct{}
 
-func (e *InsertPaymentException) Error() string {
+func (e *PaymentRecordingException) Error() string {
 	return "Failed to insert payment"
 }

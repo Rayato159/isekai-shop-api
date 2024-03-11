@@ -2,10 +2,10 @@ package exception
 
 import "fmt"
 
-type UpdatePlayerException struct {
+type ProfileEditingException struct {
 	PlayerID string
 }
 
-func (e *UpdatePlayerException) Error() string {
+func (e *ProfileEditingException) Error() string {
 	return fmt.Sprintf("Error updating player: %s", e.PlayerID)
 }

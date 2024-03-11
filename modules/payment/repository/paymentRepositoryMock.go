@@ -10,7 +10,7 @@ type PaymentRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *PaymentRepositoryMock) InsertPayment(paymentEntity *_paymentEntity.Payment) (*_paymentEntity.Payment, error) {
+func (m *PaymentRepositoryMock) PaymentRecording(paymentEntity *_paymentEntity.Payment) (*_paymentEntity.Payment, error) {
 	args := m.Called(paymentEntity)
 	return args.Get(0).(*_paymentEntity.Payment), args.Error(1)
 }

@@ -42,7 +42,7 @@ func (s *paymentServiceImpl) TopUp(topUpReq *_paymentModel.TopUpReq) (*_paymentM
 		Amount:   topUpReq.Amount,
 	}
 
-	insertedPayment, err := s.paymentRepository.InsertPayment(paymentEntity)
+	insertedPayment, err := s.paymentRepository.PaymentRecording(paymentEntity)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func (s *paymentServiceImpl) ItemBuying(itemBuyingReq *_paymentModel.ItemBuyingR
 		return nil, err
 	}
 
-	insertedOrder, err := s.orderRepository.InsertOrder(&_orderEntity.Order{
+	insertedOrder, err := s.orderRepository.OrderRecording(&_orderEntity.Order{
 		PlayerID:        itemBuyingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -97,7 +97,7 @@ func (s *paymentServiceImpl) ItemBuying(itemBuyingReq *_paymentModel.ItemBuyingR
 
 	inventoryEntities := s.groupInventoryEntities(itemBuyingReq)
 
-	insertedPayment, err := s.paymentRepository.InsertPayment(&_paymentEntity.Payment{
+	insertedPayment, err := s.paymentRepository.PaymentRecording(&_paymentEntity.Payment{
 		PlayerID: itemBuyingReq.PlayerID,
 		Amount:   -totalPrice,
 	})
@@ -106,7 +106,7 @@ func (s *paymentServiceImpl) ItemBuying(itemBuyingReq *_paymentModel.ItemBuyingR
 	}
 	log.Printf("Payment entity: %d", insertedPayment.ID)
 
-	inventory, err := s.inventoryRepository.InsertInventoryInBluk(inventoryEntities)
+	inventory, err := s.inventoryRepository.InventoryFilling(inventoryEntities)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +138,7 @@ func (s *paymentServiceImpl) ItemSelling(itemSellingReq *_paymentModel.ItemSelli
 	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), itemSellingReq.Quantity)
 	totalPrice = totalPrice / 2
 
-	insertedOrder, err := s.orderRepository.InsertOrder(&_orderEntity.Order{
+	insertedOrder, err := s.orderRepository.OrderRecording(&_orderEntity.Order{
 		PlayerID:        itemSellingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -153,7 +153,7 @@ func (s *paymentServiceImpl) ItemSelling(itemSellingReq *_paymentModel.ItemSelli
 	}
 	log.Printf("Inserted order: %d", insertedOrder.ID)
 
-	insertedPayment, err := s.paymentRepository.InsertPayment(&_paymentEntity.Payment{
+	insertedPayment, err := s.paymentRepository.PaymentRecording(&_paymentEntity.Payment{
 		PlayerID: itemSellingReq.PlayerID,
 		Amount:   totalPrice,
 	})
@@ -189,7 +189,7 @@ func (s *paymentServiceImpl) groupInventoryEntities(itemBuyingReq *_paymentModel
 }
 
 func (s *paymentServiceImpl) checkPlayerItemQuantity(playerID string, itemID uint64, quantity uint) error {
-	inventoryCount := s.inventoryRepository.CountPlayerItem(playerID, itemID)
+	inventoryCount := s.inventoryRepository.PlayerItemCounting(playerID, itemID)
 
 	if int(inventoryCount) < int(quantity) {
 		log.Printf("Player %s has not enough item with id: %d", playerID, itemID)

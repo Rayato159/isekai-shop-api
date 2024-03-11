@@ -20,12 +20,12 @@ func NewPaymentRepositoryImpl(db *gorm.DB, logger echo.Logger) PaymentRepository
 	}
 }
 
-func (r *paymentRepositoryImpl) InsertPayment(paymentEntity *_paymentEntity.Payment) (*_paymentEntity.Payment, error) {
+func (r *paymentRepositoryImpl) PaymentRecording(paymentEntity *_paymentEntity.Payment) (*_paymentEntity.Payment, error) {
 	insertedPayment := new(_paymentEntity.Payment)
 
 	if err := r.db.Create(paymentEntity).Scan(insertedPayment).Error; err != nil {
 		r.logger.Error("Failed to insert payment", err.Error())
-		return nil, &_paymentException.InsertPaymentException{}
+		return nil, &_paymentException.PaymentRecordingException{}
 	}
 
 	return insertedPayment, nil

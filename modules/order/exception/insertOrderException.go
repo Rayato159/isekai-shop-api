@@ -1,7 +1,7 @@
 package exception
 
-type InsertOrderException struct{}
+type OrderRecordingException struct{}
 
-func (e *InsertOrderException) Error() string {
+func (e *OrderRecordingException) Error() string {
 	return "Error inserting order"
 }

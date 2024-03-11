@@ -25,7 +25,7 @@ func (s *adminServiceImpl) ItemCreating(itemCreatingReq *_itemModel.ItemCreating
 		Price:       itemCreatingReq.Price,
 	}
 
-	itemEntity, err := s.itemRepository.InsertItem(item)
+	itemEntity, err := s.itemRepository.ItemCreating(item)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (s *adminServiceImpl) ItemCreating(itemCreatingReq *_itemModel.ItemCreating
 }
 
 func (s *adminServiceImpl) ItemEditing(itemID uint64, updateItemReq *_itemModel.ItemEditingReq) (*_itemModel.Item, error) {
-	updateItemDto := &_itemEntity.UpdateItemDto{
+	updateItemDto := &_itemEntity.ItemEditingDto{
 		AdminID:     &updateItemReq.AdminID,
 		Name:        updateItemReq.Name,
 		Description: updateItemReq.Description,
@@ -42,7 +42,7 @@ func (s *adminServiceImpl) ItemEditing(itemID uint64, updateItemReq *_itemModel.
 		Price:       updateItemReq.Price,
 	}
 
-	updatedItemID, err := s.itemRepository.UpdateItem(itemID, updateItemDto)
+	updatedItemID, err := s.itemRepository.ItemEditing(itemID, updateItemDto)
 	if err != nil {
 		return nil, err
 	}

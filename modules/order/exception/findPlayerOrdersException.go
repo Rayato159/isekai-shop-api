@@ -1,7 +1,7 @@
 package exception
 
-type FindPlayerOrdersException struct{}
+type PlayerOrderListingException struct{}
 
-func (e *FindPlayerOrdersException) Error() string {
+func (e *PlayerOrderListingException) Error() string {
 	return "Error finding player orders"
 }

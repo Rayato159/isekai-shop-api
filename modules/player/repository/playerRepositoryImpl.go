@@ -20,12 +20,12 @@ func NewPlayerRepositoryImpl(db *gorm.DB, logger echo.Logger) PlayerRepository {
 	}
 }
 
-func (r *playerRepositoryImpl) InsertPlayer(playerEntity *_playerEntity.Player) (*_playerEntity.Player, error) {
+func (r *playerRepositoryImpl) PlayerCreating(playerEntity *_playerEntity.Player) (*_playerEntity.Player, error) {
 	insertedPlayer := new(_playerEntity.Player)
 
 	if err := r.db.Create(playerEntity).Scan(insertedPlayer).Error; err != nil {
 		r.logger.Error("Failed to insert item", err.Error())
-		return nil, &_playerException.InsertPlayerException{PlayerID: playerEntity.ID}
+		return nil, &_playerException.PlayerCreatingException{PlayerID: playerEntity.ID}
 	}
 
 	return insertedPlayer, nil
@@ -43,7 +43,7 @@ func (r *playerRepositoryImpl) FindPlayerByID(playerID string) (*_playerEntity.P
 	return player, nil
 }
 
-func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayerDto *_playerEntity.UpdatePlayerDto) (string, error) {
+func (r *playerRepositoryImpl) ProfileEditing(playerID string, updatePlayerDto *_playerEntity.ProfileEditingDto) (string, error) {
 	updatedPlayer := new(_playerEntity.Player)
 
 	tx := r.db.Model(&_playerEntity.Player{}).Where(
@@ -54,7 +54,7 @@ func (r *playerRepositoryImpl) UpdatePlayer(playerID string, updatePlayerDto *_p
 
 	if tx.Error != nil {
 		r.logger.Errorf("Error updating player: %s", tx.Error.Error())
-		return "", &_playerException.UpdatePlayerException{PlayerID: playerID}
+		return "", &_playerException.ProfileEditingException{PlayerID: playerID}
 	}
 
 	return playerID, nil

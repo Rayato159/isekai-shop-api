@@ -19,7 +19,7 @@ func NewInventoryRepository(db *gorm.DB, logger echo.Logger) InventoryRepository
 	}
 }
 
-func (r *inventoryRepositoryImpl) FindPlayerInventories(playerID string) ([]*_inventoryEntity.Inventory, error) {
+func (r *inventoryRepositoryImpl) InventorySearching(playerID string) ([]*_inventoryEntity.Inventory, error) {
 	inventories := make([]*_inventoryEntity.Inventory, 0)
 
 	if err := r.db.Where(
@@ -56,7 +56,7 @@ func (r *inventoryRepositoryImpl) DeleteItemByLimit(playerID string, itemID uint
 	return nil
 }
 
-func (r *inventoryRepositoryImpl) InsertInventoryInBluk(inventoryEntities []*_inventoryEntity.Inventory) ([]*_inventoryEntity.Inventory, error) {
+func (r *inventoryRepositoryImpl) InventoryFilling(inventoryEntities []*_inventoryEntity.Inventory) ([]*_inventoryEntity.Inventory, error) {
 	insertedInventories := make([]*_inventoryEntity.Inventory, 0)
 
 	if err := r.db.Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
@@ -67,7 +67,7 @@ func (r *inventoryRepositoryImpl) InsertInventoryInBluk(inventoryEntities []*_in
 	return insertedInventories, nil
 }
 
-func (r *inventoryRepositoryImpl) CountPlayerItem(playerID string, itemID uint64) int64 {
+func (r *inventoryRepositoryImpl) PlayerItemCounting(playerID string, itemID uint64) int64 {
 	var count int64
 
 	if err := r.db.Model(

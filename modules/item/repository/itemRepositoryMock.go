@@ -15,7 +15,7 @@ func (m *ItemRepositoryMock) FindItemByID(itemID uint64) (*_itemEntity.Item, err
 	return args.Get(0).(*_itemEntity.Item), args.Error(1)
 }
 
-func (m *ItemRepositoryMock) FindItems(itemFilterDto *_itemEntity.ItemFilterDto) ([]*_itemEntity.Item, error) {
+func (m *ItemRepositoryMock) ItemListing(itemFilterDto *_itemEntity.ItemFilterDto) ([]*_itemEntity.Item, error) {
 	args := m.Called(itemFilterDto)
 	return args.Get(0).([]*_itemEntity.Item), args.Error(1)
 }
@@ -25,17 +25,17 @@ func (m *ItemRepositoryMock) FindItemByIDs(itemIDs []uint64) ([]*_itemEntity.Ite
 	return args.Get(0).([]*_itemEntity.Item), args.Error(1)
 }
 
-func (m *ItemRepositoryMock) CountItems(itemFilterDto *_itemEntity.ItemFilterDto) (int64, error) {
+func (m *ItemRepositoryMock) ItemCounting(itemFilterDto *_itemEntity.ItemFilterDto) (int64, error) {
 	args := m.Called(itemFilterDto)
 	return args.Get(0).(int64), args.Error(1)
 }
 
-func (m *ItemRepositoryMock) InsertItem(itemEntity *_itemEntity.Item) (*_itemEntity.Item, error) {
+func (m *ItemRepositoryMock) ItemCreating(itemEntity *_itemEntity.Item) (*_itemEntity.Item, error) {
 	args := m.Called(itemEntity)
 	return args.Get(0).(*_itemEntity.Item), args.Error(1)
 }
 
-func (m *ItemRepositoryMock) UpdateItem(itemID uint64, updateItemDto *_itemEntity.UpdateItemDto) (uint64, error) {
+func (m *ItemRepositoryMock) ItemEditing(itemID uint64, updateItemDto *_itemEntity.ItemEditingDto) (uint64, error) {
 	args := m.Called(itemID, updateItemDto)
 	return args.Get(0).(uint64), args.Error(1)
 }

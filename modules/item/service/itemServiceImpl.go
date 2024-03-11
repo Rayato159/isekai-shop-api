@@ -26,12 +26,12 @@ func (s *itemServiceImpl) ItemListing(itemFilter *_itemModel.ItemFilter) (*_item
 		},
 	}
 
-	itemEntityList, err := s.itemRepository.FindItems(itemFilterDto)
+	itemEntityList, err := s.itemRepository.ItemListing(itemFilterDto)
 	if err != nil {
 		return nil, err
 	}
 
-	totalItems, err := s.itemRepository.CountItems(itemFilterDto)
+	totalItems, err := s.itemRepository.ItemCounting(itemFilterDto)
 	if err != nil {
 		return nil, err
 	}

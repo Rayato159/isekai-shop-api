@@ -20,7 +20,7 @@ func NewItemRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemRepository {
 	}
 }
 
-func (r *itemRepositoryImpl) FindItems(itemFilterDto *_itemEntity.ItemFilterDto) ([]*_itemEntity.Item, error) {
+func (r *itemRepositoryImpl) ItemListing(itemFilterDto *_itemEntity.ItemFilterDto) ([]*_itemEntity.Item, error) {
 	query := r.db.Model(&_itemEntity.Item{})
 	if itemFilterDto.Name != "" {
 		query = query.Where("name LIKE ?", "%"+itemFilterDto.Name+"%")
@@ -42,7 +42,7 @@ func (r *itemRepositoryImpl) FindItems(itemFilterDto *_itemEntity.ItemFilterDto)
 	return items, nil
 }
 
-func (r *itemRepositoryImpl) CountItems(itemFilterDto *_itemEntity.ItemFilterDto) (int64, error) {
+func (r *itemRepositoryImpl) ItemCounting(itemFilterDto *_itemEntity.ItemFilterDto) (int64, error) {
 	query := r.db.Model(&_itemEntity.Item{}).Where("is_archive = ?", false)
 
 	if itemFilterDto.Name != "" {
@@ -56,7 +56,7 @@ func (r *itemRepositoryImpl) CountItems(itemFilterDto *_itemEntity.ItemFilterDto
 
 	if err := query.Count(&count).Error; err != nil {
 		r.logger.Error("Failed to count items", err.Error())
-		return -1, &_itemException.CountItemsException{}
+		return -1, &_itemException.ItemCountingException{}
 	}
 
 	return count, nil
@@ -74,18 +74,18 @@ func (r *itemRepositoryImpl) FindItemByID(itemID uint64) (*_itemEntity.Item, err
 
 }
 
-func (r *itemRepositoryImpl) InsertItem(itemEntity *_itemEntity.Item) (*_itemEntity.Item, error) {
+func (r *itemRepositoryImpl) ItemCreating(itemEntity *_itemEntity.Item) (*_itemEntity.Item, error) {
 	insertedItem := new(_itemEntity.Item)
 
 	if err := r.db.Create(itemEntity).Scan(insertedItem).Error; err != nil {
 		r.logger.Error("Failed to insert item", err.Error())
-		return nil, &_itemException.InsertItemException{}
+		return nil, &_itemException.ItemCreatingException{}
 	}
 
 	return insertedItem, nil
 }
 
-func (r *itemRepositoryImpl) UpdateItem(itemID uint64, updateItemDto *_itemEntity.UpdateItemDto) (uint64, error) {
+func (r *itemRepositoryImpl) ItemEditing(itemID uint64, updateItemDto *_itemEntity.ItemEditingDto) (uint64, error) {
 	tx := r.db.Model(&_itemEntity.Item{}).Where(
 		"id = ?", itemID,
 	).Updates(
@@ -94,7 +94,7 @@ func (r *itemRepositoryImpl) UpdateItem(itemID uint64, updateItemDto *_itemEntit
 
 	if tx.Error != nil {
 		r.logger.Error("Failed to update item", tx.Error.Error())
-		return 0, &_itemException.UpdateItemException{}
+		return 0, &_itemException.ItemEditingException{}
 	}
 
 	return itemID, nil

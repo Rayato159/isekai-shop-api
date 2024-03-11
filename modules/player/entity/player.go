@@ -21,7 +21,7 @@ type (
 		UpdatedAt   time.Time                    `gorm:"not null;autoUpdateTime;"`
 	}
 
-	UpdatePlayerDto struct {
+	ProfileEditingDto struct {
 		Username string
 	}
 )
