@@ -47,7 +47,6 @@ func TestItemSellingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
-		TotalPrice:      1500,
 	}).Return(&_orderEntity.Order{
 		PlayerID:        "P001",
 		ItemID:          1,
@@ -56,7 +55,6 @@ func TestItemSellingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
-		TotalPrice:      1500,
 	}, nil)
 
 	paymentRepositoryMock.On("PaymentRecording", &_paymentEntity.Payment{

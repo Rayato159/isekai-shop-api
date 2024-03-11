@@ -51,7 +51,6 @@ func TestItemBuyingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
-		TotalPrice:      -3000,
 	}).Return(&_orderEntity.Order{
 		PlayerID:        "P001",
 		ItemID:          1,
@@ -60,7 +59,6 @@ func TestItemBuyingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
-		TotalPrice:      -3000,
 	}, nil)
 
 	inventoryRepositoryMock.On("InventoryFilling", []*_playerEntity.Inventory{
