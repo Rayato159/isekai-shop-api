@@ -1,10 +1,10 @@
 package server
 
 import (
-	_adminRepository "github.com/Rayato159/isekai-shop-api/modules/admin/repository"
-	_oauth2Controller "github.com/Rayato159/isekai-shop-api/modules/oauth2/controller"
-	_oauth2Service "github.com/Rayato159/isekai-shop-api/modules/oauth2/service"
-	_playerSource "github.com/Rayato159/isekai-shop-api/modules/player/repository"
+	_adminRepository "github.com/Rayato159/isekai-shop-api/domains/admin/repository"
+	_oauth2Controller "github.com/Rayato159/isekai-shop-api/domains/oauth2/controller"
+	_oauth2Service "github.com/Rayato159/isekai-shop-api/domains/oauth2/service"
+	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 
 	"github.com/Rayato159/isekai-shop-api/packages/state"
 )

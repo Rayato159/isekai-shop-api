@@ -37,18 +37,18 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
     - See Player’ Balance Info
     - Buy Items
     - Sell Items
-- Order
-    - Order Listing
+- HistoryOfPurchasing
+    - HistoryOfPurchasing Listing
 - Item
     - Item Listing
 - Inventory
     - Player Item Listing
 
 ## Architecture
-![alt text](./assets/IsekaiShopArchitectureV4.png "Architecture")
+![alt text](./assets/IsekaiShopArchitectureV5.png "Architecture")
 
 ## ER Diagram
-![alt text](./assets/IsekaiShopEntityV4.png "ER-Diagram")
+![alt text](./assets/IsekaiShopEntityV5.png "ER-Diagram")
 
 ## Start PostgreSQL on Docker
 

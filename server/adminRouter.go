@@ -1,9 +1,9 @@
 package server
 
 import (
-	_adminController "github.com/Rayato159/isekai-shop-api/modules/admin/controller"
-	_adminService "github.com/Rayato159/isekai-shop-api/modules/admin/service"
-	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
+	_adminController "github.com/Rayato159/isekai-shop-api/domains/admin/controller"
+	_adminService "github.com/Rayato159/isekai-shop-api/domains/admin/service"
+	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
 	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 )
 

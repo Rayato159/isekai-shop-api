@@ -820,70 +820,6 @@
 			]
 		},
 		{
-			"name": "order",
-			"item": [
-				{
-					"name": "player order listing",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/v1/order",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"v1",
-								"order"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 - ok",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/v1/order",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"v1",
-										"order"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=UTF-8"
-								},
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 17 Feb 2024 21:30:15 GMT"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								}
-							],
-							"cookie": [],
-							"body": "[\n    {\n        \"id\": 15,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 3,\n        \"itemName\": \"Healing Potion\",\n        \"itemDescription\": \"Restores health when consumed.\",\n        \"itemPicture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n        \"itemPrice\": 20,\n        \"quantity\": 10,\n        \"totalPrice\": -200,\n        \"createdAt\": \"2024-02-18T04:06:56.624218+07:00\"\n    },\n    {\n        \"id\": 17,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 3,\n        \"itemName\": \"Healing Potion\",\n        \"itemDescription\": \"Restores health when consumed.\",\n        \"itemPicture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n        \"itemPrice\": 20,\n        \"quantity\": 5,\n        \"totalPrice\": 50,\n        \"createdAt\": \"2024-02-18T04:08:06.269779+07:00\"\n    },\n    {\n        \"id\": 18,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 3,\n        \"itemName\": \"Healing Potion\",\n        \"itemDescription\": \"Restores health when consumed.\",\n        \"itemPicture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n        \"itemPrice\": 20,\n        \"quantity\": 4,\n        \"totalPrice\": 40,\n        \"createdAt\": \"2024-02-18T04:08:22.264299+07:00\"\n    },\n    {\n        \"id\": 19,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 3,\n        \"itemName\": \"Healing Potion\",\n        \"itemDescription\": \"Restores health when consumed.\",\n        \"itemPicture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n        \"itemPrice\": 20,\n        \"quantity\": 10,\n        \"totalPrice\": -200,\n        \"createdAt\": \"2024-02-18T04:08:28.411785+07:00\"\n    },\n    {\n        \"id\": 20,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 1,\n        \"itemName\": \"Sword of the Dragon\",\n        \"itemDescription\": \"A powerful sword imbued with dragon magic.\",\n        \"itemPicture\": \"https://i.pinimg.com/564x/e2/66/1d/e2661d03a8a519125d63bffb130f57a9.jpg\",\n        \"itemPrice\": 100,\n        \"quantity\": 2,\n        \"totalPrice\": -200,\n        \"createdAt\": \"2024-02-18T04:08:34.549708+07:00\"\n    },\n    {\n        \"id\": 21,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 1,\n        \"itemName\": \"Sword of the Dragon\",\n        \"itemDescription\": \"A powerful sword imbued with dragon magic.\",\n        \"itemPicture\": \"https://i.pinimg.com/564x/e2/66/1d/e2661d03a8a519125d63bffb130f57a9.jpg\",\n        \"itemPrice\": 100,\n        \"quantity\": 2,\n        \"totalPrice\": -200,\n        \"createdAt\": \"2024-02-18T04:17:50.671728+07:00\"\n    },\n    {\n        \"id\": 22,\n        \"playerID\": \"101772256434591099298\",\n        \"itemID\": 3,\n        \"itemName\": \"Healing Potion\",\n        \"itemDescription\": \"Restores health when consumed.\",\n        \"itemPicture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n        \"itemPrice\": 20,\n        \"quantity\": 2,\n        \"totalPrice\": 20,\n        \"createdAt\": \"2024-02-18T04:17:59.678262+07:00\"\n    }\n]"
-						}
-					]
-				}
-			]
-		},
-		{
 			"name": "health check",
 			"request": {
 				"method": "GET",
@@ -960,6 +896,13 @@
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
 		}
 	]
 }

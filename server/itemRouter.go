@@ -1,9 +1,9 @@
 package server
 
 import (
-	_itemController "github.com/Rayato159/isekai-shop-api/modules/item/controller"
-	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
-	_itemService "github.com/Rayato159/isekai-shop-api/modules/item/service"
+	_itemController "github.com/Rayato159/isekai-shop-api/domains/item/controller"
+	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
+	_itemService "github.com/Rayato159/isekai-shop-api/domains/item/service"
 )
 
 func (s *echoServer) initItemRouter() {

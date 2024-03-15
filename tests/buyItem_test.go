@@ -1,17 +1,17 @@
 package tests
 
 import (
-	_itemEntity "github.com/Rayato159/isekai-shop-api/modules/item/entity"
-	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
-	_orderEntity "github.com/Rayato159/isekai-shop-api/modules/order/entity"
-	_orderRepository "github.com/Rayato159/isekai-shop-api/modules/order/repository"
-	_paymentEntity "github.com/Rayato159/isekai-shop-api/modules/payment/entity"
-	_paymentException "github.com/Rayato159/isekai-shop-api/modules/payment/exception"
-	_paymentModel "github.com/Rayato159/isekai-shop-api/modules/payment/model"
-	_paymentRepository "github.com/Rayato159/isekai-shop-api/modules/payment/repository"
-	_paymentService "github.com/Rayato159/isekai-shop-api/modules/payment/service"
-	_playerEntity "github.com/Rayato159/isekai-shop-api/modules/player/entity"
-	_playerSource "github.com/Rayato159/isekai-shop-api/modules/player/repository"
+	_historyOfPurchasingEntity "github.com/Rayato159/isekai-shop-api/domains/historyOfPurchasing/entity"
+	_historyOfPurchasingRepository "github.com/Rayato159/isekai-shop-api/domains/historyOfPurchasing/repository"
+	_itemEntity "github.com/Rayato159/isekai-shop-api/domains/item/entity"
+	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
+	_paymentEntity "github.com/Rayato159/isekai-shop-api/domains/payment/entity"
+	_paymentException "github.com/Rayato159/isekai-shop-api/domains/payment/exception"
+	_paymentModel "github.com/Rayato159/isekai-shop-api/domains/payment/model"
+	_paymentRepository "github.com/Rayato159/isekai-shop-api/domains/payment/repository"
+	_paymentService "github.com/Rayato159/isekai-shop-api/domains/payment/service"
+	_playerEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
+	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	"github.com/stretchr/testify/assert"
 
 	"testing"
@@ -19,14 +19,14 @@ import (
 
 func TestItemBuyingSuccess(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
-	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
+	historyOfPurchasingRepositoryMock := new(_historyOfPurchasingRepository.HistoryOfPurchasingRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
 	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 
 	paymentService := _paymentService.NewPaymentServiceImpl(
 		paymentRepositoryMock,
 		itemRepositoryMock,
-		orderRepositoryMock,
+		historyOfPurchasingRepositoryMock,
 		inventoryRepositoryMock,
 	)
 
@@ -43,7 +43,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Balance:  5000,
 	}, nil)
 
-	orderRepositoryMock.On("OrderRecording", &_orderEntity.Order{
+	historyOfPurchasingRepositoryMock.On("HistoryOfPurchasingRecording", &_historyOfPurchasingEntity.HistoryOfPurchasing{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -51,7 +51,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
-	}).Return(&_orderEntity.Order{
+	}).Return(&_historyOfPurchasingEntity.HistoryOfPurchasing{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -125,14 +125,14 @@ func TestItemBuyingSuccess(t *testing.T) {
 
 func TestItemBuyingFail(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
-	orderRepositoryMock := new(_orderRepository.OrderRepositoryMock)
+	historyOfPurchasingRepositoryMock := new(_historyOfPurchasingRepository.HistoryOfPurchasingRepositoryMock)
 	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
 
 	paymentService := _paymentService.NewPaymentServiceImpl(
 		paymentRepositoryMock,
 		itemRepositoryMock,
-		orderRepositoryMock,
+		historyOfPurchasingRepositoryMock,
 		inventoryRepositoryMock,
 	)
 

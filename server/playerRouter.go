@@ -1,10 +1,10 @@
 package server
 
 import (
-	_itemRepository "github.com/Rayato159/isekai-shop-api/modules/item/repository"
-	_playerController "github.com/Rayato159/isekai-shop-api/modules/player/controller"
-	_playerSource "github.com/Rayato159/isekai-shop-api/modules/player/repository"
-	_playerService "github.com/Rayato159/isekai-shop-api/modules/player/service"
+	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
+	_playerController "github.com/Rayato159/isekai-shop-api/domains/player/controller"
+	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
+	_playerService "github.com/Rayato159/isekai-shop-api/domains/player/service"
 	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 )
 
