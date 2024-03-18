@@ -7,6 +7,7 @@ import (
 	"github.com/Rayato159/isekai-shop-api/domains/common"
 	_itemManagingModel "github.com/Rayato159/isekai-shop-api/domains/itemManaging/model"
 	_itemManging "github.com/Rayato159/isekai-shop-api/domains/itemManaging/service"
+	"github.com/Rayato159/isekai-shop-api/server/validation"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
 	"github.com/labstack/echo/v4"
 )
@@ -31,7 +32,9 @@ func (c *itemManagingImpl) Creating(pctx echo.Context) error {
 
 	itemCreatingReq := new(_itemManagingModel.ItemCreatingReq)
 
-	if err := pctx.Bind(itemCreatingReq); err != nil {
+	validatingContext := validation.NewCustomEchoRequest(pctx)
+
+	if err := validatingContext.Bind(itemCreatingReq); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	itemCreatingReq.AdminID = adminID
@@ -57,7 +60,9 @@ func (c *itemManagingImpl) Editing(pctx echo.Context) error {
 
 	editItemReq := new(_itemManagingModel.ItemEditingReq)
 
-	if err := pctx.Bind(editItemReq); err != nil {
+	validatingContext := validation.NewCustomEchoRequest(pctx)
+
+	if err := validatingContext.Bind(editItemReq); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	editItemReq.AdminID = adminID

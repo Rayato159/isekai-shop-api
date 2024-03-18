@@ -6,6 +6,7 @@ import (
 	"github.com/Rayato159/isekai-shop-api/domains/common"
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/domains/playerCoin/model"
 	_playerCoinService "github.com/Rayato159/isekai-shop-api/domains/playerCoin/service"
+	"github.com/Rayato159/isekai-shop-api/server/validation"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
 	"github.com/labstack/echo/v4"
 )
@@ -30,7 +31,9 @@ func (c *playerCoinControllerImpl) BuyingCoin(pctx echo.Context) error {
 
 	buyingCoinReq := new(_playerCoinModel.BuyingCoinReq)
 
-	if err := pctx.Bind(buyingCoinReq); err != nil {
+	validatingContext := validation.NewCustomEchoRequest(pctx)
+
+	if err := validatingContext.Bind(buyingCoinReq); err != nil {
 		c.logger.Error("Failed to bind top up request", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}

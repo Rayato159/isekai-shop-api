@@ -7,6 +7,7 @@ import (
 	_itemShopException "github.com/Rayato159/isekai-shop-api/domains/itemShop/exception"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
 	_itemShopService "github.com/Rayato159/isekai-shop-api/domains/itemShop/service"
+	"github.com/Rayato159/isekai-shop-api/server/validation"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
 	"github.com/labstack/echo/v4"
 )
@@ -26,7 +27,9 @@ func NewItemShopControllerImpl(itemShopService _itemShopService.ItemShopService,
 func (c *itemShopControllerImpl) Listing(pctx echo.Context) error {
 	itemFilter := new(_itemShopModel.ItemFilter)
 
-	if err := pctx.Bind(itemFilter); err != nil {
+	validatingContext := validation.NewCustomEchoRequest(pctx)
+
+	if err := validatingContext.Bind(itemFilter); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, &_itemShopException.ItemListingException{})
 	}
 
@@ -46,7 +49,9 @@ func (c *itemShopControllerImpl) Buying(pctx echo.Context) error {
 
 	buyingReq := new(_itemShopModel.BuyingReq)
 
-	if err := pctx.Bind(buyingReq); err != nil {
+	validatingContext := validation.NewCustomEchoRequest(pctx)
+
+	if err := validatingContext.Bind(buyingReq); err != nil {
 		c.logger.Error("Failed to bind buy item request", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
@@ -68,7 +73,9 @@ func (c *itemShopControllerImpl) Selling(pctx echo.Context) error {
 
 	sellingReq := new(_itemShopModel.SellingReq)
 
-	if err := pctx.Bind(sellingReq); err != nil {
+	validatingContext := validation.NewCustomEchoRequest(pctx)
+
+	if err := validatingContext.Bind(sellingReq); err != nil {
 		c.logger.Error("Failed to bind sell item request", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
