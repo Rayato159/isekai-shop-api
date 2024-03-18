@@ -16,7 +16,7 @@ type (
 
 	PlayerCoinShowingDto struct {
 		PlayerID string `json:"playerID"`
-		Balance  int64  `json:"coin"`
+		Coin     int64  `json:"coin"`
 	}
 )
 

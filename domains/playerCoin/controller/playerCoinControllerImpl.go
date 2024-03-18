@@ -51,7 +51,7 @@ func (c *playerCoinControllerImpl) PlayerCoinShowing(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	coin := c.playerCoinService.PlayerCoinShowing(playerID)
+	playerCoin := c.playerCoinService.PlayerCoinShowing(playerID)
 
-	return pctx.JSON(http.StatusOK, coin)
+	return pctx.JSON(http.StatusOK, playerCoin)
 }
