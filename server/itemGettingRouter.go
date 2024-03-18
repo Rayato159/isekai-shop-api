@@ -13,5 +13,5 @@ func (s *echoServer) initItemGettingRouter() {
 	itemService := _itemGettingService.NewItemServiceImpl(itemRepository)
 	itemController := _itemGettingController.NewItemControllerImpl(itemService, s.app.Logger)
 
-	router.GET("", itemController.ItemListing)
+	router.GET("", itemController.Listing)
 }
