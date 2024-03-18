@@ -4,8 +4,8 @@ import (
 	"log"
 
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
-	_itemGettingModel "github.com/Rayato159/isekai-shop-api/domains/itemGetting/model"
-	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
+	_itemShopModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
+	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
 	_playerBalancingModel "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/model"
 	_playerBalancingRepository "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/repository"
 	_purchasingException "github.com/Rayato159/isekai-shop-api/domains/purchasing/exception"
@@ -17,14 +17,14 @@ import (
 
 type purchasingServiceImpl struct {
 	playerBalancingRepository _playerBalancingRepository.PlayerBalancingRepository
-	itemRepository            _itemGettingRepository.ItemGettingRepository
+	itemRepository            _itemShopRepository.ItemShopRepository
 	purchasingRepository      _purchasingRepository.PurchasingRepository
 	inventoryRepository       _inventoryRepository.InventoryRepository
 }
 
 func NewPurchasingServiceImpl(
 	playerBalancingRepository _playerBalancingRepository.PlayerBalancingRepository,
-	itemRepository _itemGettingRepository.ItemGettingRepository,
+	itemRepository _itemShopRepository.ItemShopRepository,
 	purchasingRepository _purchasingRepository.PurchasingRepository,
 	inventoryRepository _inventoryRepository.InventoryRepository,
 ) PurchasingService {
@@ -185,7 +185,7 @@ func (s *purchasingServiceImpl) checkPlayerBalance(playerID string, amount int64
 	return nil
 }
 
-func (s *purchasingServiceImpl) calculateTotalPrice(item *_itemGettingModel.Item, quantity uint) int64 {
+func (s *purchasingServiceImpl) calculateTotalPrice(item *_itemShopModel.Item, quantity uint) int64 {
 	// In a real world scenario, this would be a more complex calculation
 	return int64(item.Price) * int64(quantity)
 }

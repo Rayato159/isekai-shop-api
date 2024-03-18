@@ -4,27 +4,27 @@ import (
 	_inventoryModel "github.com/Rayato159/isekai-shop-api/domains/inventory/model"
 	_inventory "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
-	_itemModel "github.com/Rayato159/isekai-shop-api/domains/itemGetting/model"
-	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
+	_itemModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
+	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type inventoryImpl struct {
-	playerRepository      _playerRepository.PlayerRepository
-	inventoryRepository   _inventoryRepository.InventoryRepository
-	itemGettingRepository _itemGettingRepository.ItemGettingRepository
+	playerRepository    _playerRepository.PlayerRepository
+	inventoryRepository _inventoryRepository.InventoryRepository
+	itemShopRepository  _itemShopRepository.ItemShopRepository
 }
 
 func NewInventoryServiceImpl(
 	playerRepository _playerRepository.PlayerRepository,
 	inventoryRepository _inventory.InventoryRepository,
-	itemGettingRepository _itemGettingRepository.ItemGettingRepository,
+	itemShopRepository _itemShopRepository.ItemShopRepository,
 ) InventoryService {
 	return &inventoryImpl{
 		playerRepository,
 		inventoryRepository,
-		itemGettingRepository,
+		itemShopRepository,
 	}
 }
 
@@ -46,7 +46,7 @@ func (s *inventoryImpl) buildInventoryListingResult(
 ) []*_inventoryModel.Inventory {
 	uniqueItemIDList := s.getItemIDList(uniqueItemWithQuantityCounterList)
 
-	itemEntities, err := s.itemGettingRepository.FindByIDList(uniqueItemIDList)
+	itemEntities, err := s.itemShopRepository.FindByIDList(uniqueItemIDList)
 	if err != nil {
 		return make([]*_inventoryModel.Inventory, 0)
 	}

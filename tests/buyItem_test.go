@@ -2,7 +2,7 @@ package tests
 
 import (
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
-	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
+	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
 	_playerBalancingModel "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/model"
 	_playerBalancingRepository "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/repository"
 	_purchasingException "github.com/Rayato159/isekai-shop-api/domains/purchasing/exception"
@@ -16,7 +16,7 @@ import (
 )
 
 func TestItemBuyingSuccess(t *testing.T) {
-	itemRepositoryMock := new(_itemGettingRepository.ItemGettingRepositoryMock)
+	itemRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	playerBalancingRepositoryMock := new(_playerBalancingRepository.BalancingRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
@@ -122,19 +122,19 @@ func TestItemBuyingSuccess(t *testing.T) {
 }
 
 func TestItemBuyingFail(t *testing.T) {
-	itemGettingRepositoryMock := new(_itemGettingRepository.ItemGettingRepositoryMock)
+	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 	playerBalancingRepositoryMock := new(_playerBalancingRepository.BalancingRepositoryMock)
 
 	purchasingService := _purchasingService.NewPurchasingServiceImpl(
 		playerBalancingRepositoryMock,
-		itemGettingRepositoryMock,
+		itemShopRepositoryMock,
 		purchasingRepositoryMock,
 		inventoryRepositoryMock,
 	)
 
-	itemGettingRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
+	itemShopRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
 		ID:          1,
 		Name:        "Sword of Tester",
 		Price:       1000,

@@ -1,22 +1,22 @@
 package service
 
 import (
-	_itemGettingModel "github.com/Rayato159/isekai-shop-api/domains/itemGetting/model"
-	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
+	_itemShopModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
+	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type itemServiceImpl struct {
-	itemRepository _itemGettingRepository.ItemGettingRepository
+	itemRepository _itemShopRepository.ItemShopRepository
 }
 
-func NewItemServiceImpl(itemRepository _itemGettingRepository.ItemGettingRepository) ItemService {
+func NewItemServiceImpl(itemRepository _itemShopRepository.ItemShopRepository) ItemService {
 	return &itemServiceImpl{
 		itemRepository: itemRepository,
 	}
 }
 
-func (s *itemServiceImpl) Listing(itemFilter *_itemGettingModel.ItemFilter) (*_itemGettingModel.ItemResult, error) {
+func (s *itemServiceImpl) Listing(itemFilter *_itemShopModel.ItemFilter) (*_itemShopModel.ItemResult, error) {
 	itemFilterDto := &entities.ItemFilterDto{
 		Name:        itemFilter.Name,
 		Description: itemFilter.Description,
@@ -55,16 +55,16 @@ func (s *itemServiceImpl) totalPageCalculation(totalItems, size int64) int64 {
 	return totalPage
 }
 
-func (s *itemServiceImpl) buildItemResultsResponse(itemEntityList []*entities.Item, page, totalPage int64) *_itemGettingModel.ItemResult {
-	items := make([]*_itemGettingModel.Item, 0)
+func (s *itemServiceImpl) buildItemResultsResponse(itemEntityList []*entities.Item, page, totalPage int64) *_itemShopModel.ItemResult {
+	items := make([]*_itemShopModel.Item, 0)
 
 	for _, itemEntity := range itemEntityList {
 		items = append(items, itemEntity.ToItemModel())
 	}
 
-	return &_itemGettingModel.ItemResult{
+	return &_itemShopModel.ItemResult{
 		Items: items,
-		Paginate: _itemGettingModel.PaginateResult{
+		Paginate: _itemShopModel.PaginateResult{
 			Page:      page,
 			TotalPage: totalPage,
 		},
