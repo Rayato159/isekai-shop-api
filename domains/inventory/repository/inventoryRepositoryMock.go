@@ -22,7 +22,7 @@ func (m *InventoryRepositoryMock) Listing(playerID string) ([]*entities.Inventor
 	return args.Get(0).([]*entities.Inventory), args.Error(1)
 }
 
-func (m *InventoryRepositoryMock) DeletePlayerItemByLimit(playerID string, itemID uint64, limit int) error {
+func (m *InventoryRepositoryMock) Removing(playerID string, itemID uint64, limit int) error {
 	args := m.Called(playerID, itemID, limit)
 	return args.Error(0)
 }

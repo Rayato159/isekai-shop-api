@@ -157,7 +157,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	}
 	log.Printf("Coin entity: %d", insertedCoin.ID)
 
-	if err := s.inventoryRepository.DeletePlayerItemByLimit(
+	if err := s.inventoryRepository.Removing(
 		sellingReq.PlayerID,
 		sellingReq.ItemID,
 		int(sellingReq.Quantity),

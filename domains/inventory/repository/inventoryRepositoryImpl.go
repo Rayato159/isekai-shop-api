@@ -45,13 +45,15 @@ func (r *inventoryImpl) Listing(playerID string) ([]*entities.Inventory, error) 
 	return inventories, nil
 }
 
-func (r *inventoryImpl) DeletePlayerItemByLimit(playerID string, itemID uint64, limit int) error {
+func (r *inventoryImpl) Removing(playerID string, itemID uint64, limit int) error {
 	inventories, err := r.findPlayerItemInInventoryByID(playerID, itemID, limit)
 	if err != nil {
 		return err
 	}
 
 	for _, inventory := range inventories {
+		inventory.IsDeleted = true
+
 		if err := r.db.Model(
 			&entities.Inventory{},
 		).Where(
@@ -96,10 +98,6 @@ func (r *inventoryImpl) findPlayerItemInInventoryByID(
 	).Find(&inventories).Error; err != nil {
 		r.logger.Error("Failed to find inventories", err.Error())
 		return nil, &_inventoryException.FindInventoriesException{PlayerID: playerID}
-	}
-
-	for _, inventory := range inventories {
-		inventory.IsDeleted = true
 	}
 
 	return inventories, nil

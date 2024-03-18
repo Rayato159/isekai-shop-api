@@ -61,7 +61,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		Amount:   1500,
 	}, nil)
 
-	inventoryRepositoryMock.On("DeletePlayerItemByLimit", "P001", uint64(1), 3).Return(nil)
+	inventoryRepositoryMock.On("Removing", "P001", uint64(1), 3).Return(nil)
 
 	type args struct {
 		in       *_itemShopModel.SellingReq
