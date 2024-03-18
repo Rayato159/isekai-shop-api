@@ -3,8 +3,6 @@ package service
 import (
 	"log"
 
-	_historyOfPurchasingEntity "github.com/Rayato159/isekai-shop-api/domains/historyOfPurchasing/entity"
-	_historyOfPurchasingRepository "github.com/Rayato159/isekai-shop-api/domains/historyOfPurchasing/repository"
 	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
 	_paymentEntity "github.com/Rayato159/isekai-shop-api/domains/payment/entity"
@@ -13,26 +11,28 @@ import (
 	_paymentRepository "github.com/Rayato159/isekai-shop-api/domains/payment/repository"
 	_inventoryEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
+	_purchasingEntity "github.com/Rayato159/isekai-shop-api/domains/purchasing/entity"
+	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
 )
 
 type paymentServiceImpl struct {
-	paymentRepository             _paymentRepository.PaymentRepository
-	itemRepository                _itemRepository.ItemRepository
-	historyOfPurchasingRepository _historyOfPurchasingRepository.HistoryOfPurchasingRepository
-	inventoryRepository           _playerSource.InventoryRepository
+	paymentRepository    _paymentRepository.PaymentRepository
+	itemRepository       _itemRepository.ItemRepository
+	purchasingRepository _purchasingRepository.PurchasingRepository
+	inventoryRepository  _playerSource.InventoryRepository
 }
 
 func NewPaymentServiceImpl(
 	paymentRepository _paymentRepository.PaymentRepository,
 	itemRepository _itemRepository.ItemRepository,
-	historyOfPurchasingRepository _historyOfPurchasingRepository.HistoryOfPurchasingRepository,
+	purchasingRepository _purchasingRepository.PurchasingRepository,
 	inventoryRepository _playerSource.InventoryRepository,
 ) PaymentService {
 	return &paymentServiceImpl{
-		paymentRepository:             paymentRepository,
-		itemRepository:                itemRepository,
-		historyOfPurchasingRepository: historyOfPurchasingRepository,
-		inventoryRepository:           inventoryRepository,
+		paymentRepository:    paymentRepository,
+		itemRepository:       itemRepository,
+		purchasingRepository: purchasingRepository,
+		inventoryRepository:  inventoryRepository,
 	}
 }
 
@@ -65,7 +65,7 @@ func (s *paymentServiceImpl) PlayerBalanceShowing(playerID string) *_paymentMode
 // 1. Search item by ID
 // 2. Calculate total price
 // 3. Check if player has enough balance
-// 4. Create historyOfPurchasing
+// 4. Create purchasing
 // 5. Create payment
 // 6. Add item into player inventory
 func (s *paymentServiceImpl) ItemBuying(itemBuyingReq *_paymentModel.ItemBuyingReq) (*_paymentModel.Payment, error) {
@@ -80,7 +80,7 @@ func (s *paymentServiceImpl) ItemBuying(itemBuyingReq *_paymentModel.ItemBuyingR
 		return nil, err
 	}
 
-	insertedHistoryOfPurchasing, err := s.historyOfPurchasingRepository.HistoryOfPurchasingRecording(&_historyOfPurchasingEntity.HistoryOfPurchasing{
+	insertedPurchasing, err := s.purchasingRepository.PurchasingHistoryRecording(&_purchasingEntity.Purchasing{
 		PlayerID:        itemBuyingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -92,7 +92,7 @@ func (s *paymentServiceImpl) ItemBuying(itemBuyingReq *_paymentModel.ItemBuyingR
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Inserted historyOfPurchasing: %d", insertedHistoryOfPurchasing.ID)
+	log.Printf("Inserted purchasing: %d", insertedPurchasing.ID)
 
 	inventoryEntities := s.groupInventoryEntities(itemBuyingReq)
 
@@ -117,7 +117,7 @@ func (s *paymentServiceImpl) ItemBuying(itemBuyingReq *_paymentModel.ItemBuyingR
 // 1. Check if player has enough quantity
 // 2. Search item by ID
 // 3. Calculate total price
-// 4. Create historyOfPurchasing
+// 4. Create purchasing
 // 5. Create payment
 // 6. Delete item into player inventory
 func (s *paymentServiceImpl) ItemSelling(itemSellingReq *_paymentModel.ItemSellingReq) (*_paymentModel.Payment, error) {
@@ -137,7 +137,7 @@ func (s *paymentServiceImpl) ItemSelling(itemSellingReq *_paymentModel.ItemSelli
 	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), itemSellingReq.Quantity)
 	totalPrice = totalPrice / 2
 
-	insertedHistoryOfPurchasing, err := s.historyOfPurchasingRepository.HistoryOfPurchasingRecording(&_historyOfPurchasingEntity.HistoryOfPurchasing{
+	insertedPurchasing, err := s.purchasingRepository.PurchasingHistoryRecording(&_purchasingEntity.Purchasing{
 		PlayerID:        itemSellingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -149,7 +149,7 @@ func (s *paymentServiceImpl) ItemSelling(itemSellingReq *_paymentModel.ItemSelli
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Inserted historyOfPurchasing: %d", insertedHistoryOfPurchasing.ID)
+	log.Printf("Inserted purchasing: %d", insertedPurchasing.ID)
 
 	insertedPayment, err := s.paymentRepository.PaymentRecording(&_paymentEntity.Payment{
 		PlayerID: itemSellingReq.PlayerID,

@@ -1,8 +1,6 @@
 package tests
 
 import (
-	_historyOfPurchasingEntity "github.com/Rayato159/isekai-shop-api/domains/historyOfPurchasing/entity"
-	_historyOfPurchasingRepository "github.com/Rayato159/isekai-shop-api/domains/historyOfPurchasing/repository"
 	_itemEntity "github.com/Rayato159/isekai-shop-api/domains/item/entity"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
 	_paymentEntity "github.com/Rayato159/isekai-shop-api/domains/payment/entity"
@@ -12,6 +10,8 @@ import (
 	_paymentService "github.com/Rayato159/isekai-shop-api/domains/payment/service"
 	_playerEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
+	_purchasingEntity "github.com/Rayato159/isekai-shop-api/domains/purchasing/entity"
+	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
 	"github.com/stretchr/testify/assert"
 
 	"testing"
@@ -19,14 +19,14 @@ import (
 
 func TestItemBuyingSuccess(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
-	historyOfPurchasingRepositoryMock := new(_historyOfPurchasingRepository.HistoryOfPurchasingRepositoryMock)
+	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
 	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 
 	paymentService := _paymentService.NewPaymentServiceImpl(
 		paymentRepositoryMock,
 		itemRepositoryMock,
-		historyOfPurchasingRepositoryMock,
+		purchasingRepositoryMock,
 		inventoryRepositoryMock,
 	)
 
@@ -43,7 +43,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Balance:  5000,
 	}, nil)
 
-	historyOfPurchasingRepositoryMock.On("HistoryOfPurchasingRecording", &_historyOfPurchasingEntity.HistoryOfPurchasing{
+	purchasingRepositoryMock.On("PurchasingHistoryRecording", &_purchasingEntity.Purchasing{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -51,7 +51,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
-	}).Return(&_historyOfPurchasingEntity.HistoryOfPurchasing{
+	}).Return(&_purchasingEntity.Purchasing{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -125,14 +125,14 @@ func TestItemBuyingSuccess(t *testing.T) {
 
 func TestItemBuyingFail(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
-	historyOfPurchasingRepositoryMock := new(_historyOfPurchasingRepository.HistoryOfPurchasingRepositoryMock)
+	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
 
 	paymentService := _paymentService.NewPaymentServiceImpl(
 		paymentRepositoryMock,
 		itemRepositoryMock,
-		historyOfPurchasingRepositoryMock,
+		purchasingRepositoryMock,
 		inventoryRepositoryMock,
 	)
 

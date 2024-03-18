@@ -37,8 +37,8 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
     - See Player’ Balance Info
     - Buy Items
     - Sell Items
-- HistoryOfPurchasing
-    - HistoryOfPurchasing Listing
+- Purchasing
+    - Purchasing Listing
 - Item
     - Item Listing
 - Inventory
