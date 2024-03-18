@@ -1,7 +1,7 @@
 package repository
 
 import (
-	_playerEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_playerException "github.com/Rayato159/isekai-shop-api/domains/player/exception"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -19,8 +19,8 @@ func NewInventoryRepositoryImpl(db *gorm.DB, logger echo.Logger) InventoryReposi
 	}
 }
 
-func (r *inventoryRepositoryImpl) InventorySearching(playerID string) ([]*_playerEntity.Inventory, error) {
-	inventories := make([]*_playerEntity.Inventory, 0)
+func (r *inventoryRepositoryImpl) InventorySearching(playerID string) ([]*entities.Inventory, error) {
+	inventories := make([]*entities.Inventory, 0)
 
 	if err := r.db.Where(
 		"player_id = ? AND is_deleted = ?", playerID, false,
@@ -42,7 +42,7 @@ func (r *inventoryRepositoryImpl) DeleteItemByLimit(playerID string, itemID uint
 
 	for _, inventory := range inventories {
 		if err := r.db.Model(
-			&_playerEntity.Inventory{},
+			&entities.Inventory{},
 		).Where(
 			"id = ?", inventory.ID,
 		).Updates(
@@ -56,8 +56,8 @@ func (r *inventoryRepositoryImpl) DeleteItemByLimit(playerID string, itemID uint
 	return nil
 }
 
-func (r *inventoryRepositoryImpl) InventoryFilling(inventoryEntities []*_playerEntity.Inventory) ([]*_playerEntity.Inventory, error) {
-	insertedInventories := make([]*_playerEntity.Inventory, 0)
+func (r *inventoryRepositoryImpl) InventoryFilling(inventoryEntities []*entities.Inventory) ([]*entities.Inventory, error) {
+	insertedInventories := make([]*entities.Inventory, 0)
 
 	if err := r.db.Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
 		r.logger.Error("Failed to insert items", err.Error())
@@ -71,7 +71,7 @@ func (r *inventoryRepositoryImpl) PlayerItemCounting(playerID string, itemID uin
 	var count int64
 
 	if err := r.db.Model(
-		&_playerEntity.Inventory{},
+		&entities.Inventory{},
 	).Where(
 		"player_id = ? AND item_id = ? AND is_deleted = ?", playerID, itemID, false,
 	).Count(&count).Error; err != nil {
@@ -86,8 +86,8 @@ func (r *inventoryRepositoryImpl) findInventoriesToDeleteByItemIDAndPlayerIDByLi
 	playerID string,
 	itemID uint64,
 	limit int,
-) ([]*_playerEntity.Inventory, error) {
-	inventories := make([]*_playerEntity.Inventory, 0)
+) ([]*entities.Inventory, error) {
+	inventories := make([]*entities.Inventory, 0)
 
 	if err := r.db.Where(
 		"player_id = ? AND item_id = ? AND is_deleted = ?", playerID, itemID, false,

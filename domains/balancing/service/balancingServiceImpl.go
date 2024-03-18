@@ -3,15 +3,13 @@ package service
 import (
 	"log"
 
-	_balancingEntity "github.com/Rayato159/isekai-shop-api/domains/balancing/entity"
 	_balancingException "github.com/Rayato159/isekai-shop-api/domains/balancing/exception"
 	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
 	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
-	_inventoryEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
-	_purchasingEntity "github.com/Rayato159/isekai-shop-api/domains/purchasing/entity"
 	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
 )
 
@@ -37,7 +35,7 @@ func NewBalancingServiceImpl(
 }
 
 func (s *balancingServiceImpl) TopUp(topUpReq *_balancingModel.TopUpReq) (*_balancingModel.Balancing, error) {
-	balancingEntity := &_balancingEntity.Balancing{
+	balancingEntity := &entities.Balancing{
 		PlayerID: topUpReq.PlayerID,
 		Amount:   topUpReq.Amount,
 	}
@@ -80,7 +78,7 @@ func (s *balancingServiceImpl) ItemBuying(itemBuyingReq *_balancingModel.ItemBuy
 		return nil, err
 	}
 
-	insertedPurchasing, err := s.purchasingRepository.PurchasingHistoryRecording(&_purchasingEntity.PurchasingHistory{
+	insertedPurchasing, err := s.purchasingRepository.PurchasingHistoryRecording(&entities.PurchasingHistory{
 		PlayerID:        itemBuyingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -96,7 +94,7 @@ func (s *balancingServiceImpl) ItemBuying(itemBuyingReq *_balancingModel.ItemBuy
 
 	inventoryEntities := s.groupInventoryEntities(itemBuyingReq)
 
-	insertedBalancing, err := s.balancingRepository.BalancingRecording(&_balancingEntity.Balancing{
+	insertedBalancing, err := s.balancingRepository.BalancingRecording(&entities.Balancing{
 		PlayerID: itemBuyingReq.PlayerID,
 		Amount:   -totalPrice,
 	})
@@ -137,7 +135,7 @@ func (s *balancingServiceImpl) ItemSelling(itemSellingReq *_balancingModel.ItemS
 	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), itemSellingReq.Quantity)
 	totalPrice = totalPrice / 2
 
-	insertedPurchasing, err := s.purchasingRepository.PurchasingHistoryRecording(&_purchasingEntity.PurchasingHistory{
+	insertedPurchasing, err := s.purchasingRepository.PurchasingHistoryRecording(&entities.PurchasingHistory{
 		PlayerID:        itemSellingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -151,7 +149,7 @@ func (s *balancingServiceImpl) ItemSelling(itemSellingReq *_balancingModel.ItemS
 	}
 	log.Printf("Inserted purchasing: %d", insertedPurchasing.ID)
 
-	insertedBalancing, err := s.balancingRepository.BalancingRecording(&_balancingEntity.Balancing{
+	insertedBalancing, err := s.balancingRepository.BalancingRecording(&entities.Balancing{
 		PlayerID: itemSellingReq.PlayerID,
 		Amount:   totalPrice,
 	})
@@ -172,11 +170,11 @@ func (s *balancingServiceImpl) ItemSelling(itemSellingReq *_balancingModel.ItemS
 	return insertedBalancing.ToBalancingModel(), nil
 }
 
-func (s *balancingServiceImpl) groupInventoryEntities(itemBuyingReq *_balancingModel.ItemBuyingReq) []*_inventoryEntity.Inventory {
-	inventoryEntities := make([]*_inventoryEntity.Inventory, 0)
+func (s *balancingServiceImpl) groupInventoryEntities(itemBuyingReq *_balancingModel.ItemBuyingReq) []*entities.Inventory {
+	inventoryEntities := make([]*entities.Inventory, 0)
 
 	for i := 0; i < int(itemBuyingReq.Quantity); i++ {
-		inventoryEntities = append(inventoryEntities, &_inventoryEntity.Inventory{
+		inventoryEntities = append(inventoryEntities, &entities.Inventory{
 			PlayerID: itemBuyingReq.PlayerID,
 			ItemID:   itemBuyingReq.ItemID,
 		})

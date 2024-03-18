@@ -3,11 +3,7 @@ package main
 import (
 	"github.com/Rayato159/isekai-shop-api/config"
 	"github.com/Rayato159/isekai-shop-api/databases"
-	_adminEntity "github.com/Rayato159/isekai-shop-api/domains/admin/entity"
-	_balancingEntity "github.com/Rayato159/isekai-shop-api/domains/balancing/entity"
-	_itemEntity "github.com/Rayato159/isekai-shop-api/domains/item/entity"
-	_playerEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
-	_purchasingEntity "github.com/Rayato159/isekai-shop-api/domains/purchasing/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 )
 
 func main() {
@@ -28,25 +24,25 @@ func uuidMigreate(db databases.Database) {
 }
 
 func playerMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&_playerEntity.Player{})
+	db.GetDb().Migrator().CreateTable(&entities.Player{})
 }
 
 func adminMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&_adminEntity.Admin{})
+	db.GetDb().Migrator().CreateTable(&entities.Admin{})
 }
 
 func itemMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&_itemEntity.Item{})
+	db.GetDb().Migrator().CreateTable(&entities.Item{})
 }
 
 func balancingMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&_balancingEntity.Balancing{})
+	db.GetDb().Migrator().CreateTable(&entities.Balancing{})
 }
 
 func inventoryMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&_playerEntity.Inventory{})
+	db.GetDb().Migrator().CreateTable(&entities.Inventory{})
 }
 
 func purchasingMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&_purchasingEntity.PurchasingHistory{})
+	db.GetDb().Migrator().CreateTable(&entities.PurchasingHistory{})
 }

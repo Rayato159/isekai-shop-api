@@ -1,10 +1,10 @@
 package repository
 
 import (
-	_adminEntity "github.com/Rayato159/isekai-shop-api/domains/admin/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 )
 
 type AdminRepository interface {
-	InsertAdmin(adminEntity *_adminEntity.Admin) (string, error)
-	FindAdminByID(adminID string) (*_adminEntity.Admin, error)
+	InsertAdmin(adminEntity *entities.Admin) (string, error)
+	FindAdminByID(adminID string) (*entities.Admin, error)
 }

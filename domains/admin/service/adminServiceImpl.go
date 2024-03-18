@@ -1,7 +1,7 @@
 package service
 
 import (
-	_itemEntity "github.com/Rayato159/isekai-shop-api/domains/item/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
 )
@@ -17,7 +17,7 @@ func NewAdminServiceImpl(itemRepository _itemRepository.ItemRepository) AdminSer
 }
 
 func (s *adminServiceImpl) ItemCreating(itemCreatingReq *_itemModel.ItemCreatingReq) (*_itemModel.Item, error) {
-	item := &_itemEntity.Item{
+	item := &entities.Item{
 		AdminID:     &itemCreatingReq.AdminID,
 		Name:        itemCreatingReq.Name,
 		Description: itemCreatingReq.Description,
@@ -34,7 +34,7 @@ func (s *adminServiceImpl) ItemCreating(itemCreatingReq *_itemModel.ItemCreating
 }
 
 func (s *adminServiceImpl) ItemEditing(itemID uint64, updateItemReq *_itemModel.ItemEditingReq) (*_itemModel.Item, error) {
-	updateItemDto := &_itemEntity.ItemEditingDto{
+	updateItemDto := &entities.ItemEditingDto{
 		AdminID:     &updateItemReq.AdminID,
 		Name:        updateItemReq.Name,
 		Description: updateItemReq.Description,

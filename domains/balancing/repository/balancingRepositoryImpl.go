@@ -1,8 +1,8 @@
 package repository
 
 import (
-	_balancingEntity "github.com/Rayato159/isekai-shop-api/domains/balancing/entity"
 	_balancingException "github.com/Rayato159/isekai-shop-api/domains/balancing/exception"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -20,8 +20,8 @@ func NewBalancingRepositoryImpl(db *gorm.DB, logger echo.Logger) BalancingReposi
 	}
 }
 
-func (r *balancingRepositoryImpl) BalancingRecording(balancingEntity *_balancingEntity.Balancing) (*_balancingEntity.Balancing, error) {
-	insertedBalancing := new(_balancingEntity.Balancing)
+func (r *balancingRepositoryImpl) BalancingRecording(balancingEntity *entities.Balancing) (*entities.Balancing, error) {
+	insertedBalancing := new(entities.Balancing)
 
 	if err := r.db.Create(balancingEntity).Scan(insertedBalancing).Error; err != nil {
 		r.logger.Error("Failed to insert balancing", err.Error())
@@ -31,11 +31,11 @@ func (r *balancingRepositoryImpl) BalancingRecording(balancingEntity *_balancing
 	return insertedBalancing, nil
 }
 
-func (r *balancingRepositoryImpl) PlayerBalanceShowing(playerID string) (*_balancingEntity.PlayerBalanceDto, error) {
-	balanceDto := new(_balancingEntity.PlayerBalanceDto)
+func (r *balancingRepositoryImpl) PlayerBalanceShowing(playerID string) (*entities.PlayerBalanceDto, error) {
+	balanceDto := new(entities.PlayerBalanceDto)
 
 	if err := r.db.Model(
-		&_balancingEntity.Balancing{},
+		&entities.Balancing{},
 	).Where(
 		"player_id = ?", playerID,
 	).Select(

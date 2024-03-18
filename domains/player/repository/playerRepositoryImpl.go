@@ -1,7 +1,7 @@
 package repository
 
 import (
-	_playerEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_playerException "github.com/Rayato159/isekai-shop-api/domains/player/exception"
 
 	"github.com/labstack/echo/v4"
@@ -20,8 +20,8 @@ func NewPlayerRepositoryImpl(db *gorm.DB, logger echo.Logger) PlayerRepository {
 	}
 }
 
-func (r *playerRepositoryImpl) PlayerCreating(playerEntity *_playerEntity.Player) (*_playerEntity.Player, error) {
-	insertedPlayer := new(_playerEntity.Player)
+func (r *playerRepositoryImpl) PlayerCreating(playerEntity *entities.Player) (*entities.Player, error) {
+	insertedPlayer := new(entities.Player)
 
 	if err := r.db.Create(playerEntity).Scan(insertedPlayer).Error; err != nil {
 		r.logger.Error("Failed to insert item", err.Error())
@@ -31,8 +31,8 @@ func (r *playerRepositoryImpl) PlayerCreating(playerEntity *_playerEntity.Player
 	return insertedPlayer, nil
 }
 
-func (r *playerRepositoryImpl) FindPlayerByID(playerID string) (*_playerEntity.Player, error) {
-	player := new(_playerEntity.Player)
+func (r *playerRepositoryImpl) FindPlayerByID(playerID string) (*entities.Player, error) {
+	player := new(entities.Player)
 	tx := r.db.Where("id = ?", playerID).First(player)
 
 	if tx.Error != nil {

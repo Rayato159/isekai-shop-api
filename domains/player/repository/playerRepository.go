@@ -1,8 +1,8 @@
 package repository
 
-import _playerEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
+import entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 
 type PlayerRepository interface {
-	PlayerCreating(playerEntity *_playerEntity.Player) (*_playerEntity.Player, error)
-	FindPlayerByID(playerID string) (*_playerEntity.Player, error)
+	PlayerCreating(playerEntity *entities.Player) (*entities.Player, error)
+	FindPlayerByID(playerID string) (*entities.Player, error)
 }

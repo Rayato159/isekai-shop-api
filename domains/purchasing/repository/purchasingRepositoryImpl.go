@@ -1,7 +1,7 @@
 package repository
 
 import (
-	_purchasingEntity "github.com/Rayato159/isekai-shop-api/domains/purchasing/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_purchasingException "github.com/Rayato159/isekai-shop-api/domains/purchasing/exception"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -19,8 +19,8 @@ func NewPurchasingRepositoryImpl(db *gorm.DB, logger echo.Logger) PurchasingRepo
 	}
 }
 
-func (r *purchasingRepositoryImpl) PurchasingHistoryRecording(purchasingEntity *_purchasingEntity.PurchasingHistory) (*_purchasingEntity.PurchasingHistory, error) {
-	insertedPurchasing := new(_purchasingEntity.PurchasingHistory)
+func (r *purchasingRepositoryImpl) PurchasingHistoryRecording(purchasingEntity *entities.PurchasingHistory) (*entities.PurchasingHistory, error) {
+	insertedPurchasing := new(entities.PurchasingHistory)
 
 	if err := r.db.Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
 		r.logger.Errorf("Error inserting purchasing: %s", err.Error())

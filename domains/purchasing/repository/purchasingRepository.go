@@ -1,9 +1,9 @@
 package repository
 
 import (
-	_purchasingEntity "github.com/Rayato159/isekai-shop-api/domains/purchasing/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 )
 
 type PurchasingRepository interface {
-	PurchasingHistoryRecording(purchasingEntity *_purchasingEntity.PurchasingHistory) (*_purchasingEntity.PurchasingHistory, error)
+	PurchasingHistoryRecording(purchasingEntity *entities.PurchasingHistory) (*entities.PurchasingHistory, error)
 }

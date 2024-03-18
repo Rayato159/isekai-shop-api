@@ -1,10 +1,9 @@
 package service
 
 import (
-	_adminEntity "github.com/Rayato159/isekai-shop-api/domains/admin/entity"
 	_adminModel "github.com/Rayato159/isekai-shop-api/domains/admin/model"
 	_adminRepository "github.com/Rayato159/isekai-shop-api/domains/admin/repository"
-	_playerEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_playerModel "github.com/Rayato159/isekai-shop-api/domains/player/model"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 )
@@ -26,7 +25,7 @@ func NewGoogleOAuth2Service(
 
 func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerModel.CreatePlayerReq) error {
 	if !s.isPlayerIsExists(playerCreatingReq.ID) {
-		playerEntity := &_playerEntity.Player{
+		playerEntity := &entities.Player{
 			ID:     playerCreatingReq.ID,
 			Email:  playerCreatingReq.Email,
 			Name:   playerCreatingReq.Name,
@@ -44,7 +43,7 @@ func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerMo
 
 func (s *googleOAuth2Service) AdminAccountCreating(createAdminInfo *_adminModel.CreateAdminReq) error {
 	if !s.isAdminIsExists(createAdminInfo.ID) {
-		adminEntity := &_adminEntity.Admin{
+		adminEntity := &entities.Admin{
 			ID:     createAdminInfo.ID,
 			Email:  createAdminInfo.Email,
 			Name:   createAdminInfo.Name,

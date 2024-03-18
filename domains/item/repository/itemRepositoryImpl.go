@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 
-	_itemEntity "github.com/Rayato159/isekai-shop-api/domains/item/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_itemException "github.com/Rayato159/isekai-shop-api/domains/item/exception"
 )
 
@@ -20,8 +20,8 @@ func NewItemRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemRepository {
 	}
 }
 
-func (r *itemRepositoryImpl) ItemListing(itemFilterDto *_itemEntity.ItemFilterDto) ([]*_itemEntity.Item, error) {
-	query := r.db.Model(&_itemEntity.Item{})
+func (r *itemRepositoryImpl) ItemListing(itemFilterDto *entities.ItemFilterDto) ([]*entities.Item, error) {
+	query := r.db.Model(&entities.Item{})
 	if itemFilterDto.Name != "" {
 		query = query.Where("name LIKE ?", "%"+itemFilterDto.Name+"%")
 	}
@@ -32,7 +32,7 @@ func (r *itemRepositoryImpl) ItemListing(itemFilterDto *_itemEntity.ItemFilterDt
 	offset := int((itemFilterDto.Page - 1) * itemFilterDto.Size)
 	size := int(itemFilterDto.Size)
 
-	items := make([]*_itemEntity.Item, 0)
+	items := make([]*entities.Item, 0)
 
 	if err := query.Offset(offset).Limit(size).Find(&items).Error; err != nil {
 		r.logger.Error("Failed to find items", err.Error())
@@ -42,8 +42,8 @@ func (r *itemRepositoryImpl) ItemListing(itemFilterDto *_itemEntity.ItemFilterDt
 	return items, nil
 }
 
-func (r *itemRepositoryImpl) ItemCounting(itemFilterDto *_itemEntity.ItemFilterDto) (int64, error) {
-	query := r.db.Model(&_itemEntity.Item{}).Where("is_archive = ?", false)
+func (r *itemRepositoryImpl) ItemCounting(itemFilterDto *entities.ItemFilterDto) (int64, error) {
+	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false)
 
 	if itemFilterDto.Name != "" {
 		query = query.Where("name LIKE ?", "%"+itemFilterDto.Name+"%")
@@ -62,8 +62,8 @@ func (r *itemRepositoryImpl) ItemCounting(itemFilterDto *_itemEntity.ItemFilterD
 	return count, nil
 }
 
-func (r *itemRepositoryImpl) FindItemByID(itemID uint64) (*_itemEntity.Item, error) {
-	item := new(_itemEntity.Item)
+func (r *itemRepositoryImpl) FindItemByID(itemID uint64) (*entities.Item, error) {
+	item := new(entities.Item)
 
 	if err := r.db.First(item, itemID).Error; err != nil {
 		r.logger.Error("Failed to find item", err.Error())
@@ -74,8 +74,8 @@ func (r *itemRepositoryImpl) FindItemByID(itemID uint64) (*_itemEntity.Item, err
 
 }
 
-func (r *itemRepositoryImpl) ItemCreating(itemEntity *_itemEntity.Item) (*_itemEntity.Item, error) {
-	insertedItem := new(_itemEntity.Item)
+func (r *itemRepositoryImpl) ItemCreating(itemEntity *entities.Item) (*entities.Item, error) {
+	insertedItem := new(entities.Item)
 
 	if err := r.db.Create(itemEntity).Scan(insertedItem).Error; err != nil {
 		r.logger.Error("Failed to insert item", err.Error())
@@ -85,8 +85,8 @@ func (r *itemRepositoryImpl) ItemCreating(itemEntity *_itemEntity.Item) (*_itemE
 	return insertedItem, nil
 }
 
-func (r *itemRepositoryImpl) ItemEditing(itemID uint64, updateItemDto *_itemEntity.ItemEditingDto) (uint64, error) {
-	tx := r.db.Model(&_itemEntity.Item{}).Where(
+func (r *itemRepositoryImpl) ItemEditing(itemID uint64, updateItemDto *entities.ItemEditingDto) (uint64, error) {
+	tx := r.db.Model(&entities.Item{}).Where(
 		"id = ?", itemID,
 	).Updates(
 		updateItemDto,
@@ -113,10 +113,10 @@ func (r *itemRepositoryImpl) ItemArchiving(itemID uint64) error {
 	return nil
 }
 
-func (r *itemRepositoryImpl) FindItemByIDs(itemIDs []uint64) ([]*_itemEntity.Item, error) {
-	items := make([]*_itemEntity.Item, 0)
+func (r *itemRepositoryImpl) FindItemByIDs(itemIDs []uint64) ([]*entities.Item, error) {
+	items := make([]*entities.Item, 0)
 
-	if err := r.db.Model(&_itemEntity.Item{}).Where("id IN ?", itemIDs).Find(&items).Error; err != nil {
+	if err := r.db.Model(&entities.Item{}).Where("id IN ?", itemIDs).Find(&items).Error; err != nil {
 		r.logger.Error("Failed to find items by IDs", err.Error())
 		return nil, &_itemException.ItemListingException{}
 	}

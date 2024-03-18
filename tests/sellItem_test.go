@@ -1,15 +1,13 @@
 package tests
 
 import (
-	_balancingEntity "github.com/Rayato159/isekai-shop-api/domains/balancing/entity"
 	_balancingException "github.com/Rayato159/isekai-shop-api/domains/balancing/exception"
 	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
 	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
 	_balancingService "github.com/Rayato159/isekai-shop-api/domains/balancing/service"
-	_itemEntity "github.com/Rayato159/isekai-shop-api/domains/item/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
-	_purchasingEntity "github.com/Rayato159/isekai-shop-api/domains/purchasing/entity"
 	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
 	"github.com/stretchr/testify/assert"
 
@@ -31,7 +29,7 @@ func TestItemSellingSuccess(t *testing.T) {
 
 	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(3), nil)
 
-	itemRepositoryMock.On("FindItemByID", uint64(1)).Return(&_itemEntity.Item{
+	itemRepositoryMock.On("FindItemByID", uint64(1)).Return(&entities.Item{
 		ID:          1,
 		Name:        "Sword of Tester",
 		Price:       1000,
@@ -39,7 +37,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	purchasingRepositoryMock.On("PurchasingHistoryRecording", &_purchasingEntity.PurchasingHistory{
+	purchasingRepositoryMock.On("PurchasingHistoryRecording", &entities.PurchasingHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -47,7 +45,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
-	}).Return(&_purchasingEntity.PurchasingHistory{
+	}).Return(&entities.PurchasingHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -57,10 +55,10 @@ func TestItemSellingSuccess(t *testing.T) {
 		Quantity:        3,
 	}, nil)
 
-	balancingRepositoryMock.On("BalancingRecording", &_balancingEntity.Balancing{
+	balancingRepositoryMock.On("BalancingRecording", &entities.Balancing{
 		PlayerID: "P001",
 		Amount:   1500,
-	}).Return(&_balancingEntity.Balancing{
+	}).Return(&entities.Balancing{
 		PlayerID: "P001",
 		Amount:   1500,
 	}, nil)

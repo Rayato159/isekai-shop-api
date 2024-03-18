@@ -1,9 +1,9 @@
 package service
 
 import (
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
-	_playerEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
 	_playerModel "github.com/Rayato159/isekai-shop-api/domains/player/model"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 )
@@ -70,7 +70,7 @@ func (s *playerServiceImpl) buildInventoryListingResult(
 }
 
 func (s *playerServiceImpl) getUniqueItemWithQuantityCounterList(
-	inventories []*_playerEntity.Inventory,
+	inventories []*entities.Inventory,
 ) []_playerModel.ItemQuantityCounting {
 	itemQuantityCounterList := make([]_playerModel.ItemQuantityCounting, 0)
 

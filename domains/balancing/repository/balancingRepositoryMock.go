@@ -1,7 +1,7 @@
 package repository
 
 import (
-	_balancingEntity "github.com/Rayato159/isekai-shop-api/domains/balancing/entity"
+	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 
 	"github.com/stretchr/testify/mock"
 )
@@ -10,12 +10,12 @@ type BalancingRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *BalancingRepositoryMock) BalancingRecording(balancingEntity *_balancingEntity.Balancing) (*_balancingEntity.Balancing, error) {
+func (m *BalancingRepositoryMock) BalancingRecording(balancingEntity *entities.Balancing) (*entities.Balancing, error) {
 	args := m.Called(balancingEntity)
-	return args.Get(0).(*_balancingEntity.Balancing), args.Error(1)
+	return args.Get(0).(*entities.Balancing), args.Error(1)
 }
 
-func (m *BalancingRepositoryMock) PlayerBalanceShowing(playerID string) (*_balancingEntity.PlayerBalanceDto, error) {
+func (m *BalancingRepositoryMock) PlayerBalanceShowing(playerID string) (*entities.PlayerBalanceDto, error) {
 	args := m.Called(playerID)
-	return args.Get(0).(*_balancingEntity.PlayerBalanceDto), args.Error(1)
+	return args.Get(0).(*entities.PlayerBalanceDto), args.Error(1)
 }
