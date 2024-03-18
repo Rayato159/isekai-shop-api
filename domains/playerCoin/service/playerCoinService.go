@@ -6,5 +6,5 @@ import (
 
 type PlayerCoinService interface {
 	BuyingCoin(buyingCoinReq *_playerBalacingModel.BuyingCoinReq) (*_playerBalacingModel.PlayerCoin, error)
-	PlayerBalanceShowing(playerID string) *_playerBalacingModel.PlayerBalanceShowing
+	PlayerCoinShowing(playerID string) *_playerBalacingModel.PlayerCoinShowing
 }

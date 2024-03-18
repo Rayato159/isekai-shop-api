@@ -61,7 +61,7 @@ func (s *itemShopServiceImpl) Listing(itemFilter *_itemShopModel.ItemFilter) (*_
 
 // 1. Search item by ID
 // 2. Calculate total price
-// 3. Check if player has enough balance
+// 3. Check if player has enough coin
 // 4. Create itemShop
 // 5. Create playerCoin
 // 6. Add item into player inventory
@@ -195,13 +195,13 @@ func (s *itemShopServiceImpl) checkPlayerItemQuantity(playerID string, itemID ui
 }
 
 func (s *itemShopServiceImpl) checkPlayerBalance(playerID string, amount int64) error {
-	balanceDto, err := s.playerCoinRepository.Showing(playerID)
+	coinDto, err := s.playerCoinRepository.Showing(playerID)
 	if err != nil {
 		return err
 	}
 
-	if balanceDto.Balance < amount {
-		log.Printf("Player %s has not enough balance", playerID)
+	if coinDto.Balance < amount {
+		log.Printf("Player %s has not enough coin", playerID)
 		return &_itemShopException.NotEnoughBalanceException{}
 	}
 

@@ -30,14 +30,14 @@ func (s *playerCoinImpl) BuyingCoin(buyingCoinReq *_playerCoinModel.BuyingCoinRe
 	return insertedPlayerCoin.ToPlayerCoinModel(), nil
 }
 
-func (s *playerCoinImpl) PlayerBalanceShowing(playerID string) *_playerCoinModel.PlayerBalanceShowing {
-	balanceDto, err := s.playerCoinRepository.Showing(playerID)
+func (s *playerCoinImpl) PlayerCoinShowing(playerID string) *_playerCoinModel.PlayerCoinShowing {
+	coinDto, err := s.playerCoinRepository.Showing(playerID)
 	if err != nil {
-		return &_playerCoinModel.PlayerBalanceShowing{
+		return &_playerCoinModel.PlayerCoinShowing{
 			PlayerID: playerID,
 			Balance:  0,
 		}
 	}
 
-	return balanceDto.ToPlayerBalanceModel()
+	return coinDto.ToPlayerBalanceModel()
 }

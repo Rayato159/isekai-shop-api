@@ -15,7 +15,7 @@ func (m *CoinRepositoryMock) Recording(balancingEntity *entities.PlayerCoin) (*e
 	return args.Get(0).(*entities.PlayerCoin), args.Error(1)
 }
 
-func (m *CoinRepositoryMock) Showing(playerID string) (*entities.PlayerBalanceShowingDto, error) {
+func (m *CoinRepositoryMock) Showing(playerID string) (*entities.PlayerCoinShowingDto, error) {
 	args := m.Called(playerID)
-	return args.Get(0).(*entities.PlayerBalanceShowingDto), args.Error(1)
+	return args.Get(0).(*entities.PlayerCoinShowingDto), args.Error(1)
 }

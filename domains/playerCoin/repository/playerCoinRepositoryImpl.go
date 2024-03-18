@@ -31,21 +31,21 @@ func (r *playerCoinImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*enti
 	return insertedPlayerCoin, nil
 }
 
-func (r *playerCoinImpl) Showing(playerID string) (*entities.PlayerBalanceShowingDto, error) {
-	balanceDto := new(entities.PlayerBalanceShowingDto)
+func (r *playerCoinImpl) Showing(playerID string) (*entities.PlayerCoinShowingDto, error) {
+	coinDto := new(entities.PlayerCoinShowingDto)
 
 	if err := r.db.Model(
 		&entities.PlayerCoin{},
 	).Where(
 		"player_id = ?", playerID,
 	).Select(
-		"player_id, sum(amount) as balance",
+		"player_id, sum(amount) as coin",
 	).Group(
 		"player_id",
-	).Scan(&balanceDto).Error; err != nil {
-		r.logger.Error("Failed to calculate player balance", err.Error())
+	).Scan(&coinDto).Error; err != nil {
+		r.logger.Error("Failed to calculate player coin", err.Error())
 		return nil, &_playerCoinException.PlayerCoinShowingException{PlayerID: playerID}
 	}
 
-	return balanceDto, nil
+	return coinDto, nil
 }

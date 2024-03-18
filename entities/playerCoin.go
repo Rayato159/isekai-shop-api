@@ -14,9 +14,9 @@ type (
 		CreatedAt time.Time `gorm:"not null;autoCreateTime;"`
 	}
 
-	PlayerBalanceShowingDto struct {
+	PlayerCoinShowingDto struct {
 		PlayerID string `json:"playerID"`
-		Balance  int64  `json:"balance"`
+		Balance  int64  `json:"coin"`
 	}
 )
 
@@ -29,8 +29,8 @@ func (p *PlayerCoin) ToPlayerCoinModel() *_playerCoinModel.PlayerCoin {
 	}
 }
 
-func (p *PlayerBalanceShowingDto) ToPlayerBalanceModel() *_playerCoinModel.PlayerBalanceShowing {
-	return &_playerCoinModel.PlayerBalanceShowing{
+func (p *PlayerCoinShowingDto) ToPlayerBalanceModel() *_playerCoinModel.PlayerCoinShowing {
+	return &_playerCoinModel.PlayerCoinShowing{
 		PlayerID: p.PlayerID,
 		Balance:  p.Balance,
 	}

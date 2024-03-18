@@ -513,7 +513,7 @@
 					]
 				},
 				{
-					"name": "player balance",
+					"name": "player coin",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -530,14 +530,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/balancing/balance",
+							"raw": "{{baseUrl}}/v1/balancing/coin",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"v1",
 								"balancing",
-								"balance"
+								"coin"
 							]
 						}
 					},
@@ -557,14 +557,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/v1/balancing/balance",
+									"raw": "{{baseUrl}}/v1/balancing/coin",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"v1",
 										"balancing",
-										"balance"
+										"coin"
 									]
 								}
 							},
@@ -590,7 +590,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"playerID\": \"101772256434591099298\",\n    \"balance\": 6000\n}"
+							"body": "{\n    \"playerID\": \"101772256434591099298\",\n    \"coin\": 6000\n}"
 						}
 					]
 				},

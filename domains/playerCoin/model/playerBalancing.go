@@ -15,8 +15,8 @@ type (
 		Amount   int64 `json:"amount" validate:"required,gt=0"`
 	}
 
-	PlayerBalanceShowing struct {
+	PlayerCoinShowing struct {
 		PlayerID string `json:"playerID"`
-		Balance  int64  `json:"balance"`
+		Balance  int64  `json:"coin"`
 	}
 )

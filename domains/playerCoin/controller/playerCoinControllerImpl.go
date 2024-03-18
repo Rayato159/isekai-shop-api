@@ -45,13 +45,13 @@ func (c *playerBalacingControllerImpl) BuyingCoin(pctx echo.Context) error {
 	return pctx.JSON(http.StatusCreated, playerBalacing)
 }
 
-func (c *playerBalacingControllerImpl) PlayerBalanceShowing(pctx echo.Context) error {
+func (c *playerBalacingControllerImpl) PlayerCoinShowing(pctx echo.Context) error {
 	playerID, err := common.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	balance := c.playerBalacingService.PlayerBalanceShowing(playerID)
+	coin := c.playerBalacingService.PlayerCoinShowing(playerID)
 
-	return pctx.JSON(http.StatusOK, balance)
+	return pctx.JSON(http.StatusOK, coin)
 }
