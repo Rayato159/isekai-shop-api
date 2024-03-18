@@ -5,7 +5,6 @@ import (
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
 	_inventoryService "github.com/Rayato159/isekai-shop-api/domains/inventory/service"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
-	_playerRepository "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 )
 
@@ -14,10 +13,8 @@ func (s *echoServer) initInventoryRouter(customMiddleware customMiddleware.Custo
 
 	itemRepository := _itemShopRepository.NewItemShopRepositoryImpl(s.db, s.app.Logger)
 	inventoryRepository := _inventoryRepository.NewInventoryRepositoryImpl(s.db, s.app.Logger)
-	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
 
 	inventoryService := _inventoryService.NewInventoryServiceImpl(
-		playerRepository,
 		inventoryRepository,
 		itemRepository,
 	)

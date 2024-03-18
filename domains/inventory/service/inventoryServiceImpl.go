@@ -6,23 +6,19 @@ import (
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
 	_itemModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
-	_playerRepository "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type inventoryImpl struct {
-	playerRepository    _playerRepository.PlayerRepository
 	inventoryRepository _inventoryRepository.InventoryRepository
 	itemShopRepository  _itemShopRepository.ItemShopRepository
 }
 
 func NewInventoryServiceImpl(
-	playerRepository _playerRepository.PlayerRepository,
 	inventoryRepository _inventory.InventoryRepository,
 	itemShopRepository _itemShopRepository.ItemShopRepository,
 ) InventoryService {
 	return &inventoryImpl{
-		playerRepository,
 		inventoryRepository,
 		itemShopRepository,
 	}
