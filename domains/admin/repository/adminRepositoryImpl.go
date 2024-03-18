@@ -19,7 +19,7 @@ func NewAdminRepositoryImpl(db *gorm.DB, logger echo.Logger) AdminRepository {
 	}
 }
 
-func (r *adminRepositoryImpl) InsertAdmin(adminEntity *entities.Admin) (string, error) {
+func (r *adminRepositoryImpl) Creating(adminEntity *entities.Admin) (string, error) {
 	tx := r.db.Create(adminEntity)
 
 	if tx.Error != nil {
@@ -30,7 +30,7 @@ func (r *adminRepositoryImpl) InsertAdmin(adminEntity *entities.Admin) (string, 
 	return adminEntity.ID, nil
 }
 
-func (r *adminRepositoryImpl) FindAdminByID(adminID string) (*entities.Admin, error) {
+func (r *adminRepositoryImpl) FindByID(adminID string) (*entities.Admin, error) {
 	admin := new(entities.Admin)
 	tx := r.db.Where("id = ?", adminID).First(admin)
 

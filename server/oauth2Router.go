@@ -4,7 +4,7 @@ import (
 	_adminRepository "github.com/Rayato159/isekai-shop-api/domains/admin/repository"
 	_oauth2Controller "github.com/Rayato159/isekai-shop-api/domains/oauth2/controller"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/domains/oauth2/service"
-	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
+	_playerRepository "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 
 	"github.com/Rayato159/isekai-shop-api/packages/state"
 )
@@ -20,7 +20,7 @@ func (s *echoServer) initOAuth2Router() {
 		stateConfig.Issuer,
 	)
 
-	playerRepository := _playerSource.NewPlayerRepositoryImpl(s.db, s.app.Logger)
+	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
 	adminRepository := _adminRepository.NewAdminRepositoryImpl(s.db, s.app.Logger)
 
 	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(

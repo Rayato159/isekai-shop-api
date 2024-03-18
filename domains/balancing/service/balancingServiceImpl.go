@@ -22,7 +22,7 @@ func (s *balancingServiceImpl) TopUp(topUpReq *_balancingModel.TopUpReq) (*_bala
 		Amount:   topUpReq.Amount,
 	}
 
-	insertedBalancing, err := s.balancingRepository.BalancingRecording(balancingEntity)
+	insertedBalancing, err := s.balancingRepository.PlayerBalanceRecording(balancingEntity)
 	if err != nil {
 		return nil, err
 	}

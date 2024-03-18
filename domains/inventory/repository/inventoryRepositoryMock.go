@@ -10,19 +10,19 @@ type InventoryRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *InventoryRepositoryMock) InventoryFilling(
+func (m *InventoryRepositoryMock) Filling(
 	inventoryEntities []*entities.Inventory,
 ) ([]*entities.Inventory, error) {
 	args := m.Called(inventoryEntities)
 	return args.Get(0).([]*entities.Inventory), args.Error(1)
 }
 
-func (m *InventoryRepositoryMock) InventorySearching(playerID string) ([]*entities.Inventory, error) {
+func (m *InventoryRepositoryMock) Listing(playerID string) ([]*entities.Inventory, error) {
 	args := m.Called(playerID)
 	return args.Get(0).([]*entities.Inventory), args.Error(1)
 }
 
-func (m *InventoryRepositoryMock) DeleteItemByLimit(playerID string, itemID uint64, limit int) error {
+func (m *InventoryRepositoryMock) DeletePlayerItemByLimit(playerID string, itemID uint64, limit int) error {
 	args := m.Called(playerID, itemID, limit)
 	return args.Error(0)
 }

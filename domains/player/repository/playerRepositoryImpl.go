@@ -20,7 +20,7 @@ func NewPlayerRepositoryImpl(db *gorm.DB, logger echo.Logger) PlayerRepository {
 	}
 }
 
-func (r *playerRepositoryImpl) PlayerCreating(playerEntity *entities.Player) (*entities.Player, error) {
+func (r *playerRepositoryImpl) Creating(playerEntity *entities.Player) (*entities.Player, error) {
 	insertedPlayer := new(entities.Player)
 
 	if err := r.db.Create(playerEntity).Scan(insertedPlayer).Error; err != nil {
@@ -31,7 +31,7 @@ func (r *playerRepositoryImpl) PlayerCreating(playerEntity *entities.Player) (*e
 	return insertedPlayer, nil
 }
 
-func (r *playerRepositoryImpl) FindPlayerByID(playerID string) (*entities.Player, error) {
+func (r *playerRepositoryImpl) FindByID(playerID string) (*entities.Player, error) {
 	player := new(entities.Player)
 	tx := r.db.Where("id = ?", playerID).First(player)
 

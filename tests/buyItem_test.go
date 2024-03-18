@@ -3,8 +3,8 @@ package tests
 import (
 	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
 	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
+	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
 	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
-	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	_purchasingException "github.com/Rayato159/isekai-shop-api/domains/purchasing/exception"
 	_purchasingModel "github.com/Rayato159/isekai-shop-api/domains/purchasing/model"
 	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
@@ -19,7 +19,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 	itemRepositoryMock := new(_itemGettingRepository.ItemGettingRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
-	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
+	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 
 	purchasingService := _purchasingService.NewPurchasingServiceImpl(
 		balancingRepositoryMock,
@@ -28,7 +28,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		inventoryRepositoryMock,
 	)
 
-	itemRepositoryMock.On("FindItemByID", uint64(1)).Return(&entities.Item{
+	itemRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
 		ID:          1,
 		Name:        "Sword of Tester",
 		Price:       1000,
@@ -59,7 +59,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Quantity:        3,
 	}, nil)
 
-	inventoryRepositoryMock.On("InventoryFilling", []*entities.Inventory{
+	inventoryRepositoryMock.On("Filling", []*entities.Inventory{
 		{
 			PlayerID: "P001",
 			ItemID:   1,
@@ -87,7 +87,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		},
 	}, nil)
 
-	balancingRepositoryMock.On("BalancingRecording", &entities.Balancing{
+	balancingRepositoryMock.On("PlayerBalanceRecording", &entities.Balancing{
 		PlayerID: "P001",
 		Amount:   -3000,
 	}).Return(&entities.Balancing{
@@ -124,7 +124,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 func TestItemBuyingFail(t *testing.T) {
 	itemGettingRepositoryMock := new(_itemGettingRepository.ItemGettingRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
-	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
+	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
 
 	purchasingService := _purchasingService.NewPurchasingServiceImpl(
@@ -134,7 +134,7 @@ func TestItemBuyingFail(t *testing.T) {
 		inventoryRepositoryMock,
 	)
 
-	itemGettingRepositoryMock.On("FindItemByID", uint64(1)).Return(&entities.Item{
+	itemGettingRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
 		ID:          1,
 		Name:        "Sword of Tester",
 		Price:       1000,

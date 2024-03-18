@@ -5,6 +5,6 @@ import (
 )
 
 type AdminRepository interface {
-	InsertAdmin(adminEntity *entities.Admin) (string, error)
-	FindAdminByID(adminID string) (*entities.Admin, error)
+	Creating(adminEntity *entities.Admin) (string, error)
+	FindByID(adminID string) (*entities.Admin, error)
 }

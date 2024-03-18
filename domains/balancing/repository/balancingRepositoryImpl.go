@@ -20,7 +20,7 @@ func NewBalancingRepositoryImpl(db *gorm.DB, logger echo.Logger) BalancingReposi
 	}
 }
 
-func (r *balancingRepositoryImpl) BalancingRecording(balancingEntity *entities.Balancing) (*entities.Balancing, error) {
+func (r *balancingRepositoryImpl) PlayerBalanceRecording(balancingEntity *entities.Balancing) (*entities.Balancing, error) {
 	insertedBalancing := new(entities.Balancing)
 
 	if err := r.db.Create(balancingEntity).Scan(insertedBalancing).Error; err != nil {

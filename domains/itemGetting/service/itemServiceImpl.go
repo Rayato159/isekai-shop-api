@@ -16,7 +16,7 @@ func NewItemServiceImpl(itemRepository _itemGettingRepository.ItemGettingReposit
 	}
 }
 
-func (s *itemServiceImpl) ItemListing(itemFilter *_itemGettingModel.ItemFilter) (*_itemGettingModel.ItemResult, error) {
+func (s *itemServiceImpl) Listing(itemFilter *_itemGettingModel.ItemFilter) (*_itemGettingModel.ItemResult, error) {
 	itemFilterDto := &entities.ItemFilterDto{
 		Name:        itemFilter.Name,
 		Description: itemFilter.Description,
@@ -26,12 +26,12 @@ func (s *itemServiceImpl) ItemListing(itemFilter *_itemGettingModel.ItemFilter) 
 		},
 	}
 
-	itemEntityList, err := s.itemRepository.ItemListing(itemFilterDto)
+	itemEntityList, err := s.itemRepository.Listing(itemFilterDto)
 	if err != nil {
 		return nil, err
 	}
 
-	totalItems, err := s.itemRepository.ItemCounting(itemFilterDto)
+	totalItems, err := s.itemRepository.Counting(itemFilterDto)
 	if err != nil {
 		return nil, err
 	}

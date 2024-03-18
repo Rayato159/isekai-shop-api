@@ -14,7 +14,7 @@ import (
 	_adminRepository "github.com/Rayato159/isekai-shop-api/domains/admin/repository"
 	_oauth2Controller "github.com/Rayato159/isekai-shop-api/domains/oauth2/controller"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/domains/oauth2/service"
-	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
+	_playerRepository "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	"github.com/Rayato159/isekai-shop-api/packages/state"
 	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 	"github.com/labstack/echo/v4"
@@ -75,7 +75,7 @@ func (s *echoServer) Start() {
 	s.baseRouter.GET("/health", s.healthCheck)
 
 	s.initOAuth2Router()
-	s.initPlayerRouter(customerMiddleware)
+	s.initInventoryRouter(customerMiddleware)
 	s.initItemGettingRouter()
 	s.initItemManagingRouter(customerMiddleware)
 	s.initBalancingRouter(customerMiddleware)
@@ -120,7 +120,7 @@ func (s *echoServer) getCustomMiddleware() customMiddleware.CustomMiddleware {
 		stateConfig.Issuer,
 	)
 
-	playerRepository := _playerSource.NewPlayerRepositoryImpl(s.db, s.app.Logger)
+	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
 	adminRepository := _adminRepository.NewAdminRepositoryImpl(s.db, s.app.Logger)
 
 	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(

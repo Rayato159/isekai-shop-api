@@ -5,5 +5,5 @@ import (
 )
 
 type ItemService interface {
-	ItemListing(itemFilter *_itemGettingModel.ItemFilter) (*_itemGettingModel.ItemResult, error)
+	Listing(itemFilter *_itemGettingModel.ItemFilter) (*_itemGettingModel.ItemResult, error)
 }

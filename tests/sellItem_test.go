@@ -3,8 +3,8 @@ package tests
 import (
 	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
 	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
+	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
 	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
-	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	_puchasingException "github.com/Rayato159/isekai-shop-api/domains/purchasing/exception"
 	_puchasingModel "github.com/Rayato159/isekai-shop-api/domains/purchasing/model"
 	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
@@ -19,7 +19,7 @@ func TestItemSellingSuccess(t *testing.T) {
 	itemRepositoryMock := new(_itemGettingRepository.ItemGettingRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
-	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
+	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 
 	purchasingService := _purchasingService.NewPurchasingServiceImpl(
 		balancingRepositoryMock,
@@ -30,7 +30,7 @@ func TestItemSellingSuccess(t *testing.T) {
 
 	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(3), nil)
 
-	itemRepositoryMock.On("FindItemByID", uint64(1)).Return(&entities.Item{
+	itemRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
 		ID:          1,
 		Name:        "Sword of Tester",
 		Price:       1000,
@@ -56,7 +56,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		Quantity:        3,
 	}, nil)
 
-	balancingRepositoryMock.On("BalancingRecording", &entities.Balancing{
+	balancingRepositoryMock.On("PlayerBalanceRecording", &entities.Balancing{
 		PlayerID: "P001",
 		Amount:   1500,
 	}).Return(&entities.Balancing{
@@ -64,7 +64,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		Amount:   1500,
 	}, nil)
 
-	inventoryRepositoryMock.On("DeleteItemByLimit", "P001", uint64(1), 3).Return(nil)
+	inventoryRepositoryMock.On("DeletePlayerItemByLimit", "P001", uint64(1), 3).Return(nil)
 
 	type args struct {
 		in       *_puchasingModel.ItemSellingReq
@@ -96,7 +96,7 @@ func TestItemSellingFailed(t *testing.T) {
 	itemRepositoryMock := new(_itemGettingRepository.ItemGettingRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
-	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
+	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 
 	purchasingService := _purchasingService.NewPurchasingServiceImpl(
 		balancingRepositoryMock,

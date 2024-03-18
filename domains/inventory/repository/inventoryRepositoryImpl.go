@@ -1,32 +1,43 @@
 package repository
 
 import (
-	_playerException "github.com/Rayato159/isekai-shop-api/domains/player/exception"
+	_inventoryException "github.com/Rayato159/isekai-shop-api/domains/inventory/exception"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
-type inventoryRepositoryImpl struct {
+type inventoryImpl struct {
 	db     *gorm.DB
 	logger echo.Logger
 }
 
 func NewInventoryRepositoryImpl(db *gorm.DB, logger echo.Logger) InventoryRepository {
-	return &inventoryRepositoryImpl{
+	return &inventoryImpl{
 		db:     db,
 		logger: logger,
 	}
 }
 
-func (r *inventoryRepositoryImpl) InventorySearching(playerID string) ([]*entities.Inventory, error) {
+func (r *inventoryImpl) Filling(inventoryEntities []*entities.Inventory) ([]*entities.Inventory, error) {
+	insertedInventories := make([]*entities.Inventory, 0)
+
+	if err := r.db.Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
+		r.logger.Error("Failed to insert items", err.Error())
+		return nil, &_inventoryException.InsertInventoryException{}
+	}
+
+	return insertedInventories, nil
+}
+
+func (r *inventoryImpl) Listing(playerID string) ([]*entities.Inventory, error) {
 	inventories := make([]*entities.Inventory, 0)
 
 	if err := r.db.Where(
 		"player_id = ? AND is_deleted = ?", playerID, false,
 	).Find(&inventories).Error; err != nil {
 		r.logger.Error("Failed to find inventories", err.Error())
-		return nil, &_playerException.FindInventoriesException{
+		return nil, &_inventoryException.FindInventoriesException{
 			PlayerID: playerID,
 		}
 	}
@@ -34,8 +45,8 @@ func (r *inventoryRepositoryImpl) InventorySearching(playerID string) ([]*entiti
 	return inventories, nil
 }
 
-func (r *inventoryRepositoryImpl) DeleteItemByLimit(playerID string, itemID uint64, limit int) error {
-	inventories, err := r.findInventoriesToDeleteByItemIDAndPlayerIDByLimit(playerID, itemID, limit)
+func (r *inventoryImpl) DeletePlayerItemByLimit(playerID string, itemID uint64, limit int) error {
+	inventories, err := r.findPlayerItemInInventoryByID(playerID, itemID, limit)
 	if err != nil {
 		return err
 	}
@@ -49,25 +60,14 @@ func (r *inventoryRepositoryImpl) DeleteItemByLimit(playerID string, itemID uint
 			inventory,
 		).Error; err != nil {
 			r.logger.Error("Failed to delete items", err.Error())
-			return &_playerException.DeleteInventoryException{ItemID: itemID}
+			return &_inventoryException.DeleteInventoryException{ItemID: itemID}
 		}
 	}
 
 	return nil
 }
 
-func (r *inventoryRepositoryImpl) InventoryFilling(inventoryEntities []*entities.Inventory) ([]*entities.Inventory, error) {
-	insertedInventories := make([]*entities.Inventory, 0)
-
-	if err := r.db.Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
-		r.logger.Error("Failed to insert items", err.Error())
-		return nil, &_playerException.InsertInventoryException{}
-	}
-
-	return insertedInventories, nil
-}
-
-func (r *inventoryRepositoryImpl) PlayerItemCounting(playerID string, itemID uint64) int64 {
+func (r *inventoryImpl) PlayerItemCounting(playerID string, itemID uint64) int64 {
 	var count int64
 
 	if err := r.db.Model(
@@ -82,7 +82,7 @@ func (r *inventoryRepositoryImpl) PlayerItemCounting(playerID string, itemID uin
 	return count
 }
 
-func (r *inventoryRepositoryImpl) findInventoriesToDeleteByItemIDAndPlayerIDByLimit(
+func (r *inventoryImpl) findPlayerItemInInventoryByID(
 	playerID string,
 	itemID uint64,
 	limit int,
@@ -95,7 +95,7 @@ func (r *inventoryRepositoryImpl) findInventoriesToDeleteByItemIDAndPlayerIDByLi
 		limit,
 	).Find(&inventories).Error; err != nil {
 		r.logger.Error("Failed to find inventories", err.Error())
-		return nil, &_playerException.FindInventoriesException{PlayerID: playerID}
+		return nil, &_inventoryException.FindInventoriesException{PlayerID: playerID}
 	}
 
 	for _, inventory := range inventories {

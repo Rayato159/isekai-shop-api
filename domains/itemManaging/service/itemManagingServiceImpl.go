@@ -54,7 +54,7 @@ func (s *itemManagingServiceImpl) ItemEditing(itemID uint64, updateItemReq *_ite
 		return nil, err
 	}
 
-	itemEntity, err := s.itemGettingRepository.FindItemByID(updatedItemID)
+	itemEntity, err := s.itemGettingRepository.FindByID(updatedItemID)
 	if err != nil {
 		return nil, err
 	}

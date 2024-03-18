@@ -22,14 +22,14 @@ func NewItemControllerImpl(itemGettingService _itemGettingService.ItemService, l
 	}
 }
 
-func (c *itemControllerImpl) ItemListing(pctx echo.Context) error {
+func (c *itemControllerImpl) Listing(pctx echo.Context) error {
 	itemFilter := new(_itemGettingModel.ItemFilter)
 
 	if err := pctx.Bind(itemFilter); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, &_itemGettingException.ItemListingException{})
 	}
 
-	itemListingResult, err := c.itemService.ItemListing(itemFilter)
+	itemListingResult, err := c.itemService.Listing(itemFilter)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}

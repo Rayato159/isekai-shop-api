@@ -4,17 +4,17 @@ import (
 	_adminModel "github.com/Rayato159/isekai-shop-api/domains/admin/model"
 	_adminRepository "github.com/Rayato159/isekai-shop-api/domains/admin/repository"
 	_playerModel "github.com/Rayato159/isekai-shop-api/domains/player/model"
-	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
+	_playerRepository "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type googleOAuth2Service struct {
-	playerRepository _playerSource.PlayerRepository
+	playerRepository _playerRepository.PlayerRepository
 	adminRepository  _adminRepository.AdminRepository
 }
 
 func NewGoogleOAuth2Service(
-	playerRepository _playerSource.PlayerRepository,
+	playerRepository _playerRepository.PlayerRepository,
 	adminRepository _adminRepository.AdminRepository,
 ) OAuth2Service {
 	return &googleOAuth2Service{
@@ -32,7 +32,7 @@ func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerMo
 			Avatar: playerCreatingReq.Avatar,
 		}
 
-		_, err := s.playerRepository.PlayerCreating(playerEntity)
+		_, err := s.playerRepository.Creating(playerEntity)
 		if err != nil {
 			return err
 		}
@@ -50,7 +50,7 @@ func (s *googleOAuth2Service) AdminAccountCreating(createAdminInfo *_adminModel.
 			Avatar: createAdminInfo.Avatar,
 		}
 
-		_, err := s.adminRepository.InsertAdmin(adminEntity)
+		_, err := s.adminRepository.Creating(adminEntity)
 		if err != nil {
 			return err
 		}
@@ -61,21 +61,21 @@ func (s *googleOAuth2Service) AdminAccountCreating(createAdminInfo *_adminModel.
 }
 
 func (s *googleOAuth2Service) IsThisGuyIsReallyAdmin(adminID string) bool {
-	if _, err := s.adminRepository.FindAdminByID(adminID); err != nil {
+	if _, err := s.adminRepository.FindByID(adminID); err != nil {
 		return false
 	}
 	return true
 }
 
 func (s *googleOAuth2Service) IsThisGuyIsReallyPlayer(playerID string) bool {
-	if _, err := s.playerRepository.FindPlayerByID(playerID); err != nil {
+	if _, err := s.playerRepository.FindByID(playerID); err != nil {
 		return false
 	}
 	return true
 }
 
 func (s *googleOAuth2Service) isPlayerIsExists(palyerId string) bool {
-	player, err := s.playerRepository.FindPlayerByID(palyerId)
+	player, err := s.playerRepository.FindByID(palyerId)
 	if err != nil {
 		return false
 	}
@@ -84,7 +84,7 @@ func (s *googleOAuth2Service) isPlayerIsExists(palyerId string) bool {
 }
 
 func (s *googleOAuth2Service) isAdminIsExists(adminId string) bool {
-	admin, err := s.adminRepository.FindAdminByID(adminId)
+	admin, err := s.adminRepository.FindByID(adminId)
 	if err != nil {
 		return false
 	}

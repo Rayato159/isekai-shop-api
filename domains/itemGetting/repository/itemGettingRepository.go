@@ -5,8 +5,8 @@ import (
 )
 
 type ItemGettingRepository interface {
-	ItemListing(itemFilterDto *entities.ItemFilterDto) ([]*entities.Item, error)
-	FindItemByID(itemID uint64) (*entities.Item, error)
-	FindItemByIDs(itemIDs []uint64) ([]*entities.Item, error)
-	ItemCounting(itemFilterDto *entities.ItemFilterDto) (int64, error)
+	Listing(itemFilterDto *entities.ItemFilterDto) ([]*entities.Item, error)
+	FindByID(itemID uint64) (*entities.Item, error)
+	FindByIDList(itemIDs []uint64) ([]*entities.Item, error)
+	Counting(itemFilterDto *entities.ItemFilterDto) (int64, error)
 }
