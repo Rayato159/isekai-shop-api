@@ -21,22 +21,22 @@ func NewPlayerCoinControllerImpl(playerCoinService _playerCoinService.PlayerCoin
 	}
 }
 
-func (c *playerCoinControllerImpl) BuyingCoin(pctx echo.Context) error {
+func (c *playerCoinControllerImpl) CoinAdding(pctx echo.Context) error {
 	playerID, err := common.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	buyingCoinReq := new(_playerCoinModel.BuyingCoinReq)
+	coinAddingReq := new(_playerCoinModel.CoinAddingReq)
 
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
-	if err := validatingContext.Bind(buyingCoinReq); err != nil {
+	if err := validatingContext.Bind(coinAddingReq); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
-	buyingCoinReq.PlayerID = playerID
+	coinAddingReq.PlayerID = playerID
 
-	playerCoin, err := c.playerCoinService.BuyingCoin(buyingCoinReq)
+	playerCoin, err := c.playerCoinService.CoinAdding(coinAddingReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}

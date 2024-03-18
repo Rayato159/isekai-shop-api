@@ -16,10 +16,10 @@ func NewPlayerCoinServiceImpl(
 	return &playerCoinImpl{playerCoinRepository}
 }
 
-func (s *playerCoinImpl) BuyingCoin(buyingCoinReq *_playerCoinModel.BuyingCoinReq) (*_playerCoinModel.PlayerCoin, error) {
+func (s *playerCoinImpl) CoinAdding(coinAddingReq *_playerCoinModel.CoinAddingReq) (*_playerCoinModel.PlayerCoin, error) {
 	playerCoinEntity := &entities.PlayerCoin{
-		PlayerID: buyingCoinReq.PlayerID,
-		Amount:   buyingCoinReq.Amount,
+		PlayerID: coinAddingReq.PlayerID,
+		Amount:   coinAddingReq.Amount,
 	}
 
 	insertedPlayerCoin, err := s.playerCoinRepository.Recording(playerCoinEntity)

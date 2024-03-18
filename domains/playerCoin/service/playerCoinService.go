@@ -5,6 +5,6 @@ import (
 )
 
 type PlayerCoinService interface {
-	BuyingCoin(buyingCoinReq *_playerCoinModel.BuyingCoinReq) (*_playerCoinModel.PlayerCoin, error)
+	CoinAdding(coinAddingReq *_playerCoinModel.CoinAddingReq) (*_playerCoinModel.PlayerCoin, error)
 	PlayerCoinShowing(playerID string) *_playerCoinModel.PlayerCoinShowing
 }
