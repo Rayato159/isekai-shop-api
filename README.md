@@ -41,7 +41,7 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
       - Admin Authorize
 
 ## Architecture
-![alt text](./screenshots/IsekaiShopArchitectureV6.png "Architecture")
+![alt text](./screenshots/IsekaiShopArchitectureV7.png "Architecture")
 
 ## ER Diagram
 ![alt text](./screenshots/IsekaiShopEntityV6.png "ER-Diagram")
