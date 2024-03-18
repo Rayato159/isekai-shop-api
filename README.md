@@ -144,4 +144,3 @@ docker run --name isekai-shop-api -v /path/to/config-folder:/app/etc -d isekai-s
 
 ## Postman Collection and ENV
 - [Collection](./postman/isekai-shop-api.postman_collection.json)
-- [Environment](./postman/isekai-shop-api-local.postman_environment.json)
