@@ -3,32 +3,32 @@ package controller
 import (
 	"net/http"
 
-	_paymentModel "github.com/Rayato159/isekai-shop-api/domains/payment/model"
-	_paymentService "github.com/Rayato159/isekai-shop-api/domains/payment/service"
+	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
+	_balancingService "github.com/Rayato159/isekai-shop-api/domains/balancing/service"
 	"github.com/Rayato159/isekai-shop-api/domains/utils"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
 	"github.com/labstack/echo/v4"
 )
 
-type paymentControllerImpl struct {
-	paymentService _paymentService.PaymentService
-	logger         echo.Logger
+type balancingControllerImpl struct {
+	balancingService _balancingService.BalancingService
+	logger           echo.Logger
 }
 
-func NewPaymentControllerImpl(paymentService _paymentService.PaymentService, logger echo.Logger) PaymentController {
-	return &paymentControllerImpl{
-		paymentService: paymentService,
-		logger:         logger,
+func NewBalancingControllerImpl(balancingService _balancingService.BalancingService, logger echo.Logger) BalancingController {
+	return &balancingControllerImpl{
+		balancingService: balancingService,
+		logger:           logger,
 	}
 }
 
-func (c *paymentControllerImpl) TopUp(pctx echo.Context) error {
+func (c *balancingControllerImpl) TopUp(pctx echo.Context) error {
 	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	topUpReq := new(_paymentModel.TopUpReq)
+	topUpReq := new(_balancingModel.TopUpReq)
 
 	if err := pctx.Bind(topUpReq); err != nil {
 		c.logger.Error("Failed to bind top up request", err.Error())
@@ -36,33 +36,33 @@ func (c *paymentControllerImpl) TopUp(pctx echo.Context) error {
 	}
 	topUpReq.PlayerID = playerID
 
-	payment, err := c.paymentService.TopUp(topUpReq)
+	balancing, err := c.balancingService.TopUp(topUpReq)
 	if err != nil {
 		c.logger.Error("Failed to top up", err.Error())
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
-	return pctx.JSON(http.StatusCreated, payment)
+	return pctx.JSON(http.StatusCreated, balancing)
 }
 
-func (c *paymentControllerImpl) PlayerBalanceShowing(pctx echo.Context) error {
+func (c *balancingControllerImpl) PlayerBalanceShowing(pctx echo.Context) error {
 	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	balance := c.paymentService.PlayerBalanceShowing(playerID)
+	balance := c.balancingService.PlayerBalanceShowing(playerID)
 
 	return pctx.JSON(http.StatusOK, balance)
 }
 
-func (c *paymentControllerImpl) ItemBuying(pctx echo.Context) error {
+func (c *balancingControllerImpl) ItemBuying(pctx echo.Context) error {
 	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	itemBuyingReq := new(_paymentModel.ItemBuyingReq)
+	itemBuyingReq := new(_balancingModel.ItemBuyingReq)
 
 	if err := pctx.Bind(itemBuyingReq); err != nil {
 		c.logger.Error("Failed to bind buy item request", err.Error())
@@ -70,21 +70,21 @@ func (c *paymentControllerImpl) ItemBuying(pctx echo.Context) error {
 	}
 	itemBuyingReq.PlayerID = playerID
 
-	payment, err := c.paymentService.ItemBuying(itemBuyingReq)
+	balancing, err := c.balancingService.ItemBuying(itemBuyingReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
-	return pctx.JSON(http.StatusOK, payment)
+	return pctx.JSON(http.StatusOK, balancing)
 }
 
-func (c *paymentControllerImpl) ItemSelling(pctx echo.Context) error {
+func (c *balancingControllerImpl) ItemSelling(pctx echo.Context) error {
 	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	itemSellingReq := new(_paymentModel.ItemSellingReq)
+	itemSellingReq := new(_balancingModel.ItemSellingReq)
 
 	if err := pctx.Bind(itemSellingReq); err != nil {
 		c.logger.Error("Failed to bind sell item request", err.Error())
@@ -92,10 +92,10 @@ func (c *paymentControllerImpl) ItemSelling(pctx echo.Context) error {
 	}
 	itemSellingReq.PlayerID = playerID
 
-	payment, err := c.paymentService.ItemSelling(itemSellingReq)
+	balancing, err := c.balancingService.ItemSelling(itemSellingReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
-	return pctx.JSON(http.StatusOK, payment)
+	return pctx.JSON(http.StatusOK, balancing)
 }

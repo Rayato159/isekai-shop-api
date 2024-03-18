@@ -10,7 +10,7 @@ type PurchasingRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *PurchasingRepositoryMock) PurchasingHistoryRecording(purchasingEntity *_purchasingEntity.Purchasing) (*_purchasingEntity.Purchasing, error) {
+func (m *PurchasingRepositoryMock) PurchasingHistoryRecording(purchasingEntity *_purchasingEntity.PurchasingHistory) (*_purchasingEntity.PurchasingHistory, error) {
 	args := m.Called(purchasingEntity)
-	return args.Get(0).(*_purchasingEntity.Purchasing), args.Error(1)
+	return args.Get(0).(*_purchasingEntity.PurchasingHistory), args.Error(1)
 }

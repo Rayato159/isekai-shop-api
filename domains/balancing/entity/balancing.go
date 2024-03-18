@@ -1,13 +1,13 @@
 package entity
 
 import (
-	_paymentModel "github.com/Rayato159/isekai-shop-api/domains/payment/model"
+	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
 
 	"time"
 )
 
 type (
-	Payment struct {
+	Balancing struct {
 		ID        uint64    `gorm:"primaryKey;autoIncrement;"`
 		PlayerID  string    `gorm:"type:varchar(64);not null;"`
 		Amount    int64     `gorm:"not null;"`
@@ -20,8 +20,8 @@ type (
 	}
 )
 
-func (p *Payment) ToPaymentModel() *_paymentModel.Payment {
-	return &_paymentModel.Payment{
+func (p *Balancing) ToBalancingModel() *_balancingModel.Balancing {
+	return &_balancingModel.Balancing{
 		ID:        p.ID,
 		PlayerID:  p.PlayerID,
 		Amount:    p.Amount,
@@ -29,8 +29,8 @@ func (p *Payment) ToPaymentModel() *_paymentModel.Payment {
 	}
 }
 
-func (p *PlayerBalanceDto) ToPlayerBalanceModel() *_paymentModel.PlayerBalance {
-	return &_paymentModel.PlayerBalance{
+func (p *PlayerBalanceDto) ToPlayerBalanceModel() *_balancingModel.PlayerBalance {
+	return &_balancingModel.PlayerBalance{
 		PlayerID: p.PlayerID,
 		Balance:  p.Balance,
 	}

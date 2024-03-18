@@ -1,13 +1,13 @@
 package tests
 
 import (
+	_balancingEntity "github.com/Rayato159/isekai-shop-api/domains/balancing/entity"
+	_balancingException "github.com/Rayato159/isekai-shop-api/domains/balancing/exception"
+	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
+	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
+	_balancingService "github.com/Rayato159/isekai-shop-api/domains/balancing/service"
 	_itemEntity "github.com/Rayato159/isekai-shop-api/domains/item/entity"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
-	_paymentEntity "github.com/Rayato159/isekai-shop-api/domains/payment/entity"
-	_paymentException "github.com/Rayato159/isekai-shop-api/domains/payment/exception"
-	_paymentModel "github.com/Rayato159/isekai-shop-api/domains/payment/model"
-	_paymentRepository "github.com/Rayato159/isekai-shop-api/domains/payment/repository"
-	_paymentService "github.com/Rayato159/isekai-shop-api/domains/payment/service"
 	_playerEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	_purchasingEntity "github.com/Rayato159/isekai-shop-api/domains/purchasing/entity"
@@ -20,11 +20,11 @@ import (
 func TestItemBuyingSuccess(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
-	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
+	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
 	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 
-	paymentService := _paymentService.NewPaymentServiceImpl(
-		paymentRepositoryMock,
+	balancingService := _balancingService.NewBalancingServiceImpl(
+		balancingRepositoryMock,
 		itemRepositoryMock,
 		purchasingRepositoryMock,
 		inventoryRepositoryMock,
@@ -38,12 +38,12 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	paymentRepositoryMock.On("PlayerBalanceShowing", "P001").Return(&_paymentEntity.PlayerBalanceDto{
+	balancingRepositoryMock.On("PlayerBalanceShowing", "P001").Return(&_balancingEntity.PlayerBalanceDto{
 		PlayerID: "P001",
 		Balance:  5000,
 	}, nil)
 
-	purchasingRepositoryMock.On("PurchasingHistoryRecording", &_purchasingEntity.Purchasing{
+	purchasingRepositoryMock.On("PurchasingHistoryRecording", &_purchasingEntity.PurchasingHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -51,7 +51,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
-	}).Return(&_purchasingEntity.Purchasing{
+	}).Return(&_purchasingEntity.PurchasingHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -89,27 +89,27 @@ func TestItemBuyingSuccess(t *testing.T) {
 		},
 	}, nil)
 
-	paymentRepositoryMock.On("PaymentRecording", &_paymentEntity.Payment{
+	balancingRepositoryMock.On("BalancingRecording", &_balancingEntity.Balancing{
 		PlayerID: "P001",
 		Amount:   -3000,
-	}).Return(&_paymentEntity.Payment{
+	}).Return(&_balancingEntity.Balancing{
 		PlayerID: "P001",
 		Amount:   -3000,
 	}, nil)
 
 	type args struct {
-		in       *_paymentModel.ItemBuyingReq
-		expected *_paymentModel.Payment
+		in       *_balancingModel.ItemBuyingReq
+		expected *_balancingModel.Balancing
 	}
 
 	cases := []args{
 		{
-			in: &_paymentModel.ItemBuyingReq{
+			in: &_balancingModel.ItemBuyingReq{
 				PlayerID: "P001",
 				ItemID:   1,
 				Quantity: 3,
 			},
-			expected: &_paymentModel.Payment{
+			expected: &_balancingModel.Balancing{
 				PlayerID: "P001",
 				Amount:   -3000,
 			},
@@ -117,7 +117,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := paymentService.ItemBuying(c.in)
+		result, err := balancingService.ItemBuying(c.in)
 		assert.NoError(t, err)
 		assert.EqualValues(t, c.expected, result)
 	}
@@ -127,10 +127,10 @@ func TestItemBuyingFail(t *testing.T) {
 	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
-	paymentRepositoryMock := new(_paymentRepository.PaymentRepositoryMock)
+	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
 
-	paymentService := _paymentService.NewPaymentServiceImpl(
-		paymentRepositoryMock,
+	balancingService := _balancingService.NewBalancingServiceImpl(
+		balancingRepositoryMock,
 		itemRepositoryMock,
 		purchasingRepositoryMock,
 		inventoryRepositoryMock,
@@ -144,29 +144,29 @@ func TestItemBuyingFail(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	paymentRepositoryMock.On("PlayerBalanceShowing", "P001").Return(&_paymentEntity.PlayerBalanceDto{
+	balancingRepositoryMock.On("PlayerBalanceShowing", "P001").Return(&_balancingEntity.PlayerBalanceDto{
 		PlayerID: "P001",
 		Balance:  2000,
 	}, nil)
 
 	type args struct {
-		in       *_paymentModel.ItemBuyingReq
+		in       *_balancingModel.ItemBuyingReq
 		expected error
 	}
 
 	cases := []args{
 		{
-			in: &_paymentModel.ItemBuyingReq{
+			in: &_balancingModel.ItemBuyingReq{
 				PlayerID: "P001",
 				ItemID:   1,
 				Quantity: 3,
 			},
-			expected: &_paymentException.NotEnoughBalanceException{},
+			expected: &_balancingException.NotEnoughBalanceException{},
 		},
 	}
 
 	for _, c := range cases {
-		result, err := paymentService.ItemBuying(c.in)
+		result, err := balancingService.ItemBuying(c.in)
 		assert.Nil(t, result)
 		assert.Error(t, err)
 		assert.EqualValues(t, c.expected, err)

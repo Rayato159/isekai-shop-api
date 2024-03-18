@@ -32,7 +32,7 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
     - Middleware
         - Player Authorize
         - Admin Authorize
-- Payment
+- Balancing
     - Top Up
     - See Player’ Balance Info
     - Buy Items

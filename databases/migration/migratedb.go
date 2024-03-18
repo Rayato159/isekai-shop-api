@@ -4,8 +4,8 @@ import (
 	"github.com/Rayato159/isekai-shop-api/config"
 	"github.com/Rayato159/isekai-shop-api/databases"
 	_adminEntity "github.com/Rayato159/isekai-shop-api/domains/admin/entity"
+	_balancingEntity "github.com/Rayato159/isekai-shop-api/domains/balancing/entity"
 	_itemEntity "github.com/Rayato159/isekai-shop-api/domains/item/entity"
-	_paymentEntity "github.com/Rayato159/isekai-shop-api/domains/payment/entity"
 	_playerEntity "github.com/Rayato159/isekai-shop-api/domains/player/entity"
 	_purchasingEntity "github.com/Rayato159/isekai-shop-api/domains/purchasing/entity"
 )
@@ -18,7 +18,7 @@ func main() {
 	playerMigrate(database)
 	adminMigrate(database)
 	itemMigrate(database)
-	paymentMigrate(database)
+	balancingMigrate(database)
 	inventoryMigrate(database)
 	purchasingMigrate(database)
 }
@@ -39,8 +39,8 @@ func itemMigrate(db databases.Database) {
 	db.GetDb().Migrator().CreateTable(&_itemEntity.Item{})
 }
 
-func paymentMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&_paymentEntity.Payment{})
+func balancingMigrate(db databases.Database) {
+	db.GetDb().Migrator().CreateTable(&_balancingEntity.Balancing{})
 }
 
 func inventoryMigrate(db databases.Database) {
@@ -48,5 +48,5 @@ func inventoryMigrate(db databases.Database) {
 }
 
 func purchasingMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&_purchasingEntity.Purchasing{})
+	db.GetDb().Migrator().CreateTable(&_purchasingEntity.PurchasingHistory{})
 }

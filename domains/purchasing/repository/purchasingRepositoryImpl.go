@@ -19,8 +19,8 @@ func NewPurchasingRepositoryImpl(db *gorm.DB, logger echo.Logger) PurchasingRepo
 	}
 }
 
-func (r *purchasingRepositoryImpl) PurchasingHistoryRecording(purchasingEntity *_purchasingEntity.Purchasing) (*_purchasingEntity.Purchasing, error) {
-	insertedPurchasing := new(_purchasingEntity.Purchasing)
+func (r *purchasingRepositoryImpl) PurchasingHistoryRecording(purchasingEntity *_purchasingEntity.PurchasingHistory) (*_purchasingEntity.PurchasingHistory, error) {
+	insertedPurchasing := new(_purchasingEntity.PurchasingHistory)
 
 	if err := r.db.Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
 		r.logger.Errorf("Error inserting purchasing: %s", err.Error())

@@ -433,7 +433,7 @@
 			]
 		},
 		{
-			"name": "payment",
+			"name": "balancing",
 			"item": [
 				{
 					"name": "top up",
@@ -450,13 +450,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/payment",
+							"raw": "{{baseUrl}}/v1/balancing",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"v1",
-								"payment"
+								"balancing"
 							]
 						}
 					},
@@ -476,13 +476,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/v1/payment",
+									"raw": "{{baseUrl}}/v1/balancing",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"v1",
-										"payment"
+										"balancing"
 									]
 								}
 							},
@@ -530,13 +530,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/payment/balance",
+							"raw": "{{baseUrl}}/v1/balancing/balance",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"v1",
-								"payment",
+								"balancing",
 								"balance"
 							]
 						}
@@ -557,13 +557,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/v1/payment/balance",
+									"raw": "{{baseUrl}}/v1/balancing/balance",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"v1",
-										"payment",
+										"balancing",
 										"balance"
 									]
 								}
@@ -609,13 +609,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/payment/buy",
+							"raw": "{{baseUrl}}/v1/balancing/buy",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"v1",
-								"payment",
+								"balancing",
 								"buy"
 							]
 						}
@@ -636,13 +636,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/v1/payment/buy",
+									"raw": "{{baseUrl}}/v1/balancing/buy",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"v1",
-										"payment",
+										"balancing",
 										"buy"
 									]
 								}
@@ -688,13 +688,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/payment/sell",
+							"raw": "{{baseUrl}}/v1/balancing/sell",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"v1",
-								"payment",
+								"balancing",
 								"sell"
 							]
 						}
@@ -715,13 +715,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/v1/payment/buy",
+									"raw": "{{baseUrl}}/v1/balancing/buy",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"v1",
-										"payment",
+										"balancing",
 										"buy"
 									]
 								}

@@ -1,33 +1,33 @@
 package server
 
 import (
+	_balancingController "github.com/Rayato159/isekai-shop-api/domains/balancing/controller"
+	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
+	_balancingService "github.com/Rayato159/isekai-shop-api/domains/balancing/service"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
-	_paymentController "github.com/Rayato159/isekai-shop-api/domains/payment/controller"
-	_paymentRepository "github.com/Rayato159/isekai-shop-api/domains/payment/repository"
-	_paymentService "github.com/Rayato159/isekai-shop-api/domains/payment/service"
 	_playerSouce "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
 	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 )
 
-func (s *echoServer) initPaymentRouter(customMiddleware customMiddleware.CustomMiddleware) {
-	router := s.baseRouter.Group("/payment")
+func (s *echoServer) initBalancingRouter(customMiddleware customMiddleware.CustomMiddleware) {
+	router := s.baseRouter.Group("/balancing")
 
-	paymentRepository := _paymentRepository.NewPaymentRepositoryImpl(s.db, s.app.Logger)
+	balancingRepository := _balancingRepository.NewBalancingRepositoryImpl(s.db, s.app.Logger)
 	itemRepository := _itemRepository.NewItemRepositoryImpl(s.db, s.app.Logger)
 	purchasingRepository := _purchasingRepository.NewPurchasingRepositoryImpl(s.db, s.app.Logger)
 	inventoryRepository := _playerSouce.NewInventoryRepositoryImpl(s.db, s.app.Logger)
 
-	paymentService := _paymentService.NewPaymentServiceImpl(
-		paymentRepository,
+	balancingService := _balancingService.NewBalancingServiceImpl(
+		balancingRepository,
 		itemRepository,
 		purchasingRepository,
 		inventoryRepository,
 	)
-	paymentController := _paymentController.NewPaymentControllerImpl(paymentService, s.app.Logger)
+	balancingController := _balancingController.NewBalancingControllerImpl(balancingService, s.app.Logger)
 
-	router.POST("", paymentController.TopUp, customMiddleware.PlayerAuthorizing)
-	router.GET("/balance", paymentController.PlayerBalanceShowing, customMiddleware.PlayerAuthorizing)
-	router.POST("/buy", paymentController.ItemBuying, customMiddleware.PlayerAuthorizing)
-	router.POST("/sell", paymentController.ItemSelling, customMiddleware.PlayerAuthorizing)
+	router.POST("", balancingController.TopUp, customMiddleware.PlayerAuthorizing)
+	router.GET("/balance", balancingController.PlayerBalanceShowing, customMiddleware.PlayerAuthorizing)
+	router.POST("/buy", balancingController.ItemBuying, customMiddleware.PlayerAuthorizing)
+	router.POST("/sell", balancingController.ItemSelling, customMiddleware.PlayerAuthorizing)
 }

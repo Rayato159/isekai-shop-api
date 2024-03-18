@@ -3,20 +3,20 @@ package entity
 import (
 	"time"
 
-	_paymentEntity "github.com/Rayato159/isekai-shop-api/domains/payment/entity"
+	_balancingEntity "github.com/Rayato159/isekai-shop-api/domains/balancing/entity"
 	_playerModel "github.com/Rayato159/isekai-shop-api/domains/player/model"
 )
 
 type (
 	Player struct {
-		ID          string                   `gorm:"primaryKey;type:varchar(64);"`
-		Email       string                   `gorm:"type:varchar(128);unique;not null;"`
-		Name        string                   `gorm:"type:varchar(128);not null;"`
-		Avatar      string                   `gorm:"type:varchar(256);not null;default:'';"`
-		Inventories []Inventory              `gorm:"foreignKey:PlayerID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-		Payments    []_paymentEntity.Payment `gorm:"foreignKey:PlayerID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-		CreatedAt   time.Time                `gorm:"not null;autoCreateTime;"`
-		UpdatedAt   time.Time                `gorm:"not null;autoUpdateTime;"`
+		ID          string                       `gorm:"primaryKey;type:varchar(64);"`
+		Email       string                       `gorm:"type:varchar(128);unique;not null;"`
+		Name        string                       `gorm:"type:varchar(128);not null;"`
+		Avatar      string                       `gorm:"type:varchar(256);not null;default:'';"`
+		Inventories []Inventory                  `gorm:"foreignKey:PlayerID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+		Balancings  []_balancingEntity.Balancing `gorm:"foreignKey:PlayerID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+		CreatedAt   time.Time                    `gorm:"not null;autoCreateTime;"`
+		UpdatedAt   time.Time                    `gorm:"not null;autoUpdateTime;"`
 	}
 )
 

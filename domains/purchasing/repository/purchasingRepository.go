@@ -5,5 +5,5 @@ import (
 )
 
 type PurchasingRepository interface {
-	PurchasingHistoryRecording(purchasingEntity *_purchasingEntity.Purchasing) (*_purchasingEntity.Purchasing, error)
+	PurchasingHistoryRecording(purchasingEntity *_purchasingEntity.PurchasingHistory) (*_purchasingEntity.PurchasingHistory, error)
 }

@@ -3,7 +3,7 @@ package model
 import "time"
 
 type (
-	Payment struct {
+	Balancing struct {
 		ID        uint64    `json:"id"`
 		PlayerID  string    `json:"playerID"`
 		Amount    int64     `json:"amount"`
