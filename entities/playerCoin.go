@@ -1,13 +1,13 @@
 package entity
 
 import (
-	_playerBalancingModel "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/model"
+	_playerCoinModel "github.com/Rayato159/isekai-shop-api/domains/playerCoin/model"
 
 	"time"
 )
 
 type (
-	PlayerBalancing struct {
+	PlayerCoin struct {
 		ID        uint64    `gorm:"primaryKey;autoIncrement;"`
 		PlayerID  string    `gorm:"type:varchar(64);not null;"`
 		Amount    int64     `gorm:"not null;"`
@@ -20,8 +20,8 @@ type (
 	}
 )
 
-func (p *PlayerBalancing) ToPlayerBalancingModel() *_playerBalancingModel.PlayerBalancing {
-	return &_playerBalancingModel.PlayerBalancing{
+func (p *PlayerCoin) ToPlayerCoinModel() *_playerCoinModel.PlayerCoin {
+	return &_playerCoinModel.PlayerCoin{
 		ID:        p.ID,
 		PlayerID:  p.PlayerID,
 		Amount:    p.Amount,
@@ -29,8 +29,8 @@ func (p *PlayerBalancing) ToPlayerBalancingModel() *_playerBalancingModel.Player
 	}
 }
 
-func (p *PlayerBalanceShowingDto) ToPlayerBalanceModel() *_playerBalancingModel.PlayerBalanceShowing {
-	return &_playerBalancingModel.PlayerBalanceShowing{
+func (p *PlayerBalanceShowingDto) ToPlayerBalanceModel() *_playerCoinModel.PlayerBalanceShowing {
+	return &_playerCoinModel.PlayerBalanceShowing{
 		PlayerID: p.PlayerID,
 		Balance:  p.Balance,
 	}

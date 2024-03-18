@@ -10,9 +10,9 @@ type BalancingRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *BalancingRepositoryMock) Recording(balancingEntity *entities.PlayerBalancing) (*entities.PlayerBalancing, error) {
+func (m *BalancingRepositoryMock) Recording(balancingEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
 	args := m.Called(balancingEntity)
-	return args.Get(0).(*entities.PlayerBalancing), args.Error(1)
+	return args.Get(0).(*entities.PlayerCoin), args.Error(1)
 }
 
 func (m *BalancingRepositoryMock) Showing(playerID string) (*entities.PlayerBalanceShowingDto, error) {

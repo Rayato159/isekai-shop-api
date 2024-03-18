@@ -4,39 +4,39 @@ import (
 	"net/http"
 
 	"github.com/Rayato159/isekai-shop-api/domains/common"
-	_playerBalancingModel "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/model"
-	_playerBalancingService "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/service"
+	_playerCoinModel "github.com/Rayato159/isekai-shop-api/domains/playerCoin/model"
+	_playerCoinService "github.com/Rayato159/isekai-shop-api/domains/playerCoin/service"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
 	"github.com/labstack/echo/v4"
 )
 
 type playerBalacingControllerImpl struct {
-	playerBalacingService _playerBalancingService.PlayerBalancingService
+	playerBalacingService _playerCoinService.PlayerCoinService
 	logger                echo.Logger
 }
 
-func NewBalancingControllerImpl(playerBalacingService _playerBalancingService.PlayerBalancingService, logger echo.Logger) BalancingController {
+func NewBalancingControllerImpl(playerBalacingService _playerCoinService.PlayerCoinService, logger echo.Logger) BalancingController {
 	return &playerBalacingControllerImpl{
 		playerBalacingService: playerBalacingService,
 		logger:                logger,
 	}
 }
 
-func (c *playerBalacingControllerImpl) TopUp(pctx echo.Context) error {
+func (c *playerBalacingControllerImpl) BuyingCoin(pctx echo.Context) error {
 	playerID, err := common.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	topUpReq := new(_playerBalancingModel.TopUpReq)
+	buyingCoinReq := new(_playerCoinModel.BuyingCoinReq)
 
-	if err := pctx.Bind(topUpReq); err != nil {
+	if err := pctx.Bind(buyingCoinReq); err != nil {
 		c.logger.Error("Failed to bind top up request", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
-	topUpReq.PlayerID = playerID
+	buyingCoinReq.PlayerID = playerID
 
-	playerBalacing, err := c.playerBalacingService.TopUp(topUpReq)
+	playerBalacing, err := c.playerBalacingService.BuyingCoin(buyingCoinReq)
 	if err != nil {
 		c.logger.Error("Failed to top up", err.Error())
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)

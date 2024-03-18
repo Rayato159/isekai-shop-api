@@ -6,8 +6,8 @@ import (
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
 	_itemShopService "github.com/Rayato159/isekai-shop-api/domains/itemShop/service"
-	_playerBalancingModel "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/model"
-	_playerBalancingRepository "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/repository"
+	_playerCoinModel "github.com/Rayato159/isekai-shop-api/domains/playerCoin/model"
+	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/domains/playerCoin/repository"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	"github.com/stretchr/testify/assert"
 
@@ -16,12 +16,12 @@ import (
 
 func TestItemSellingSuccess(t *testing.T) {
 	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
-	playerBalancingRepositoryMock := new(_playerBalancingRepository.BalancingRepositoryMock)
+	playerCoinRepositoryMock := new(_playerCoinRepository.BalancingRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 
 	itemShopService := _itemShopService.NewItemShopServiceImpl(
 		itemShopRepositoryMock,
-		playerBalancingRepositoryMock,
+		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
 	)
 
@@ -53,10 +53,10 @@ func TestItemSellingSuccess(t *testing.T) {
 		Quantity:        3,
 	}, nil)
 
-	playerBalancingRepositoryMock.On("Recording", &entities.PlayerBalancing{
+	playerCoinRepositoryMock.On("Recording", &entities.PlayerCoin{
 		PlayerID: "P001",
 		Amount:   1500,
-	}).Return(&entities.PlayerBalancing{
+	}).Return(&entities.PlayerCoin{
 		PlayerID: "P001",
 		Amount:   1500,
 	}, nil)
@@ -65,7 +65,7 @@ func TestItemSellingSuccess(t *testing.T) {
 
 	type args struct {
 		in       *_itemShopModel.SellingReq
-		expected *_playerBalancingModel.PlayerBalancing
+		expected *_playerCoinModel.PlayerCoin
 	}
 
 	cases := []args{
@@ -75,7 +75,7 @@ func TestItemSellingSuccess(t *testing.T) {
 				ItemID:   1,
 				Quantity: 3,
 			},
-			&_playerBalancingModel.PlayerBalancing{
+			&_playerCoinModel.PlayerCoin{
 				PlayerID: "P001",
 				Amount:   1500,
 			},
@@ -91,12 +91,12 @@ func TestItemSellingSuccess(t *testing.T) {
 
 func TestItemSellingFailed(t *testing.T) {
 	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
-	playerBalancingRepositoryMock := new(_playerBalancingRepository.BalancingRepositoryMock)
+	playerCoinRepositoryMock := new(_playerCoinRepository.BalancingRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 
 	itemShopService := _itemShopService.NewItemShopServiceImpl(
 		itemShopRepositoryMock,
-		playerBalancingRepositoryMock,
+		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
 	)
 
