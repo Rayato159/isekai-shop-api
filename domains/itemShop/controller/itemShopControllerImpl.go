@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/Rayato159/isekai-shop-api/domains/common"
-	_itemShopException "github.com/Rayato159/isekai-shop-api/domains/itemShop/exception"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
 	_itemShopService "github.com/Rayato159/isekai-shop-api/domains/itemShop/service"
 	"github.com/Rayato159/isekai-shop-api/server/validation"
@@ -30,7 +29,7 @@ func (c *itemShopControllerImpl) Listing(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(itemFilter); err != nil {
-		return writter.CustomError(pctx, http.StatusBadRequest, &_itemShopException.ItemListingException{})
+		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
 	itemListingResult, err := c.itemShopService.Listing(itemFilter)
