@@ -1,6 +1,6 @@
 /.vscode
 /assets
-/app
+/config/config.yml
 /README.md
 /tests
 /postman

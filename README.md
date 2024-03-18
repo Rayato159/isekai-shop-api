@@ -139,7 +139,7 @@ docker build -t isekai-shop-api:v1.0.0 .
 ```
 
 ```bash
-docker run --name isekai-shop-api -v /path/to/etc:/app/etc -d isekai-shop-api:v1.0.0
+docker run --name isekai-shop-api -v /path/to/config-folder:/app/etc -d isekai-shop-api:v1.0.0
 ```
 
 ## Postman Collection and ENV

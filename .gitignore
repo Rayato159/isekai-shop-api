@@ -26,5 +26,6 @@ go.work
 /.vscode
 /.idea
 /app
+/config/config.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/go
