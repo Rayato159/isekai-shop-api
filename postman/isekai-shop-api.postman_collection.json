@@ -145,7 +145,7 @@
 					]
 				},
 				{
-					"name": "buying coin",
+					"name": "coin adding",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -328,7 +328,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 2\r\n}",
+							"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

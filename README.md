@@ -30,7 +30,7 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
 - Inventory
   - Listing
 - Player Coin
-  - Coin Buying
+  - Coin Adding
   - Showing
 - OAuth2
   - Player Login
