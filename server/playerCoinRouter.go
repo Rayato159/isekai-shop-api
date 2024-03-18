@@ -15,7 +15,7 @@ func (s *echoServer) initPlayerCoinRouter(customMiddleware customMiddleware.Cust
 	playerCoinService := _playerCoinService.NewPlayerCoinServiceImpl(
 		playerCoinRepository,
 	)
-	playerCoinController := _playerCoinController.NewBalancingControllerImpl(playerCoinService, s.app.Logger)
+	playerCoinController := _playerCoinController.NewCoinControllerImpl(playerCoinService, s.app.Logger)
 
 	router.POST("", playerCoinController.BuyingCoin, customMiddleware.PlayerAuthorizing)
 	router.GET("", playerCoinController.PlayerBalanceShowing, customMiddleware.PlayerAuthorizing)

@@ -15,7 +15,7 @@ type playerBalacingControllerImpl struct {
 	logger                echo.Logger
 }
 
-func NewBalancingControllerImpl(playerBalacingService _playerCoinService.PlayerCoinService, logger echo.Logger) BalancingController {
+func NewCoinControllerImpl(playerBalacingService _playerCoinService.PlayerCoinService, logger echo.Logger) CoinController {
 	return &playerBalacingControllerImpl{
 		playerBalacingService: playerBalacingService,
 		logger:                logger,

@@ -16,7 +16,7 @@ import (
 
 func TestItemSellingSuccess(t *testing.T) {
 	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
-	playerCoinRepositoryMock := new(_playerCoinRepository.BalancingRepositoryMock)
+	playerCoinRepositoryMock := new(_playerCoinRepository.CoinRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 
 	itemShopService := _itemShopService.NewItemShopServiceImpl(
@@ -91,7 +91,7 @@ func TestItemSellingSuccess(t *testing.T) {
 
 func TestItemSellingFailed(t *testing.T) {
 	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
-	playerCoinRepositoryMock := new(_playerCoinRepository.BalancingRepositoryMock)
+	playerCoinRepositoryMock := new(_playerCoinRepository.CoinRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 
 	itemShopService := _itemShopService.NewItemShopServiceImpl(

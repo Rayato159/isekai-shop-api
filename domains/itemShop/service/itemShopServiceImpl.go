@@ -93,14 +93,14 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 
 	inventoryEntities := s.groupInventoryEntities(buyingReq)
 
-	insertedBalancing, err := s.playerCoinRepository.Recording(&entities.PlayerCoin{
+	insertedCoin, err := s.playerCoinRepository.Recording(&entities.PlayerCoin{
 		PlayerID: buyingReq.PlayerID,
 		Amount:   -totalPrice,
 	})
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Balancing entity: %d", insertedBalancing.ID)
+	log.Printf("Coin entity: %d", insertedCoin.ID)
 
 	inventory, err := s.inventoryRepository.Filling(inventoryEntities)
 	if err != nil {
@@ -108,7 +108,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 	}
 	log.Printf("Inserted inventories: %d", len(inventory))
 
-	return insertedBalancing.ToPlayerCoinModel(), nil
+	return insertedCoin.ToPlayerCoinModel(), nil
 }
 
 // 1. Check if player has enough quantity
@@ -148,14 +148,14 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	}
 	log.Printf("Inserted itemShop: %d", insertedPurchasing.ID)
 
-	insertedBalancing, err := s.playerCoinRepository.Recording(&entities.PlayerCoin{
+	insertedCoin, err := s.playerCoinRepository.Recording(&entities.PlayerCoin{
 		PlayerID: sellingReq.PlayerID,
 		Amount:   totalPrice,
 	})
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Balancing entity: %d", insertedBalancing.ID)
+	log.Printf("Coin entity: %d", insertedCoin.ID)
 
 	if err := s.inventoryRepository.DeletePlayerItemByLimit(
 		sellingReq.PlayerID,
@@ -166,7 +166,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	}
 	log.Printf("Deleted inventories for %d records", sellingReq.Quantity)
 
-	return insertedBalancing.ToPlayerCoinModel(), nil
+	return insertedCoin.ToPlayerCoinModel(), nil
 }
 
 func (s *itemShopServiceImpl) groupInventoryEntities(buyingReq *_itemShopModel.BuyingReq) []*entities.Inventory {
