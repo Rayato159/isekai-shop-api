@@ -23,7 +23,7 @@ func NewItemManagingServiceImpl(
 	}
 }
 
-func (s *itemManagingServiceImpl) ItemCreating(itemCreatingReq *_itemManagingModel.ItemCreatingReq) (*_itemShopModel.Item, error) {
+func (s *itemManagingServiceImpl) Creating(itemCreatingReq *_itemManagingModel.ItemCreatingReq) (*_itemShopModel.Item, error) {
 	item := &entities.Item{
 		AdminID:     &itemCreatingReq.AdminID,
 		Name:        itemCreatingReq.Name,
@@ -32,7 +32,7 @@ func (s *itemManagingServiceImpl) ItemCreating(itemCreatingReq *_itemManagingMod
 		Price:       itemCreatingReq.Price,
 	}
 
-	itemEntity, err := s.itemManagingRepository.ItemCreating(item)
+	itemEntity, err := s.itemManagingRepository.Creating(item)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (s *itemManagingServiceImpl) ItemCreating(itemCreatingReq *_itemManagingMod
 	return itemEntity.ToItemModel(), nil
 }
 
-func (s *itemManagingServiceImpl) ItemEditing(itemID uint64, updateItemReq *_itemManagingModel.ItemEditingReq) (*_itemShopModel.Item, error) {
+func (s *itemManagingServiceImpl) Editing(itemID uint64, updateItemReq *_itemManagingModel.ItemEditingReq) (*_itemShopModel.Item, error) {
 	updateItemDto := &entities.ItemEditingDto{
 		AdminID:     &updateItemReq.AdminID,
 		Name:        updateItemReq.Name,
@@ -49,7 +49,7 @@ func (s *itemManagingServiceImpl) ItemEditing(itemID uint64, updateItemReq *_ite
 		Price:       updateItemReq.Price,
 	}
 
-	updatedItemID, err := s.itemManagingRepository.ItemEditing(itemID, updateItemDto)
+	updatedItemID, err := s.itemManagingRepository.Editing(itemID, updateItemDto)
 	if err != nil {
 		return nil, err
 	}
@@ -62,6 +62,6 @@ func (s *itemManagingServiceImpl) ItemEditing(itemID uint64, updateItemReq *_ite
 	return itemEntity.ToItemModel(), nil
 }
 
-func (s *itemManagingServiceImpl) ItemArchiving(itemID uint64) error {
-	return s.itemManagingRepository.ItemArchiving(itemID)
+func (s *itemManagingServiceImpl) Archiving(itemID uint64) error {
+	return s.itemManagingRepository.Archiving(itemID)
 }

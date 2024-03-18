@@ -29,3 +29,8 @@ func (m *ItemShopRepositoryMock) Counting(itemFilterDto *entities.ItemFilterDto)
 	args := m.Called(itemFilterDto)
 	return args.Get(0).(int64), args.Error(1)
 }
+
+func (m *ItemShopRepositoryMock) PurchasingHistoryRecording(purchasingEntity *entities.PurchasingHistory) (*entities.PurchasingHistory, error) {
+	args := m.Called(purchasingEntity)
+	return args.Get(0).(*entities.PurchasingHistory), args.Error(1)
+}

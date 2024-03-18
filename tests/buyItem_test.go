@@ -2,13 +2,12 @@ package tests
 
 import (
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
+	_itemShopException "github.com/Rayato159/isekai-shop-api/domains/itemShop/exception"
+	_itemShopModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
+	_itemShopService "github.com/Rayato159/isekai-shop-api/domains/itemShop/service"
 	_playerBalancingModel "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/model"
 	_playerBalancingRepository "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/repository"
-	_purchasingException "github.com/Rayato159/isekai-shop-api/domains/purchasing/exception"
-	_purchasingModel "github.com/Rayato159/isekai-shop-api/domains/purchasing/model"
-	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
-	_purchasingService "github.com/Rayato159/isekai-shop-api/domains/purchasing/service"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	"github.com/stretchr/testify/assert"
 
@@ -16,19 +15,17 @@ import (
 )
 
 func TestItemBuyingSuccess(t *testing.T) {
-	itemRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
-	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
+	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
 	playerBalancingRepositoryMock := new(_playerBalancingRepository.BalancingRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 
-	purchasingService := _purchasingService.NewPurchasingServiceImpl(
+	itemShopService := _itemShopService.NewItemShopServiceImpl(
+		itemShopRepositoryMock,
 		playerBalancingRepositoryMock,
-		itemRepositoryMock,
-		purchasingRepositoryMock,
 		inventoryRepositoryMock,
 	)
 
-	itemRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
+	itemShopRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
 		ID:          1,
 		Name:        "Sword of Tester",
 		Price:       1000,
@@ -41,7 +38,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Balance:  5000,
 	}, nil)
 
-	purchasingRepositoryMock.On("PurchasingHistoryRecording", &entities.PurchasingHistory{
+	itemShopRepositoryMock.On("PurchasingHistoryRecording", &entities.PurchasingHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -96,13 +93,13 @@ func TestItemBuyingSuccess(t *testing.T) {
 	}, nil)
 
 	type args struct {
-		in       *_purchasingModel.ItemBuyingReq
+		in       *_itemShopModel.BuyingReq
 		expected *_playerBalancingModel.PlayerBalancing
 	}
 
 	cases := []args{
 		{
-			in: &_purchasingModel.ItemBuyingReq{
+			in: &_itemShopModel.BuyingReq{
 				PlayerID: "P001",
 				ItemID:   1,
 				Quantity: 3,
@@ -115,7 +112,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := purchasingService.ItemBuying(c.in)
+		result, err := itemShopService.Buying(c.in)
 		assert.NoError(t, err)
 		assert.EqualValues(t, c.expected, result)
 	}
@@ -123,14 +120,12 @@ func TestItemBuyingSuccess(t *testing.T) {
 
 func TestItemBuyingFail(t *testing.T) {
 	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
-	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 	playerBalancingRepositoryMock := new(_playerBalancingRepository.BalancingRepositoryMock)
 
-	purchasingService := _purchasingService.NewPurchasingServiceImpl(
-		playerBalancingRepositoryMock,
+	itemShopService := _itemShopService.NewItemShopServiceImpl(
 		itemShopRepositoryMock,
-		purchasingRepositoryMock,
+		playerBalancingRepositoryMock,
 		inventoryRepositoryMock,
 	)
 
@@ -148,23 +143,23 @@ func TestItemBuyingFail(t *testing.T) {
 	}, nil)
 
 	type args struct {
-		in       *_purchasingModel.ItemBuyingReq
+		in       *_itemShopModel.BuyingReq
 		expected error
 	}
 
 	cases := []args{
 		{
-			in: &_purchasingModel.ItemBuyingReq{
+			in: &_itemShopModel.BuyingReq{
 				PlayerID: "P001",
 				ItemID:   1,
 				Quantity: 3,
 			},
-			expected: &_purchasingException.NotEnoughBalanceException{},
+			expected: &_itemShopException.NotEnoughBalanceException{},
 		},
 	}
 
 	for _, c := range cases {
-		result, err := purchasingService.ItemBuying(c.in)
+		result, err := itemShopService.Buying(c.in)
 		assert.Nil(t, result)
 		assert.Error(t, err)
 		assert.EqualValues(t, c.expected, err)

@@ -19,30 +19,27 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
 
 ## Features of Isekai Shop API
 
-- Player
-    - Edit Profile
-- Admin
-    - Add Item Into The System
-    - Remove Item From The System
-    - Edit Item in The System
-- Authentication
-    - Player Login
-    - Admin Login
-    - Logout
-    - Middleware
-        - Player Authorize
-        - Admin Authorize
-- Balancing
-    - Top Up
-    - See Player’ Balance Info
-    - Buy Items
-    - Sell Items
-- Purchasing
-    - Purchasing Listing
-- Item
-    - Item Listing
+- Item Shop
+  - Listing
+- Item Managing
+  - Creating
+  - Editing
+  - Archiving
 - Inventory
-    - Player Item Listing
+  - Listing
+- Player Balancing
+  - Topup
+  - Showing
+- Purchasing
+  - Item Selling
+  - Item Buying
+- OAuth2
+  - Player Login
+  - Admin Login
+  - Logout
+  - Middleware
+      - Player Authorize
+      - Admin Authorize
 
 ## Architecture
 ![alt text](./assets/IsekaiShopArchitectureV5.png "Architecture")

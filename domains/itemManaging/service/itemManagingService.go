@@ -6,7 +6,7 @@ import (
 )
 
 type ItemManagingService interface {
-	ItemCreating(itemCreatingReq *_itemManaging.ItemCreatingReq) (*_itemShopModel.Item, error)
-	ItemEditing(itemID uint64, editItemReq *_itemManaging.ItemEditingReq) (*_itemShopModel.Item, error)
-	ItemArchiving(itemID uint64) error
+	Creating(itemCreatingReq *_itemManaging.ItemCreatingReq) (*_itemShopModel.Item, error)
+	Editing(itemID uint64, editItemReq *_itemManaging.ItemEditingReq) (*_itemShopModel.Item, error)
+	Archiving(itemID uint64) error
 }

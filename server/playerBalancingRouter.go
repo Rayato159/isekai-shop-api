@@ -8,7 +8,7 @@ import (
 )
 
 func (s *echoServer) initPlayerBalancingRouter(customMiddleware customMiddleware.CustomMiddleware) {
-	router := s.baseRouter.Group("/player-playerBalancing")
+	router := s.baseRouter.Group("/player-balancing")
 
 	playerBalancingRepository := _playerBalancingRepository.NewPlayerBalancingRepositoryImpl(s.db, s.app.Logger)
 

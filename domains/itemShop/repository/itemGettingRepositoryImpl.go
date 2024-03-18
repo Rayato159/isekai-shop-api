@@ -84,3 +84,14 @@ func (r *itemRepositoryImpl) FindByIDList(itemIDs []uint64) ([]*entities.Item, e
 
 	return items, nil
 }
+
+func (r *itemRepositoryImpl) PurchasingHistoryRecording(purchasingEntity *entities.PurchasingHistory) (*entities.PurchasingHistory, error) {
+	insertedPurchasing := new(entities.PurchasingHistory)
+
+	if err := r.db.Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
+		r.logger.Errorf("Error inserting purchasing: %s", err.Error())
+		return nil, &_itemShopException.HistoryOfPurchaseRecordingException{}
+	}
+
+	return insertedPurchasing, nil
+}

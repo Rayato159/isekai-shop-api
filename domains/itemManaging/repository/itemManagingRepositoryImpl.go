@@ -16,7 +16,7 @@ func NewItemManagingRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemManaging
 	return &itemMangingRepositoryImpl{db, logger}
 }
 
-func (r *itemMangingRepositoryImpl) ItemCreating(itemEntity *entities.Item) (*entities.Item, error) {
+func (r *itemMangingRepositoryImpl) Creating(itemEntity *entities.Item) (*entities.Item, error) {
 	insertedItem := new(entities.Item)
 
 	if err := r.db.Create(itemEntity).Scan(insertedItem).Error; err != nil {
@@ -27,7 +27,7 @@ func (r *itemMangingRepositoryImpl) ItemCreating(itemEntity *entities.Item) (*en
 	return insertedItem, nil
 }
 
-func (r *itemMangingRepositoryImpl) ItemEditing(itemID uint64, updateItemDto *entities.ItemEditingDto) (uint64, error) {
+func (r *itemMangingRepositoryImpl) Editing(itemID uint64, updateItemDto *entities.ItemEditingDto) (uint64, error) {
 	tx := r.db.Model(&entities.Item{}).Where(
 		"id = ?", itemID,
 	).Updates(
@@ -42,7 +42,7 @@ func (r *itemMangingRepositoryImpl) ItemEditing(itemID uint64, updateItemDto *en
 	return itemID, nil
 }
 
-func (r *itemMangingRepositoryImpl) ItemArchiving(itemID uint64) error {
+func (r *itemMangingRepositoryImpl) Archiving(itemID uint64) error {
 	if err := r.db.Table("items").Where(
 		"id = ?", itemID,
 	).Update(
