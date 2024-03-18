@@ -32,6 +32,6 @@ func (p *PlayerCoin) ToPlayerCoinModel() *_playerCoinModel.PlayerCoin {
 func (p *PlayerCoinShowingDto) ToPlayerBalanceModel() *_playerCoinModel.PlayerCoinShowing {
 	return &_playerCoinModel.PlayerCoinShowing{
 		PlayerID: p.PlayerID,
-		Balance:  p.Balance,
+		Balance:  p.Coin,
 	}
 }

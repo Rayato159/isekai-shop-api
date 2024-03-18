@@ -35,7 +35,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 
 	playerCoinRepositoryMock.On("Showing", "P001").Return(&entities.PlayerCoinShowingDto{
 		PlayerID: "P001",
-		Balance:  5000,
+		Coin:     5000,
 	}, nil)
 
 	itemShopRepositoryMock.On("PurchasingHistoryRecording", &entities.PurchasingHistory{
@@ -139,7 +139,7 @@ func TestItemBuyingFail(t *testing.T) {
 
 	playerCoinRepositoryMock.On("Showing", "P001").Return(&entities.PlayerCoinShowingDto{
 		PlayerID: "P001",
-		Balance:  2000,
+		Coin:     2000,
 	}, nil)
 
 	type args struct {

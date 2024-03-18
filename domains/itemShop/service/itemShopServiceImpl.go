@@ -200,7 +200,7 @@ func (s *itemShopServiceImpl) checkPlayerBalance(playerID string, amount int64) 
 		return err
 	}
 
-	if coinDto.Balance < amount {
+	if coinDto.Coin < amount {
 		log.Printf("Player %s has not enough coin", playerID)
 		return &_itemShopException.NotEnoughBalanceException{}
 	}
