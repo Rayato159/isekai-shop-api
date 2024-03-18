@@ -27,44 +27,77 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/oauth2/google/logout",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"oauth2",
+										"google",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "act=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "rft=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 18 Mar 2024 17:35:45 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Logout successful\"\n}"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "item",
+			"name": "player balancing",
 			"item": [
 				{
-					"name": "item listing",
+					"name": "showing",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/item?name=&description&page=1&size=5",
+							"raw": "{{baseUrl}}/v1/player-coin",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"v1",
-								"item"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": ""
-								},
-								{
-									"key": "description",
-									"value": null
-								},
-								{
-									"key": "page",
-									"value": "1"
-								},
-								{
-									"key": "size",
-									"value": "5"
-								}
+								"player-coin"
 							]
 						}
 					},
@@ -75,31 +108,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/v1/item?name=&description&page=1&size=5",
+									"raw": "{{baseUrl}}/v1/player-coin",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"v1",
-										"item"
-									],
-									"query": [
-										{
-											"key": "name",
-											"value": ""
-										},
-										{
-											"key": "description",
-											"value": null
-										},
-										{
-											"key": "page",
-											"value": "1"
-										},
-										{
-											"key": "size",
-											"value": "5"
-										}
+										"player-coin"
 									]
 								}
 							},
@@ -117,31 +132,26 @@
 								},
 								{
 									"key": "Date",
-									"value": "Sat, 17 Feb 2024 12:11:03 GMT"
+									"value": "Mon, 18 Mar 2024 17:26:55 GMT"
 								},
 								{
 									"key": "Content-Length",
-									"value": "1472"
+									"value": "49"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"items\": [\n        {\n            \"id\": 1,\n            \"adminID\": null,\n            \"name\": \"Sword of the Dragon\",\n            \"description\": \"A powerful sword imbued with dragon magic.\",\n            \"picture\": \"https://i.pinimg.com/564x/e2/66/1d/e2661d03a8a519125d63bffb130f57a9.jpg\",\n            \"price\": 100,\n            \"createdAt\": \"2024-02-17 15:34:46.03173+07\",\n            \"updatedAt\": \"2024-02-17 15:34:46.03173+07\"\n        },\n        {\n            \"id\": 2,\n            \"adminID\": null,\n            \"name\": \"Mage Robe\",\n            \"description\": \"Enchanted robe for magical protection.\",\n            \"picture\": \"https://i.pinimg.com/564x/fb/cb/df/fbcbdf78714649a0c03337300340b6ba.jpg\",\n            \"price\": 80,\n            \"createdAt\": \"2024-02-17 15:34:46.03173+07\",\n            \"updatedAt\": \"2024-02-17 15:34:46.03173+07\"\n        },\n        {\n            \"id\": 3,\n            \"adminID\": null,\n            \"name\": \"Healing Potion\",\n            \"description\": \"Restores health when consumed.\",\n            \"picture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n            \"price\": 20,\n            \"createdAt\": \"2024-02-17 15:34:46.03173+07\",\n            \"updatedAt\": \"2024-02-17 15:34:46.03173+07\"\n        },\n        {\n            \"id\": 4,\n            \"adminID\": null,\n            \"name\": \"Elven Bow\",\n            \"description\": \"Crafted by skilled elves for precise shooting.\",\n            \"picture\": \"https://i.pinimg.com/564x/93/dc/ac/93dcaceb02008fc4d2bc7e609b89adb0.jpg\",\n            \"price\": 150,\n            \"createdAt\": \"2024-02-17 15:34:46.03173+07\",\n            \"updatedAt\": \"2024-02-17 15:34:46.03173+07\"\n        },\n        {\n            \"id\": 5,\n            \"adminID\": null,\n            \"name\": \"Orcish Shield\",\n            \"description\": \"Sturdy shield made from orcish materials.\",\n            \"picture\": \"https://i.pinimg.com/564x/a1/a5/a2/a1a5a24c75c8bdadbe17bfecaa43d866.jpg\",\n            \"price\": 120,\n            \"createdAt\": \"2024-02-17 15:34:46.03173+07\",\n            \"updatedAt\": \"2024-02-17 15:34:46.03173+07\"\n        }\n    ],\n    \"paginate\": {\n        \"page\": 1,\n        \"totalPage\": 2\n    }\n}"
+							"body": "{\n    \"playerID\": \"101772256434591099298\",\n    \"coin\": 1000\n}"
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "admin",
-			"item": [
+				},
 				{
-					"name": "create item",
+					"name": "buying coin",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Red Rose of The Dead\",\r\n    \"description\": \"For red rose party of the death\",\r\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\r\n    \"price\": 1000\r\n}",
+							"raw": "{\r\n    \"amount\": 1000\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -149,26 +159,25 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/admin/item",
+							"raw": "{{baseUrl}}/v1/player-coin",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"v1",
-								"admin",
-								"item"
+								"player-coin"
 							]
 						}
 					},
 					"response": [
 						{
-							"name": "201 - ok",
+							"name": "201 - created",
 							"originalRequest": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"Red Rose of The Dead\",\r\n    \"description\": \"For red rose party of the death\",\r\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\r\n    \"price\": 1000\r\n}",
+									"raw": "{\r\n    \"amount\": 1000\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -176,14 +185,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/v1/admin/item",
+									"raw": "{{baseUrl}}/v1/player-coin",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"v1",
-										"admin",
-										"item"
+										"player-coin"
 									]
 								}
 							},
@@ -201,47 +209,53 @@
 								},
 								{
 									"key": "Date",
-									"value": "Sat, 17 Feb 2024 15:52:32 GMT"
+									"value": "Mon, 18 Mar 2024 17:23:51 GMT"
 								},
 								{
 									"key": "Content-Length",
-									"value": "218"
+									"value": "105"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"adminID\": \"101772256434591099298\",\n    \"name\": \"Red Rose of The Dead\",\n    \"description\": \"For red rose party of the death\",\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\n    \"price\": 1000\n}"
+							"body": "{\n    \"id\": 1,\n    \"playerID\": \"101772256434591099298\",\n    \"amount\": 1000,\n    \"createdAt\": \"2024-03-19T00:23:51.519678+07:00\"\n}"
 						}
 					]
-				},
+				}
+			]
+		},
+		{
+			"name": "item shop",
+			"item": [
 				{
-					"name": "edit item",
+					"name": "listing",
 					"request": {
-						"method": "PATCH",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Black Rose of The Dead\",\r\n    \"description\": \"For black rose party of the death\",\r\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\r\n    \"price\": 2000\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/admin/item/:itemID",
+							"raw": "{{baseUrl}}/v1/item-shop?page=1&size=10&name=&description",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"v1",
-								"admin",
-								"item",
-								":itemID"
+								"item-shop"
 							],
-							"variable": [
+							"query": [
 								{
-									"key": "itemID",
-									"value": "12"
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "name",
+									"value": ""
+								},
+								{
+									"key": "description",
+									"value": null
 								}
 							]
 						}
@@ -250,32 +264,33 @@
 						{
 							"name": "200 - ok",
 							"originalRequest": {
-								"method": "PATCH",
+								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"Black Rose of The Dead\",\r\n    \"description\": \"For black rose party of the death\",\r\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\r\n    \"price\": 2000\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
-									"raw": "{{baseUrl}}/v1/admin/item/:itemID",
+									"raw": "{{baseUrl}}/v1/item-shop?page=1&size=10&name=&description",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"v1",
-										"admin",
-										"item",
-										":itemID"
+										"item-shop"
 									],
-									"variable": [
+									"query": [
 										{
-											"key": "itemID",
+											"key": "page",
 											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "name",
+											"value": ""
+										},
+										{
+											"key": "description",
+											"value": null
 										}
 									]
 								}
@@ -294,24 +309,53 @@
 								},
 								{
 									"key": "Date",
-									"value": "Sat, 17 Feb 2024 15:58:35 GMT"
+									"value": "Mon, 18 Mar 2024 18:07:02 GMT"
 								},
 								{
 									"key": "Content-Length",
-									"value": "222"
+									"value": "540"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"adminID\": \"101772256434591099298\",\n    \"name\": \"Black Rose of The Dead\",\n    \"description\": \"For black rose party of the death\",\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\n    \"price\": 2000\n}"
+							"body": "{\n    \"items\": [\n        {\n            \"id\": 1,\n            \"name\": \"Sword of Darkness\",\n            \"description\": \"Deep into the dark\",\n            \"picture\": \"https://i.pinimg.com/564x/79/62/96/79629685288fb4b8597b8ef77eb2ad71.jpg\",\n            \"price\": 200\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Sword of Light\",\n            \"description\": \"Bright as you can\",\n            \"picture\": \"https://i.pinimg.com/564x/79/62/96/79629685288fb4b8597b8ef77eb2ad71.jpg\",\n            \"price\": 250\n        },\n        {\n            \"id\": 4,\n            \"name\": \"Sword of Thunder\",\n            \"description\": \"Bright as hell\",\n            \"picture\": \"https://i.pinimg.com/564x/79/62/96/79629685288fb4b8597b8ef77eb2ad71.jpg\",\n            \"price\": 300\n        }\n    ],\n    \"paginate\": {\n        \"page\": 1,\n        \"totalPage\": 1\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "buying",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/item-shop/buying",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"item-shop",
+								"buying"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "500 - item not found",
+							"name": "200 - ok",
 							"originalRequest": {
-								"method": "PATCH",
+								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"Black Rose of The Dead\",\r\n    \"description\": \"For black rose party of the death\",\r\n    \"picture\": \"https://i.pinimg.com/564x/4c/e6/de/4ce6de5a0c556ac51f9f884d7d247885.jpg\",\r\n    \"price\": 2000\r\n}",
+									"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 2\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -319,26 +363,19 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/v1/admin/item/:itemID",
+									"raw": "{{baseUrl}}/v1/item-shop/buying",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"v1",
-										"admin",
-										"item",
-										":itemID"
-									],
-									"variable": [
-										{
-											"key": "itemID",
-											"value": "12"
-										}
+										"item-shop",
+										"buying"
 									]
 								}
 							},
-							"status": "Internal Server Error",
-							"code": 500,
+							"status": "OK",
+							"code": 200,
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
@@ -351,38 +388,289 @@
 								},
 								{
 									"key": "Date",
-									"value": "Sat, 17 Feb 2024 16:07:17 GMT"
+									"value": "Mon, 18 Mar 2024 18:08:42 GMT"
 								},
 								{
 									"key": "Content-Length",
-									"value": "38"
+									"value": "105"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"error\": \"Item with ID 12 not found\"\n}"
+							"body": "{\n    \"id\": 2,\n    \"playerID\": \"101772256434591099298\",\n    \"amount\": -400,\n    \"createdAt\": \"2024-03-19T01:08:42.463215+07:00\"\n}"
 						}
 					]
 				},
 				{
-					"name": "archive item",
+					"name": "selling",
 					"request": {
-						"method": "DELETE",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/admin/item/:itemID",
+							"raw": "{{baseUrl}}/v1/item-shop/selling",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"v1",
-								"admin",
-								"item",
+								"item-shop",
+								"selling"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/item-shop/selling",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"item-shop",
+										"selling"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 18 Mar 2024 18:09:00 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "104"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 3,\n    \"playerID\": \"101772256434591099298\",\n    \"amount\": 100,\n    \"createdAt\": \"2024-03-19T01:08:59.996056+07:00\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "item managing",
+			"item": [
+				{
+					"name": "creating",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sword of Thunder\",\r\n    \"description\": \"Bright as hell\",\r\n    \"picture\": \"https://i.pinimg.com/564x/79/62/96/79629685288fb4b8597b8ef77eb2ad71.jpg\",\r\n    \"price\": 300\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/item-managing",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"item-managing"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "201 - created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Sword of Thunder\",\r\n    \"description\": \"Bright as hell\",\r\n    \"picture\": \"https://i.pinimg.com/564x/79/62/96/79629685288fb4b8597b8ef77eb2ad71.jpg\",\r\n    \"price\": 300\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/item-managing",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"item-managing"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 18 Mar 2024 17:35:24 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "162"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 4,\n    \"name\": \"Sword of Thunder\",\n    \"description\": \"Bright as hell\",\n    \"picture\": \"https://i.pinimg.com/564x/79/62/96/79629685288fb4b8597b8ef77eb2ad71.jpg\",\n    \"price\": 300\n}"
+						}
+					]
+				},
+				{
+					"name": "editing",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sword of Light\",\r\n    \"description\": \"Bright as you can\",\r\n    \"picture\": \"https://i.pinimg.com/564x/79/62/96/79629685288fb4b8597b8ef77eb2ad71.jpg\",\r\n    \"price\": 250\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/item-managing/:itemID",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"item-managing",
 								":itemID"
 							],
 							"variable": [
 								{
 									"key": "itemID",
-									"value": "5"
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Sword of Light\",\r\n    \"description\": \"Bright as you can\",\r\n    \"picture\": \"https://i.pinimg.com/564x/79/62/96/79629685288fb4b8597b8ef77eb2ad71.jpg\",\r\n    \"price\": 250\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/item-managing/:itemID",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"item-managing",
+										":itemID"
+									],
+									"variable": [
+										{
+											"key": "itemID",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 18 Mar 2024 17:32:58 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "163"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 2,\n    \"name\": \"Sword of Light\",\n    \"description\": \"Bright as you can\",\n    \"picture\": \"https://i.pinimg.com/564x/79/62/96/79629685288fb4b8597b8ef77eb2ad71.jpg\",\n    \"price\": 250\n}"
+						}
+					]
+				},
+				{
+					"name": "archiving",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/item-managing/:itemID",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"item-managing",
+								":itemID"
+							],
+							"variable": [
+								{
+									"key": "itemID",
+									"value": "2"
 								}
 							]
 						}
@@ -394,20 +682,19 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/v1/admin/item/:itemID",
+									"raw": "{{baseUrl}}/v1/item-managing/:itemID",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"v1",
-										"admin",
-										"item",
+										"item-managing",
 										":itemID"
 									],
 									"variable": [
 										{
 											"key": "itemID",
-											"value": "5"
+											"value": "2"
 										}
 									]
 								}
@@ -422,398 +709,11 @@
 								},
 								{
 									"key": "Date",
-									"value": "Sat, 17 Feb 2024 13:30:05 GMT"
+									"value": "Mon, 18 Mar 2024 17:33:14 GMT"
 								}
 							],
 							"cookie": [],
 							"body": null
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "balancing",
-			"item": [
-				{
-					"name": "top up",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"amount\": 1000\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/v1/balancing",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"v1",
-								"balancing"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "201 - ok",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"amount\": 5000\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/v1/balancing",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"v1",
-										"balancing"
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=UTF-8"
-								},
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 17 Feb 2024 17:00:35 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "150"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"playerID\": \"101772256434591099298\",\n    \"amount\": 5000,\n    \"createdAt\": \"2024-02-18T00:00:35.72617+07:00\",\n    \"updatedAt\": \"2024-02-18T00:00:35.72617+07:00\"\n}"
-						}
-					]
-				},
-				{
-					"name": "player coin",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/v1/balancing/coin",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"v1",
-								"balancing",
-								"coin"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 - ok",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/v1/balancing/coin",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"v1",
-										"balancing",
-										"coin"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=UTF-8"
-								},
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 17 Feb 2024 17:02:45 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "52"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"playerID\": \"101772256434591099298\",\n    \"coin\": 6000\n}"
-						}
-					]
-				},
-				{
-					"name": "buy item",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/v1/balancing/buy",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"v1",
-								"balancing",
-								"buy"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 - ok",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"itemID\": 3,\r\n    \"quantity\": 10\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/v1/balancing/buy",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"v1",
-										"balancing",
-										"buy"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=UTF-8"
-								},
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 17 Feb 2024 20:07:57 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "152"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 3,\n    \"playerID\": \"101772256434591099298\",\n    \"amount\": -200,\n    \"createdAt\": \"2024-02-18T03:07:57.424378+07:00\",\n    \"updatedAt\": \"2024-02-18T03:07:57.424378+07:00\"\n}"
-						}
-					]
-				},
-				{
-					"name": "sell item",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/v1/balancing/sell",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"v1",
-								"balancing",
-								"sell"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 - ok",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"itemID\": 3,\r\n    \"quantity\": 10\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/v1/balancing/buy",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"v1",
-										"balancing",
-										"buy"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=UTF-8"
-								},
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 17 Feb 2024 20:07:57 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "152"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 3,\n    \"playerID\": \"101772256434591099298\",\n    \"amount\": -200,\n    \"createdAt\": \"2024-02-18T03:07:57.424378+07:00\",\n    \"updatedAt\": \"2024-02-18T03:07:57.424378+07:00\"\n}"
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "player",
-			"item": [
-				{
-					"name": "player item listing",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/v1/player/inventory",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"v1",
-								"player",
-								"inventory"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "200 - ok",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/v1/inventory",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"v1",
-										"inventory"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=UTF-8"
-								},
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 17 Feb 2024 21:08:40 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "415"
-								}
-							],
-							"cookie": [],
-							"body": "[\n    {\n        \"item\": {\n            \"id\": 1,\n            \"name\": \"Sword of the Dragon\",\n            \"description\": \"A powerful sword imbued with dragon magic.\",\n            \"picture\": \"https://i.pinimg.com/564x/e2/66/1d/e2661d03a8a519125d63bffb130f57a9.jpg\",\n            \"price\": 100\n        },\n        \"quantity\": 2\n    },\n    {\n        \"item\": {\n            \"id\": 3,\n            \"name\": \"Healing Potion\",\n            \"description\": \"Restores health when consumed.\",\n            \"picture\": \"https://i.pinimg.com/736x/6c/df/35/6cdf3597ab6839db5c9892efcbe7a3b7.jpg\",\n            \"price\": 20\n        },\n        \"quantity\": 11\n    }\n]"
 						}
 					]
 				}
