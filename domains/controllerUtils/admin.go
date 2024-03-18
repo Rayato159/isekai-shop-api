@@ -1,4 +1,4 @@
-package utils
+package controllerUtils
 
 import (
 	"github.com/labstack/echo/v4"

@@ -1,10 +1,10 @@
 package tests
 
 import (
-	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
-	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
 	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
+	_playerBalancingModel "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/model"
+	_playerBalancingRepository "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/repository"
 	_purchasingException "github.com/Rayato159/isekai-shop-api/domains/purchasing/exception"
 	_purchasingModel "github.com/Rayato159/isekai-shop-api/domains/purchasing/model"
 	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
@@ -18,11 +18,11 @@ import (
 func TestItemBuyingSuccess(t *testing.T) {
 	itemRepositoryMock := new(_itemGettingRepository.ItemGettingRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
-	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
+	playerBalancingRepositoryMock := new(_playerBalancingRepository.BalancingRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 
 	purchasingService := _purchasingService.NewPurchasingServiceImpl(
-		balancingRepositoryMock,
+		playerBalancingRepositoryMock,
 		itemRepositoryMock,
 		purchasingRepositoryMock,
 		inventoryRepositoryMock,
@@ -36,7 +36,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	balancingRepositoryMock.On("PlayerBalanceShowing", "P001").Return(&entities.PlayerBalanceDto{
+	playerBalancingRepositoryMock.On("Showing", "P001").Return(&entities.PlayerBalanceShowingDto{
 		PlayerID: "P001",
 		Balance:  5000,
 	}, nil)
@@ -87,17 +87,17 @@ func TestItemBuyingSuccess(t *testing.T) {
 		},
 	}, nil)
 
-	balancingRepositoryMock.On("PlayerBalanceRecording", &entities.Balancing{
+	playerBalancingRepositoryMock.On("Recording", &entities.PlayerBalancing{
 		PlayerID: "P001",
 		Amount:   -3000,
-	}).Return(&entities.Balancing{
+	}).Return(&entities.PlayerBalancing{
 		PlayerID: "P001",
 		Amount:   -3000,
 	}, nil)
 
 	type args struct {
 		in       *_purchasingModel.ItemBuyingReq
-		expected *_balancingModel.Balancing
+		expected *_playerBalancingModel.PlayerBalancing
 	}
 
 	cases := []args{
@@ -107,7 +107,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 				ItemID:   1,
 				Quantity: 3,
 			},
-			expected: &_balancingModel.Balancing{
+			expected: &_playerBalancingModel.PlayerBalancing{
 				PlayerID: "P001",
 				Amount:   -3000,
 			},
@@ -125,10 +125,10 @@ func TestItemBuyingFail(t *testing.T) {
 	itemGettingRepositoryMock := new(_itemGettingRepository.ItemGettingRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
-	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
+	playerBalancingRepositoryMock := new(_playerBalancingRepository.BalancingRepositoryMock)
 
 	purchasingService := _purchasingService.NewPurchasingServiceImpl(
-		balancingRepositoryMock,
+		playerBalancingRepositoryMock,
 		itemGettingRepositoryMock,
 		purchasingRepositoryMock,
 		inventoryRepositoryMock,
@@ -142,7 +142,7 @@ func TestItemBuyingFail(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	balancingRepositoryMock.On("PlayerBalanceShowing", "P001").Return(&entities.PlayerBalanceDto{
+	playerBalancingRepositoryMock.On("Showing", "P001").Return(&entities.PlayerBalanceShowingDto{
 		PlayerID: "P001",
 		Balance:  2000,
 	}, nil)

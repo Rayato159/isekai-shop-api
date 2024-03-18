@@ -1,27 +1,27 @@
 package entity
 
 import (
-	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
+	_playerBalancingModel "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/model"
 
 	"time"
 )
 
 type (
-	Balancing struct {
+	PlayerBalancing struct {
 		ID        uint64    `gorm:"primaryKey;autoIncrement;"`
 		PlayerID  string    `gorm:"type:varchar(64);not null;"`
 		Amount    int64     `gorm:"not null;"`
 		CreatedAt time.Time `gorm:"not null;autoCreateTime;"`
 	}
 
-	PlayerBalanceDto struct {
+	PlayerBalanceShowingDto struct {
 		PlayerID string `json:"playerID"`
 		Balance  int64  `json:"balance"`
 	}
 )
 
-func (p *Balancing) ToBalancingModel() *_balancingModel.Balancing {
-	return &_balancingModel.Balancing{
+func (p *PlayerBalancing) ToPlayerBalancingModel() *_playerBalancingModel.PlayerBalancing {
+	return &_playerBalancingModel.PlayerBalancing{
 		ID:        p.ID,
 		PlayerID:  p.PlayerID,
 		Amount:    p.Amount,
@@ -29,8 +29,8 @@ func (p *Balancing) ToBalancingModel() *_balancingModel.Balancing {
 	}
 }
 
-func (p *PlayerBalanceDto) ToPlayerBalanceModel() *_balancingModel.PlayerBalance {
-	return &_balancingModel.PlayerBalance{
+func (p *PlayerBalanceShowingDto) ToPlayerBalanceModel() *_playerBalancingModel.PlayerBalanceShowing {
+	return &_playerBalancingModel.PlayerBalanceShowing{
 		PlayerID: p.PlayerID,
 		Balance:  p.Balance,
 	}

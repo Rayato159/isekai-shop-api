@@ -1,4 +1,4 @@
-package utils
+package controllerUtils
 
 import (
 	_playerException "github.com/Rayato159/isekai-shop-api/domains/player/exception"

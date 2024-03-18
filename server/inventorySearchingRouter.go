@@ -10,7 +10,7 @@ import (
 )
 
 func (s *echoServer) initInventoryRouter(customMiddleware customMiddleware.CustomMiddleware) {
-	router := s.baseRouter.Group("/player")
+	router := s.baseRouter.Group("/inventory-searching")
 
 	itemRepository := _itemGettingRepository.NewItemGettingRepositoryImpl(s.db, s.app.Logger)
 	inventoryRepository := _inventoryRepository.NewInventoryRepositoryImpl(s.db, s.app.Logger)
@@ -24,5 +24,5 @@ func (s *echoServer) initInventoryRouter(customMiddleware customMiddleware.Custo
 
 	inventoryController := _inventoryController.NewInventoryControllerImpl(inventoryService, s.app.Logger)
 
-	router.GET("/inventory-searching", inventoryController.Listing, customMiddleware.PlayerAuthorizing)
+	router.GET("", inventoryController.Listing, customMiddleware.PlayerAuthorizing)
 }

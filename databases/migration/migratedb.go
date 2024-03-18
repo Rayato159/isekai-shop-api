@@ -14,9 +14,9 @@ func main() {
 	playerMigrate(database)
 	adminMigrate(database)
 	itemMigrate(database)
-	balancingMigrate(database)
+	playerBalancingMigrate(database)
 	inventoryMigrate(database)
-	purchasingMigrate(database)
+	purchasingHistoryMigrate(database)
 }
 
 func uuidMigreate(db databases.Database) {
@@ -35,14 +35,14 @@ func itemMigrate(db databases.Database) {
 	db.GetDb().Migrator().CreateTable(&entities.Item{})
 }
 
-func balancingMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&entities.Balancing{})
+func playerBalancingMigrate(db databases.Database) {
+	db.GetDb().Migrator().CreateTable(&entities.PlayerBalancing{})
 }
 
 func inventoryMigrate(db databases.Database) {
 	db.GetDb().Migrator().CreateTable(&entities.Inventory{})
 }
 
-func purchasingMigrate(db databases.Database) {
+func purchasingHistoryMigrate(db databases.Database) {
 	db.GetDb().Migrator().CreateTable(&entities.PurchasingHistory{})
 }
