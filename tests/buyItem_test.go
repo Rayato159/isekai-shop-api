@@ -3,7 +3,7 @@ package tests
 import (
 	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
 	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
-	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
+	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	_purchasingException "github.com/Rayato159/isekai-shop-api/domains/purchasing/exception"
 	_purchasingModel "github.com/Rayato159/isekai-shop-api/domains/purchasing/model"
@@ -16,7 +16,7 @@ import (
 )
 
 func TestItemBuyingSuccess(t *testing.T) {
-	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
+	itemRepositoryMock := new(_itemGettingRepository.ItemGettingRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
 	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
@@ -122,19 +122,19 @@ func TestItemBuyingSuccess(t *testing.T) {
 }
 
 func TestItemBuyingFail(t *testing.T) {
-	itemRepositoryMock := new(_itemRepository.ItemRepositoryMock)
+	itemGettingRepositoryMock := new(_itemGettingRepository.ItemGettingRepositoryMock)
 	purchasingRepositoryMock := new(_purchasingRepository.PurchasingRepositoryMock)
 	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
 
 	purchasingService := _purchasingService.NewPurchasingServiceImpl(
 		balancingRepositoryMock,
-		itemRepositoryMock,
+		itemGettingRepositoryMock,
 		purchasingRepositoryMock,
 		inventoryRepositoryMock,
 	)
 
-	itemRepositoryMock.On("FindItemByID", uint64(1)).Return(&entities.Item{
+	itemGettingRepositoryMock.On("FindItemByID", uint64(1)).Return(&entities.Item{
 		ID:          1,
 		Name:        "Sword of Tester",
 		Price:       1000,

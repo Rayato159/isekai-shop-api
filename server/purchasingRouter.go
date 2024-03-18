@@ -2,7 +2,7 @@ package server
 
 import (
 	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
-	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
+	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
 	_playerSouce "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	_purchasingController "github.com/Rayato159/isekai-shop-api/domains/purchasing/controller"
 	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
@@ -14,7 +14,7 @@ func (s *echoServer) initPurchasingRouter(customMiddleware customMiddleware.Cust
 	router := s.baseRouter.Group("/balancing")
 
 	balancingRepository := _balancingRepository.NewBalancingRepositoryImpl(s.db, s.app.Logger)
-	itemRepository := _itemRepository.NewItemRepositoryImpl(s.db, s.app.Logger)
+	itemRepository := _itemGettingRepository.NewItemGettingRepositoryImpl(s.db, s.app.Logger)
 	purchasingRepository := _purchasingRepository.NewPurchasingRepositoryImpl(s.db, s.app.Logger)
 	inventoryRepository := _playerSouce.NewInventoryRepositoryImpl(s.db, s.app.Logger)
 

@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
+	_itemGettingModel "github.com/Rayato159/isekai-shop-api/domains/itemGetting/model"
 )
 
 type (
@@ -39,8 +39,8 @@ type (
 	}
 )
 
-func (i *Item) ToItemModel() *_itemModel.Item {
-	return &_itemModel.Item{
+func (i *Item) ToItemModel() *_itemGettingModel.Item {
+	return &_itemGettingModel.Item{
 		ID:          i.ID,
 		Name:        i.Name,
 		Description: i.Description,

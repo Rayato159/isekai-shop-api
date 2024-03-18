@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 
-	_itemException "github.com/Rayato159/isekai-shop-api/domains/item/exception"
+	_itemGettingException "github.com/Rayato159/isekai-shop-api/domains/itemGetting/exception"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
@@ -13,7 +13,7 @@ type itemRepositoryImpl struct {
 	logger echo.Logger
 }
 
-func NewItemRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemRepository {
+func NewItemGettingRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemGettingRepository {
 	return &itemRepositoryImpl{
 		db:     db,
 		logger: logger,
@@ -36,7 +36,7 @@ func (r *itemRepositoryImpl) ItemListing(itemFilterDto *entities.ItemFilterDto) 
 
 	if err := query.Offset(offset).Limit(size).Find(&items).Error; err != nil {
 		r.logger.Error("Failed to find items", err.Error())
-		return nil, &_itemException.ItemListingException{}
+		return nil, &_itemGettingException.ItemListingException{}
 	}
 
 	return items, nil
@@ -56,7 +56,7 @@ func (r *itemRepositoryImpl) ItemCounting(itemFilterDto *entities.ItemFilterDto)
 
 	if err := query.Count(&count).Error; err != nil {
 		r.logger.Error("Failed to count items", err.Error())
-		return -1, &_itemException.ItemCountingException{}
+		return -1, &_itemGettingException.ItemCountingException{}
 	}
 
 	return count, nil
@@ -67,7 +67,7 @@ func (r *itemRepositoryImpl) FindItemByID(itemID uint64) (*entities.Item, error)
 
 	if err := r.db.First(item, itemID).Error; err != nil {
 		r.logger.Error("Failed to find item", err.Error())
-		return nil, &_itemException.ItemNotFoundException{ItemID: itemID}
+		return nil, &_itemGettingException.ItemNotFoundException{ItemID: itemID}
 	}
 
 	return item, nil
@@ -79,7 +79,7 @@ func (r *itemRepositoryImpl) FindItemByIDs(itemIDs []uint64) ([]*entities.Item, 
 
 	if err := r.db.Model(&entities.Item{}).Where("id IN ?", itemIDs).Find(&items).Error; err != nil {
 		r.logger.Error("Failed to find items by IDs", err.Error())
-		return nil, &_itemException.ItemListingException{}
+		return nil, &_itemGettingException.ItemListingException{}
 	}
 
 	return items, nil

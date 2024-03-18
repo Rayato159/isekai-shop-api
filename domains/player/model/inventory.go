@@ -1,13 +1,13 @@
 package model
 
 import (
-	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
+	_itemGettingModel "github.com/Rayato159/isekai-shop-api/domains/itemGetting/model"
 )
 
 type (
 	Inventory struct {
-		Item     *_itemModel.Item `json:"item"`
-		Quantity uint             `json:"quantity"`
+		Item     *_itemGettingModel.Item `json:"item"`
+		Quantity uint                    `json:"quantity"`
 	}
 
 	ItemQuantityCounting struct {

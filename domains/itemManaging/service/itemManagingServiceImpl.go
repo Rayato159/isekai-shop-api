@@ -1,8 +1,8 @@
 package service
 
 import (
-	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
-	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
+	_itemGettingModel "github.com/Rayato159/isekai-shop-api/domains/itemGetting/model"
+	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
 	_itemManagingModel "github.com/Rayato159/isekai-shop-api/domains/itemManaging/model"
 	_itemManagingRepository "github.com/Rayato159/isekai-shop-api/domains/itemManaging/repository"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
@@ -10,20 +10,20 @@ import (
 
 type itemManagingServiceImpl struct {
 	itemManagingRepository _itemManagingRepository.ItemManagingRepository
-	itemRepository         _itemRepository.ItemRepository
+	itemGettingRepository  _itemGettingRepository.ItemGettingRepository
 }
 
 func NewItemManagingServiceImpl(
 	itemManagingRepository _itemManagingRepository.ItemManagingRepository,
-	itemRepository _itemRepository.ItemRepository,
+	itemGettingRepository _itemGettingRepository.ItemGettingRepository,
 ) ItemManagingService {
 	return &itemManagingServiceImpl{
 		itemManagingRepository,
-		itemRepository,
+		itemGettingRepository,
 	}
 }
 
-func (s *itemManagingServiceImpl) ItemCreating(itemCreatingReq *_itemManagingModel.ItemCreatingReq) (*_itemModel.Item, error) {
+func (s *itemManagingServiceImpl) ItemCreating(itemCreatingReq *_itemManagingModel.ItemCreatingReq) (*_itemGettingModel.Item, error) {
 	item := &entities.Item{
 		AdminID:     &itemCreatingReq.AdminID,
 		Name:        itemCreatingReq.Name,
@@ -40,7 +40,7 @@ func (s *itemManagingServiceImpl) ItemCreating(itemCreatingReq *_itemManagingMod
 	return itemEntity.ToItemModel(), nil
 }
 
-func (s *itemManagingServiceImpl) ItemEditing(itemID uint64, updateItemReq *_itemManagingModel.ItemEditingReq) (*_itemModel.Item, error) {
+func (s *itemManagingServiceImpl) ItemEditing(itemID uint64, updateItemReq *_itemManagingModel.ItemEditingReq) (*_itemGettingModel.Item, error) {
 	updateItemDto := &entities.ItemEditingDto{
 		AdminID:     &updateItemReq.AdminID,
 		Name:        updateItemReq.Name,
@@ -54,7 +54,7 @@ func (s *itemManagingServiceImpl) ItemEditing(itemID uint64, updateItemReq *_ite
 		return nil, err
 	}
 
-	itemEntity, err := s.itemRepository.FindItemByID(updatedItemID)
+	itemEntity, err := s.itemGettingRepository.FindItemByID(updatedItemID)
 	if err != nil {
 		return nil, err
 	}

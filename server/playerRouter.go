@@ -1,7 +1,7 @@
 package server
 
 import (
-	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
+	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
 	_playerController "github.com/Rayato159/isekai-shop-api/domains/player/controller"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	_playerService "github.com/Rayato159/isekai-shop-api/domains/player/service"
@@ -11,7 +11,7 @@ import (
 func (s *echoServer) initPlayerRouter(customMiddleware customMiddleware.CustomMiddleware) {
 	router := s.baseRouter.Group("/player")
 
-	itemRepository := _itemRepository.NewItemRepositoryImpl(s.db, s.app.Logger)
+	itemRepository := _itemGettingRepository.NewItemGettingRepositoryImpl(s.db, s.app.Logger)
 	inventoryRepository := _playerSource.NewInventoryRepositoryImpl(s.db, s.app.Logger)
 	playerRepository := _playerSource.NewPlayerRepositoryImpl(s.db, s.app.Logger)
 	playerService := _playerService.NewPlayerServiceImpl(playerRepository, inventoryRepository, itemRepository)

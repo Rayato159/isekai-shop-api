@@ -1,8 +1,8 @@
 package service
 
 import (
-	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
-	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
+	_itemModel "github.com/Rayato159/isekai-shop-api/domains/itemGetting/model"
+	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
 	_playerModel "github.com/Rayato159/isekai-shop-api/domains/player/model"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
@@ -11,13 +11,13 @@ import (
 type playerServiceImpl struct {
 	playerRepository    _playerSource.PlayerRepository
 	inventoryRepository _playerSource.InventoryRepository
-	itemRepository      _itemRepository.ItemRepository
+	itemRepository      _itemRepository.ItemGettingRepository
 }
 
 func NewPlayerServiceImpl(
 	playerRepository _playerSource.PlayerRepository,
 	inventoryRepository _playerSource.InventoryRepository,
-	itemRepository _itemRepository.ItemRepository,
+	itemRepository _itemRepository.ItemGettingRepository,
 ) PlayerService {
 	return &playerServiceImpl{
 		playerRepository,

@@ -1,22 +1,22 @@
 package service
 
 import (
-	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
-	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
+	_itemGettingModel "github.com/Rayato159/isekai-shop-api/domains/itemGetting/model"
+	_itemGettingRepository "github.com/Rayato159/isekai-shop-api/domains/itemGetting/repository"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type itemServiceImpl struct {
-	itemRepository _itemRepository.ItemRepository
+	itemRepository _itemGettingRepository.ItemGettingRepository
 }
 
-func NewItemServiceImpl(itemRepository _itemRepository.ItemRepository) ItemService {
+func NewItemServiceImpl(itemRepository _itemGettingRepository.ItemGettingRepository) ItemService {
 	return &itemServiceImpl{
 		itemRepository: itemRepository,
 	}
 }
 
-func (s *itemServiceImpl) ItemListing(itemFilter *_itemModel.ItemFilter) (*_itemModel.ItemResult, error) {
+func (s *itemServiceImpl) ItemListing(itemFilter *_itemGettingModel.ItemFilter) (*_itemGettingModel.ItemResult, error) {
 	itemFilterDto := &entities.ItemFilterDto{
 		Name:        itemFilter.Name,
 		Description: itemFilter.Description,
@@ -55,16 +55,16 @@ func (s *itemServiceImpl) totalPageCalculation(totalItems, size int64) int64 {
 	return totalPage
 }
 
-func (s *itemServiceImpl) buildItemResultsResponse(itemEntityList []*entities.Item, page, totalPage int64) *_itemModel.ItemResult {
-	items := make([]*_itemModel.Item, 0)
+func (s *itemServiceImpl) buildItemResultsResponse(itemEntityList []*entities.Item, page, totalPage int64) *_itemGettingModel.ItemResult {
+	items := make([]*_itemGettingModel.Item, 0)
 
 	for _, itemEntity := range itemEntityList {
 		items = append(items, itemEntity.ToItemModel())
 	}
 
-	return &_itemModel.ItemResult{
+	return &_itemGettingModel.ItemResult{
 		Items: items,
-		Paginate: _itemModel.PaginateResult{
+		Paginate: _itemGettingModel.PaginateResult{
 			Page:      page,
 			TotalPage: totalPage,
 		},
