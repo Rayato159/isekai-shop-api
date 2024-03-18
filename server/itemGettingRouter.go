@@ -6,7 +6,7 @@ import (
 	_itemGettingService "github.com/Rayato159/isekai-shop-api/domains/itemGetting/service"
 )
 
-func (s *echoServer) initItemRouter() {
+func (s *echoServer) initItemGettingRouter() {
 	router := s.baseRouter.Group("/item-getting")
 
 	itemRepository := _itemGettingRepository.NewItemGettingRepositoryImpl(s.db, s.app.Logger)

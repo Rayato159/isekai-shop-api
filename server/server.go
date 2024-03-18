@@ -76,7 +76,7 @@ func (s *echoServer) Start() {
 
 	s.initOAuth2Router()
 	s.initPlayerRouter(customerMiddleware)
-	s.initItemRouter()
+	s.initItemGettingRouter()
 	s.initItemManagingRouter(customerMiddleware)
 	s.initBalancingRouter(customerMiddleware)
 	s.initPurchasingRouter(customerMiddleware)
