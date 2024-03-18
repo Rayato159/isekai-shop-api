@@ -54,7 +54,7 @@ func (s *itemShopServiceImpl) Listing(itemFilter *_itemShopModel.ItemFilter) (*_
 	page := itemFilter.Paginate.Page
 	totalPage := s.totalPageCalculation(totalItems, size)
 
-	result := s.buildItemResultsResponse(itemEntityList, page, totalPage)
+	result := s.toItemResultsResponse(itemEntityList, page, totalPage)
 
 	return result, nil
 }
@@ -223,7 +223,7 @@ func (s *itemShopServiceImpl) totalPageCalculation(totalItems, size int64) int64
 	return totalPage
 }
 
-func (s *itemShopServiceImpl) buildItemResultsResponse(itemEntityList []*entities.Item, page, totalPage int64) *_itemShopModel.ItemResult {
+func (s *itemShopServiceImpl) toItemResultsResponse(itemEntityList []*entities.Item, page, totalPage int64) *_itemShopModel.ItemResult {
 	items := make([]*_itemShopModel.Item, 0)
 
 	for _, itemEntity := range itemEntityList {
