@@ -1,7 +1,7 @@
 package repository
 
 import (
-	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type InventoryRepository interface {

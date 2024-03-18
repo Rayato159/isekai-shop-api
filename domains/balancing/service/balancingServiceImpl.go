@@ -3,7 +3,7 @@ package service
 import (
 	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
 	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
-	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type balancingServiceImpl struct {

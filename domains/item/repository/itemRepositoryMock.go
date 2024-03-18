@@ -1,7 +1,7 @@
 package repository
 
 import (
-	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 
 	"github.com/stretchr/testify/mock"
 )
@@ -28,19 +28,4 @@ func (m *ItemRepositoryMock) FindItemByIDs(itemIDs []uint64) ([]*entities.Item, 
 func (m *ItemRepositoryMock) ItemCounting(itemFilterDto *entities.ItemFilterDto) (int64, error) {
 	args := m.Called(itemFilterDto)
 	return args.Get(0).(int64), args.Error(1)
-}
-
-func (m *ItemRepositoryMock) ItemCreating(itemEntity *entities.Item) (*entities.Item, error) {
-	args := m.Called(itemEntity)
-	return args.Get(0).(*entities.Item), args.Error(1)
-}
-
-func (m *ItemRepositoryMock) ItemEditing(itemID uint64, updateItemDto *entities.ItemEditingDto) (uint64, error) {
-	args := m.Called(itemID, updateItemDto)
-	return args.Get(0).(uint64), args.Error(1)
-}
-
-func (m *ItemRepositoryMock) ItemArchiving(itemID uint64) error {
-	args := m.Called(itemID)
-	return args.Error(0)
 }

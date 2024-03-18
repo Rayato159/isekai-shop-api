@@ -3,9 +3,9 @@ package service
 import (
 	_adminModel "github.com/Rayato159/isekai-shop-api/domains/admin/model"
 	_adminRepository "github.com/Rayato159/isekai-shop-api/domains/admin/repository"
-	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_playerModel "github.com/Rayato159/isekai-shop-api/domains/player/model"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type googleOAuth2Service struct {

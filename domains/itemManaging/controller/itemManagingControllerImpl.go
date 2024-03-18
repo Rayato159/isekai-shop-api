@@ -4,22 +4,22 @@ import (
 	"net/http"
 	"strconv"
 
-	_adminService "github.com/Rayato159/isekai-shop-api/domains/admin/service"
-	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
+	_itemManagingModel "github.com/Rayato159/isekai-shop-api/domains/itemManaging/model"
+	_itemManging "github.com/Rayato159/isekai-shop-api/domains/itemManaging/service"
 	"github.com/Rayato159/isekai-shop-api/domains/utils"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
 	"github.com/labstack/echo/v4"
 )
 
 type adminControllerImpl struct {
-	adminService _adminService.AdminService
-	logger       echo.Logger
+	itemManging _itemManging.ItemManagingService
+	logger      echo.Logger
 }
 
-func NewAdminControllerImpl(adminService _adminService.AdminService, logger echo.Logger) AdminController {
+func NewItemManagingControllerImpl(itemManging _itemManging.ItemManagingService, logger echo.Logger) ItemManagingController {
 	return &adminControllerImpl{
-		adminService: adminService,
-		logger:       logger,
+		itemManging: itemManging,
+		logger:      logger,
 	}
 }
 
@@ -29,14 +29,14 @@ func (c *adminControllerImpl) ItemCreating(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
 
-	itemCreatingReq := new(_itemModel.ItemCreatingReq)
+	itemCreatingReq := new(_itemManagingModel.ItemCreatingReq)
 
 	if err := pctx.Bind(itemCreatingReq); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	itemCreatingReq.AdminID = adminID
 
-	item, err := c.adminService.ItemCreating(itemCreatingReq)
+	item, err := c.itemManging.ItemCreating(itemCreatingReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
@@ -55,14 +55,14 @@ func (c *adminControllerImpl) ItemEditing(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	editItemReq := new(_itemModel.ItemEditingReq)
+	editItemReq := new(_itemManagingModel.ItemEditingReq)
 
 	if err := pctx.Bind(editItemReq); err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	editItemReq.AdminID = adminID
 
-	item, err := c.adminService.ItemEditing(itemID, editItemReq)
+	item, err := c.itemManging.ItemEditing(itemID, editItemReq)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
@@ -81,7 +81,7 @@ func (c *adminControllerImpl) ItemArchiving(pctx echo.Context) error {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	err = c.adminService.ItemArchiving(itemID)
+	err = c.itemManging.ItemArchiving(itemID)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}

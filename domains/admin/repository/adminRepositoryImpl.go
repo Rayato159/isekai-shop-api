@@ -2,7 +2,7 @@ package repository
 
 import (
 	_adminExpception "github.com/Rayato159/isekai-shop-api/domains/admin/exception"
-	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )

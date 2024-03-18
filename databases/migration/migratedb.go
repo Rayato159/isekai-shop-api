@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/Rayato159/isekai-shop-api/config"
 	"github.com/Rayato159/isekai-shop-api/databases"
-	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 func main() {

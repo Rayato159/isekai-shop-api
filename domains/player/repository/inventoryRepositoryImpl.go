@@ -1,8 +1,8 @@
 package repository
 
 import (
-	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_playerException "github.com/Rayato159/isekai-shop-api/domains/player/exception"
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )

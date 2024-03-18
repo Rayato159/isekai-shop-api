@@ -1,9 +1,9 @@
 package service
 
 import (
-	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type itemServiceImpl struct {

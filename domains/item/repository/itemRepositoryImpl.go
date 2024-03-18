@@ -4,8 +4,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 
-	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_itemException "github.com/Rayato159/isekai-shop-api/domains/item/exception"
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type itemRepositoryImpl struct {
@@ -72,45 +72,6 @@ func (r *itemRepositoryImpl) FindItemByID(itemID uint64) (*entities.Item, error)
 
 	return item, nil
 
-}
-
-func (r *itemRepositoryImpl) ItemCreating(itemEntity *entities.Item) (*entities.Item, error) {
-	insertedItem := new(entities.Item)
-
-	if err := r.db.Create(itemEntity).Scan(insertedItem).Error; err != nil {
-		r.logger.Error("Failed to insert item", err.Error())
-		return nil, &_itemException.ItemCreatingException{}
-	}
-
-	return insertedItem, nil
-}
-
-func (r *itemRepositoryImpl) ItemEditing(itemID uint64, updateItemDto *entities.ItemEditingDto) (uint64, error) {
-	tx := r.db.Model(&entities.Item{}).Where(
-		"id = ?", itemID,
-	).Updates(
-		updateItemDto,
-	)
-
-	if tx.Error != nil {
-		r.logger.Error("Failed to update item", tx.Error.Error())
-		return 0, &_itemException.ItemEditingException{}
-	}
-
-	return itemID, nil
-}
-
-func (r *itemRepositoryImpl) ItemArchiving(itemID uint64) error {
-	if err := r.db.Table("items").Where(
-		"id = ?", itemID,
-	).Update(
-		"is_archive", true,
-	).Error; err != nil {
-		r.logger.Error("Failed to archive item", err.Error())
-		return &_itemException.ItemArchivingException{ItemID: itemID}
-	}
-
-	return nil
 }
 
 func (r *itemRepositoryImpl) FindItemByIDs(itemIDs []uint64) ([]*entities.Item, error) {

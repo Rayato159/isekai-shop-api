@@ -1,11 +1,11 @@
 package service
 
 import (
-	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_itemModel "github.com/Rayato159/isekai-shop-api/domains/item/model"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
 	_playerModel "github.com/Rayato159/isekai-shop-api/domains/player/model"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type playerServiceImpl struct {
