@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	"github.com/Rayato159/isekai-shop-api/domains/controllerUtils"
+	"github.com/Rayato159/isekai-shop-api/domains/common"
 	_itemShopException "github.com/Rayato159/isekai-shop-api/domains/itemShop/exception"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
 	_itemShopService "github.com/Rayato159/isekai-shop-api/domains/itemShop/service"
@@ -39,7 +39,7 @@ func (c *itemShopControllerImpl) Listing(pctx echo.Context) error {
 }
 
 func (c *itemShopControllerImpl) Buying(pctx echo.Context) error {
-	playerID, err := controllerUtils.GetPlayerID(pctx)
+	playerID, err := common.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
@@ -61,7 +61,7 @@ func (c *itemShopControllerImpl) Buying(pctx echo.Context) error {
 }
 
 func (c *itemShopControllerImpl) Selling(pctx echo.Context) error {
-	playerID, err := controllerUtils.GetPlayerID(pctx)
+	playerID, err := common.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}

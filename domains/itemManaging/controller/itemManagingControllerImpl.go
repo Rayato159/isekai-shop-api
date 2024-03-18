@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Rayato159/isekai-shop-api/domains/controllerUtils"
+	"github.com/Rayato159/isekai-shop-api/domains/common"
 	_itemManagingModel "github.com/Rayato159/isekai-shop-api/domains/itemManaging/model"
 	_itemManging "github.com/Rayato159/isekai-shop-api/domains/itemManaging/service"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
@@ -24,7 +24,7 @@ func NewItemManagingControllerImpl(itemManging _itemManging.ItemManagingService,
 }
 
 func (c *itemManagingImpl) Creating(pctx echo.Context) error {
-	adminID, err := controllerUtils.GetAdminID(pctx)
+	adminID, err := common.GetAdminID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
@@ -45,7 +45,7 @@ func (c *itemManagingImpl) Creating(pctx echo.Context) error {
 }
 
 func (c *itemManagingImpl) Editing(pctx echo.Context) error {
-	adminID, err := controllerUtils.GetAdminID(pctx)
+	adminID, err := common.GetAdminID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}
@@ -71,7 +71,7 @@ func (c *itemManagingImpl) Editing(pctx echo.Context) error {
 }
 
 func (c *itemManagingImpl) Archiving(pctx echo.Context) error {
-	_, err := controllerUtils.GetAdminID(pctx)
+	_, err := common.GetAdminID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusUnauthorized, err)
 	}

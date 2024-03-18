@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	"github.com/Rayato159/isekai-shop-api/domains/controllerUtils"
+	"github.com/Rayato159/isekai-shop-api/domains/common"
 	_playerBalancingModel "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/model"
 	_playerBalancingService "github.com/Rayato159/isekai-shop-api/domains/playerBalancing/service"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
@@ -23,7 +23,7 @@ func NewBalancingControllerImpl(playerBalacingService _playerBalancingService.Pl
 }
 
 func (c *playerBalacingControllerImpl) TopUp(pctx echo.Context) error {
-	playerID, err := controllerUtils.GetPlayerID(pctx)
+	playerID, err := common.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
@@ -46,7 +46,7 @@ func (c *playerBalacingControllerImpl) TopUp(pctx echo.Context) error {
 }
 
 func (c *playerBalacingControllerImpl) PlayerBalanceShowing(pctx echo.Context) error {
-	playerID, err := controllerUtils.GetPlayerID(pctx)
+	playerID, err := common.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}

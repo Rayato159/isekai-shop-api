@@ -21,6 +21,8 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
 
 - Item Shop
   - Listing
+  - Selling
+  - Buying
 - Item Managing
   - Creating
   - Editing
@@ -30,9 +32,6 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
 - Player Balancing
   - Topup
   - Showing
-- Purchasing
-  - Item Selling
-  - Item Buying
 - OAuth2
   - Player Login
   - Admin Login
