@@ -44,7 +44,7 @@ func (r *playerCoinImpl) Showing(playerID string) (*entities.PlayerBalanceShowin
 		"player_id",
 	).Scan(&balanceDto).Error; err != nil {
 		r.logger.Error("Failed to calculate player balance", err.Error())
-		return nil, &_playerCoinException.PlayerBalanceShowingException{PlayerID: playerID}
+		return nil, &_playerCoinException.PlayerCoinShowingException{PlayerID: playerID}
 	}
 
 	return balanceDto, nil
