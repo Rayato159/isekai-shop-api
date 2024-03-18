@@ -1,14 +1,15 @@
 package tests
 
 import (
-	_balancingException "github.com/Rayato159/isekai-shop-api/domains/balancing/exception"
 	_balancingModel "github.com/Rayato159/isekai-shop-api/domains/balancing/model"
 	_balancingRepository "github.com/Rayato159/isekai-shop-api/domains/balancing/repository"
-	_balancingService "github.com/Rayato159/isekai-shop-api/domains/balancing/service"
 	entities "github.com/Rayato159/isekai-shop-api/domains/entities"
 	_itemRepository "github.com/Rayato159/isekai-shop-api/domains/item/repository"
 	_playerSource "github.com/Rayato159/isekai-shop-api/domains/player/repository"
+	_purchasingException "github.com/Rayato159/isekai-shop-api/domains/purchasing/exception"
+	_purchasingModel "github.com/Rayato159/isekai-shop-api/domains/purchasing/model"
 	_purchasingRepository "github.com/Rayato159/isekai-shop-api/domains/purchasing/repository"
+	_purchasingService "github.com/Rayato159/isekai-shop-api/domains/purchasing/service"
 	"github.com/stretchr/testify/assert"
 
 	"testing"
@@ -20,7 +21,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
 	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 
-	balancingService := _balancingService.NewBalancingServiceImpl(
+	purchasingService := _purchasingService.NewPurchasingServiceImpl(
 		balancingRepositoryMock,
 		itemRepositoryMock,
 		purchasingRepositoryMock,
@@ -95,13 +96,13 @@ func TestItemBuyingSuccess(t *testing.T) {
 	}, nil)
 
 	type args struct {
-		in       *_balancingModel.ItemBuyingReq
+		in       *_purchasingModel.ItemBuyingReq
 		expected *_balancingModel.Balancing
 	}
 
 	cases := []args{
 		{
-			in: &_balancingModel.ItemBuyingReq{
+			in: &_purchasingModel.ItemBuyingReq{
 				PlayerID: "P001",
 				ItemID:   1,
 				Quantity: 3,
@@ -114,7 +115,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := balancingService.ItemBuying(c.in)
+		result, err := purchasingService.ItemBuying(c.in)
 		assert.NoError(t, err)
 		assert.EqualValues(t, c.expected, result)
 	}
@@ -126,7 +127,7 @@ func TestItemBuyingFail(t *testing.T) {
 	inventoryRepositoryMock := new(_playerSource.InventoryRepositoryMock)
 	balancingRepositoryMock := new(_balancingRepository.BalancingRepositoryMock)
 
-	balancingService := _balancingService.NewBalancingServiceImpl(
+	purchasingService := _purchasingService.NewPurchasingServiceImpl(
 		balancingRepositoryMock,
 		itemRepositoryMock,
 		purchasingRepositoryMock,
@@ -147,23 +148,23 @@ func TestItemBuyingFail(t *testing.T) {
 	}, nil)
 
 	type args struct {
-		in       *_balancingModel.ItemBuyingReq
+		in       *_purchasingModel.ItemBuyingReq
 		expected error
 	}
 
 	cases := []args{
 		{
-			in: &_balancingModel.ItemBuyingReq{
+			in: &_purchasingModel.ItemBuyingReq{
 				PlayerID: "P001",
 				ItemID:   1,
 				Quantity: 3,
 			},
-			expected: &_balancingException.NotEnoughBalanceException{},
+			expected: &_purchasingException.NotEnoughBalanceException{},
 		},
 	}
 
 	for _, c := range cases {
-		result, err := balancingService.ItemBuying(c.in)
+		result, err := purchasingService.ItemBuying(c.in)
 		assert.Nil(t, result)
 		assert.Error(t, err)
 		assert.EqualValues(t, c.expected, err)
