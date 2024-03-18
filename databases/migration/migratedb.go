@@ -16,7 +16,7 @@ func main() {
 	itemMigrate(database)
 	playerCoinMigrate(database)
 	inventoryMigrate(database)
-	purchasingHistoryMigrate(database)
+	purchaseHistoryMigrate(database)
 }
 
 func uuidMigreate(db databases.Database) {
@@ -43,6 +43,6 @@ func inventoryMigrate(db databases.Database) {
 	db.GetDb().Migrator().CreateTable(&entities.Inventory{})
 }
 
-func purchasingHistoryMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&entities.PurchasingHistory{})
+func purchaseHistoryMigrate(db databases.Database) {
+	db.GetDb().Migrator().CreateTable(&entities.PurchaseHistory{})
 }

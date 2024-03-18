@@ -77,7 +77,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		return nil, err
 	}
 
-	insertedPurchasing, err := s.itemShopRepository.PurchasingHistoryRecording(&entities.PurchasingHistory{
+	insertedPurchasing, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
 		PlayerID:        buyingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -134,7 +134,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), sellingReq.Quantity)
 	totalPrice = totalPrice / 2
 
-	insertedPurchasing, err := s.itemShopRepository.PurchasingHistoryRecording(&entities.PurchasingHistory{
+	insertedPurchasing, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
 		PlayerID:        sellingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,

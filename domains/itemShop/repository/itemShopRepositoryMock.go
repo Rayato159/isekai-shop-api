@@ -30,7 +30,7 @@ func (m *ItemShopRepositoryMock) Counting(itemFilterDto *entities.ItemFilterDto)
 	return args.Get(0).(int64), args.Error(1)
 }
 
-func (m *ItemShopRepositoryMock) PurchasingHistoryRecording(purchasingEntity *entities.PurchasingHistory) (*entities.PurchasingHistory, error) {
+func (m *ItemShopRepositoryMock) PurchaseHistoryRecording(purchasingEntity *entities.PurchaseHistory) (*entities.PurchaseHistory, error) {
 	args := m.Called(purchasingEntity)
-	return args.Get(0).(*entities.PurchasingHistory), args.Error(1)
+	return args.Get(0).(*entities.PurchaseHistory), args.Error(1)
 }

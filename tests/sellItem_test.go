@@ -35,7 +35,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	itemShopRepositoryMock.On("PurchasingHistoryRecording", &entities.PurchasingHistory{
+	itemShopRepositoryMock.On("PurchaseHistoryRecording", &entities.PurchaseHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -43,7 +43,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
-	}).Return(&entities.PurchasingHistory{
+	}).Return(&entities.PurchaseHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
