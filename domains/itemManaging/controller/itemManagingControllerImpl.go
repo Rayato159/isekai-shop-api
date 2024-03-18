@@ -14,14 +14,10 @@ import (
 
 type itemManagingImpl struct {
 	itemManging _itemManging.ItemManagingService
-	logger      echo.Logger
 }
 
-func NewItemManagingControllerImpl(itemManging _itemManging.ItemManagingService, logger echo.Logger) ItemManagingController {
-	return &itemManagingImpl{
-		itemManging: itemManging,
-		logger:      logger,
-	}
+func NewItemManagingControllerImpl(itemManging _itemManging.ItemManagingService) ItemManagingController {
+	return &itemManagingImpl{itemManging: itemManging}
 }
 
 func (c *itemManagingImpl) Creating(pctx echo.Context) error {

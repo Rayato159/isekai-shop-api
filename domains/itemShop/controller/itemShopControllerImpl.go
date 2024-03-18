@@ -13,14 +13,10 @@ import (
 
 type itemShopControllerImpl struct {
 	itemShopService _itemShopService.ItemShopService
-	logger          echo.Logger
 }
 
-func NewItemShopControllerImpl(itemShopService _itemShopService.ItemShopService, logger echo.Logger) ItemShopController {
-	return &itemShopControllerImpl{
-		itemShopService,
-		logger,
-	}
+func NewItemShopControllerImpl(itemShopService _itemShopService.ItemShopService) ItemShopController {
+	return &itemShopControllerImpl{itemShopService}
 }
 
 func (c *itemShopControllerImpl) Listing(pctx echo.Context) error {
@@ -51,7 +47,6 @@ func (c *itemShopControllerImpl) Buying(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(buyingReq); err != nil {
-		c.logger.Error("Failed to bind buy item request", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	buyingReq.PlayerID = playerID
@@ -75,7 +70,6 @@ func (c *itemShopControllerImpl) Selling(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(sellingReq); err != nil {
-		c.logger.Error("Failed to bind sell item request", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	sellingReq.PlayerID = playerID

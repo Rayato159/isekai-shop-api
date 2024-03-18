@@ -22,7 +22,7 @@ func (s *echoServer) initItemShopRouter(customMiddleware customMiddleware.Custom
 		inventoryRepository,
 	)
 
-	itemShopController := _itemShopController.NewItemShopControllerImpl(itemShopService, s.app.Logger)
+	itemShopController := _itemShopController.NewItemShopControllerImpl(itemShopService)
 
 	router.GET("", itemShopController.Listing)
 	router.POST("/buying", itemShopController.Buying, customMiddleware.PlayerAuthorizing)

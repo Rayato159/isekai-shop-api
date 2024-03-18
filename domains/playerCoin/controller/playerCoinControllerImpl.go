@@ -13,13 +13,11 @@ import (
 
 type playerCoinControllerImpl struct {
 	playerCoinService _playerCoinService.PlayerCoinService
-	logger            echo.Logger
 }
 
-func NewPlayerCoinControllerImpl(playerCoinService _playerCoinService.PlayerCoinService, logger echo.Logger) PlayerCoinController {
+func NewPlayerCoinControllerImpl(playerCoinService _playerCoinService.PlayerCoinService) PlayerCoinController {
 	return &playerCoinControllerImpl{
 		playerCoinService: playerCoinService,
-		logger:            logger,
 	}
 }
 
@@ -34,14 +32,12 @@ func (c *playerCoinControllerImpl) BuyingCoin(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(buyingCoinReq); err != nil {
-		c.logger.Error("Failed to bind top up request", err.Error())
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	buyingCoinReq.PlayerID = playerID
 
 	playerCoin, err := c.playerCoinService.BuyingCoin(buyingCoinReq)
 	if err != nil {
-		c.logger.Error("Failed to top up", err.Error())
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 

@@ -16,7 +16,7 @@ func (s *echoServer) initItemManagingRouter(customMiddleware customMiddleware.Cu
 
 	itemManagingService := _itemManagingService.NewItemManagingServiceImpl(itemMangingRepository, itemRepository)
 
-	itemManaging := _itemManagingController.NewItemManagingControllerImpl(itemManagingService, s.app.Logger)
+	itemManaging := _itemManagingController.NewItemManagingControllerImpl(itemManagingService)
 
 	router.POST("", itemManaging.Creating, customMiddleware.AdminAuthorizing)
 	router.PATCH("/:itemID", itemManaging.Editing, customMiddleware.AdminAuthorizing)
