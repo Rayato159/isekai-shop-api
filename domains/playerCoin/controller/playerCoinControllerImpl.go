@@ -10,19 +10,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type playerBalacingControllerImpl struct {
-	playerBalacingService _playerCoinService.PlayerCoinService
-	logger                echo.Logger
+type playerCoinControllerImpl struct {
+	playerCoinService _playerCoinService.PlayerCoinService
+	logger            echo.Logger
 }
 
-func NewPlayerCoinControllerImpl(playerBalacingService _playerCoinService.PlayerCoinService, logger echo.Logger) PlayerCoinController {
-	return &playerBalacingControllerImpl{
-		playerBalacingService: playerBalacingService,
-		logger:                logger,
+func NewPlayerCoinControllerImpl(playerCoinService _playerCoinService.PlayerCoinService, logger echo.Logger) PlayerCoinController {
+	return &playerCoinControllerImpl{
+		playerCoinService: playerCoinService,
+		logger:            logger,
 	}
 }
 
-func (c *playerBalacingControllerImpl) BuyingCoin(pctx echo.Context) error {
+func (c *playerCoinControllerImpl) BuyingCoin(pctx echo.Context) error {
 	playerID, err := common.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
@@ -36,22 +36,22 @@ func (c *playerBalacingControllerImpl) BuyingCoin(pctx echo.Context) error {
 	}
 	buyingCoinReq.PlayerID = playerID
 
-	playerBalacing, err := c.playerBalacingService.BuyingCoin(buyingCoinReq)
+	playerCoin, err := c.playerCoinService.BuyingCoin(buyingCoinReq)
 	if err != nil {
 		c.logger.Error("Failed to top up", err.Error())
 		return writter.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
-	return pctx.JSON(http.StatusCreated, playerBalacing)
+	return pctx.JSON(http.StatusCreated, playerCoin)
 }
 
-func (c *playerBalacingControllerImpl) PlayerCoinShowing(pctx echo.Context) error {
+func (c *playerCoinControllerImpl) PlayerCoinShowing(pctx echo.Context) error {
 	playerID, err := common.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
-	coin := c.playerBalacingService.PlayerCoinShowing(playerID)
+	coin := c.playerCoinService.PlayerCoinShowing(playerID)
 
 	return pctx.JSON(http.StatusOK, coin)
 }
