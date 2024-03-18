@@ -61,6 +61,10 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
 3. Create the Isekai Shop Database
 
     ```bash
+    docker exec -it isekaishopdb bash
+    ```
+
+    ```bash
     psql -U postgres
     ```
     ```bash
