@@ -1,7 +1,7 @@
 package exception
 
-type AdminIDNotfoundException struct{}
+type AdminIDNotfound struct{}
 
-func (e *AdminIDNotfoundException) Error() string {
+func (e *AdminIDNotfound) Error() string {
 	return "Admin ID not found"
 }

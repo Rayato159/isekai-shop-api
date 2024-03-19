@@ -1,7 +1,7 @@
 package repository
 
 import (
-	_inventoryException "github.com/Rayato159/isekai-shop-api/domains/inventory/exception"
+	_inventory "github.com/Rayato159/isekai-shop-api/domains/inventory/exception"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -24,7 +24,7 @@ func (r *inventoryImpl) Filling(inventoryEntities []*entities.Inventory) ([]*ent
 
 	if err := r.db.Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
 		r.logger.Error("Failed to insert items", err.Error())
-		return nil, &_inventoryException.InsertInventoryException{}
+		return nil, &_inventory.InventoryFilling{}
 	}
 
 	return insertedInventories, nil
@@ -37,7 +37,7 @@ func (r *inventoryImpl) Listing(playerID string) ([]*entities.Inventory, error) 
 		"player_id = ? AND is_deleted = ?", playerID, false,
 	).Find(&inventories).Error; err != nil {
 		r.logger.Error("Failed to find inventories", err.Error())
-		return nil, &_inventoryException.FindInventoriesException{
+		return nil, &_inventory.PlayerItemsFinding{
 			PlayerID: playerID,
 		}
 	}
@@ -62,7 +62,7 @@ func (r *inventoryImpl) Removing(playerID string, itemID uint64, limit int) erro
 			inventory,
 		).Error; err != nil {
 			r.logger.Error("Failed to delete items", err.Error())
-			return &_inventoryException.DeleteInventoryException{ItemID: itemID}
+			return &_inventory.PlayerItemRemoving{ItemID: itemID}
 		}
 	}
 
@@ -97,7 +97,7 @@ func (r *inventoryImpl) findPlayerItemInInventoryByID(
 		limit,
 	).Find(&inventories).Error; err != nil {
 		r.logger.Error("Failed to find inventories", err.Error())
-		return nil, &_inventoryException.FindInventoriesException{PlayerID: playerID}
+		return nil, &_inventory.PlayerItemsFinding{PlayerID: playerID}
 	}
 
 	return inventories, nil

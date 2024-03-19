@@ -2,7 +2,7 @@ package tests
 
 import (
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
-	_itemShopException "github.com/Rayato159/isekai-shop-api/domains/itemShop/exception"
+	_itemShop "github.com/Rayato159/isekai-shop-api/domains/itemShop/exception"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
 	_itemShopService "github.com/Rayato159/isekai-shop-api/domains/itemShop/service"
@@ -154,7 +154,7 @@ func TestItemBuyingFail(t *testing.T) {
 				ItemID:   1,
 				Quantity: 3,
 			},
-			expected: &_itemShopException.NotEnoughBalanceException{},
+			expected: &_itemShop.CoinNotEnough{},
 		},
 	}
 

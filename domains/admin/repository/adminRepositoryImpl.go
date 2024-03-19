@@ -24,7 +24,7 @@ func (r *adminRepositoryImpl) Creating(adminEntity *entities.Admin) (string, err
 
 	if tx.Error != nil {
 		r.logger.Errorf("Error inserting player: %s", tx.Error.Error())
-		return "", &_adminExpception.InsertAdminException{AdminID: adminEntity.ID}
+		return "", &_adminExpception.InsertAdmin{AdminID: adminEntity.ID}
 	}
 
 	return adminEntity.ID, nil
@@ -36,7 +36,7 @@ func (r *adminRepositoryImpl) FindByID(adminID string) (*entities.Admin, error) 
 
 	if tx.Error != nil {
 		r.logger.Errorf("Error finding player: %s", tx.Error.Error())
-		return nil, &_adminExpception.FindAdminException{AdminID: adminID}
+		return nil, &_adminExpception.FindAdmin{AdminID: adminID}
 	}
 
 	return admin, nil

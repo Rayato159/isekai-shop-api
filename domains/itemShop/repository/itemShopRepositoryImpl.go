@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 
-	_itemShopException "github.com/Rayato159/isekai-shop-api/domains/itemShop/exception"
+	_itemShop "github.com/Rayato159/isekai-shop-api/domains/itemShop/exception"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
@@ -36,7 +36,7 @@ func (r *itemRepositoryImpl) Listing(itemFilterDto *entities.ItemFilterDto) ([]*
 
 	if err := query.Offset(offset).Limit(size).Find(&items).Error; err != nil {
 		r.logger.Error("Failed to find items", err.Error())
-		return nil, &_itemShopException.ItemListingException{}
+		return nil, &_itemShop.ItemListing{}
 	}
 
 	return items, nil
@@ -56,7 +56,7 @@ func (r *itemRepositoryImpl) Counting(itemFilterDto *entities.ItemFilterDto) (in
 
 	if err := query.Count(&count).Error; err != nil {
 		r.logger.Error("Failed to count items", err.Error())
-		return -1, &_itemShopException.ItemCountingException{}
+		return -1, &_itemShop.ItemCounting{}
 	}
 
 	return count, nil
@@ -67,7 +67,7 @@ func (r *itemRepositoryImpl) FindByID(itemID uint64) (*entities.Item, error) {
 
 	if err := r.db.First(item, itemID).Error; err != nil {
 		r.logger.Error("Failed to find item", err.Error())
-		return nil, &_itemShopException.ItemNotFoundException{ItemID: itemID}
+		return nil, &_itemShop.ItemNotFound{ItemID: itemID}
 	}
 
 	return item, nil
@@ -79,7 +79,7 @@ func (r *itemRepositoryImpl) FindByIDList(itemIDs []uint64) ([]*entities.Item, e
 
 	if err := r.db.Model(&entities.Item{}).Where("id IN ?", itemIDs).Find(&items).Error; err != nil {
 		r.logger.Error("Failed to find items by IDs", err.Error())
-		return nil, &_itemShopException.ItemListingException{}
+		return nil, &_itemShop.ItemListing{}
 	}
 
 	return items, nil
@@ -90,7 +90,7 @@ func (r *itemRepositoryImpl) PurchaseHistoryRecording(purchasingEntity *entities
 
 	if err := r.db.Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
 		r.logger.Errorf("Error inserting purchasing: %s", err.Error())
-		return nil, &_itemShopException.HistoryOfPurchaseRecordingException{}
+		return nil, &_itemShop.HistoryOfPurchaseRecording{}
 	}
 
 	return insertedPurchasing, nil

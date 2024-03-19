@@ -1,7 +1,7 @@
 package repository
 
 import (
-	_playerCoinException "github.com/Rayato159/isekai-shop-api/domains/playerCoin/exception"
+	_playerCoin "github.com/Rayato159/isekai-shop-api/domains/playerCoin/exception"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 
 	"github.com/labstack/echo/v4"
@@ -25,7 +25,7 @@ func (r *playerCoinImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*enti
 
 	if err := r.db.Create(playerCoinEntity).Scan(insertedPlayerCoin).Error; err != nil {
 		r.logger.Error("Failed to insert balancing", err.Error())
-		return nil, &_playerCoinException.PlayerBalanceRecording{}
+		return nil, &_playerCoin.CoinAdding{}
 	}
 
 	return insertedPlayerCoin, nil
@@ -44,7 +44,7 @@ func (r *playerCoinImpl) Showing(playerID string) (*entities.PlayerCoinShowingDt
 		"player_id",
 	).Scan(&coinDto).Error; err != nil {
 		r.logger.Error("Failed to calculate player coin", err.Error())
-		return nil, &_playerCoinException.PlayerCoinShowingException{PlayerID: playerID}
+		return nil, &_playerCoin.PlayerCoinShowing{}
 	}
 
 	return coinDto, nil

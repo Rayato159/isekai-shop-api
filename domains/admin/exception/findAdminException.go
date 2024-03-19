@@ -2,10 +2,10 @@ package exception
 
 import "fmt"
 
-type FindAdminException struct {
+type FindAdmin struct {
 	AdminID string
 }
 
-func (e *FindAdminException) Error() string {
+func (e *FindAdmin) Error() string {
 	return fmt.Sprintf("Error finding admin: %s", e.AdminID)
 }
