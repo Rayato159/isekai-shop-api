@@ -39,5 +39,5 @@ func (s *playerCoinImpl) PlayerCoinShowing(playerID string) *_playerCoinModel.Pl
 		}
 	}
 
-	return coinDto.ToPlayerBalanceModel()
+	return coinDto.ToPlayerCoinModel()
 }
