@@ -29,7 +29,7 @@ func (p *PlayerCoin) ToPlayerCoinModel() *_playerCoinModel.PlayerCoin {
 	}
 }
 
-func (p *PlayerCoinShowingDto) ToPlayerCoinModel() *_playerCoinModel.PlayerCoinShowing {
+func (p *PlayerCoinShowingDto) ToPlayerCoinShowingModel() *_playerCoinModel.PlayerCoinShowing {
 	return &_playerCoinModel.PlayerCoinShowing{
 		PlayerID: p.PlayerID,
 		Balance:  p.Coin,
