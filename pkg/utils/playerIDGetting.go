@@ -1,4 +1,4 @@
-package common
+package utils
 
 import (
 	_player "github.com/Rayato159/isekai-shop-api/pkg/player/exception"

@@ -3,9 +3,9 @@ package controller
 import (
 	"net/http"
 
-	"github.com/Rayato159/isekai-shop-api/pkg/common"
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 	_playerCoinService "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/service"
+	"github.com/Rayato159/isekai-shop-api/pkg/utils"
 	"github.com/Rayato159/isekai-shop-api/server/validation"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
 	"github.com/labstack/echo/v4"
@@ -22,7 +22,7 @@ func NewPlayerCoinControllerImpl(playerCoinService _playerCoinService.PlayerCoin
 }
 
 func (c *playerCoinControllerImpl) CoinAdding(pctx echo.Context) error {
-	playerID, err := common.GetPlayerID(pctx)
+	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
@@ -45,7 +45,7 @@ func (c *playerCoinControllerImpl) CoinAdding(pctx echo.Context) error {
 }
 
 func (c *playerCoinControllerImpl) PlayerCoinShowing(pctx echo.Context) error {
-	playerID, err := common.GetPlayerID(pctx)
+	playerID, err := utils.GetPlayerID(pctx)
 	if err != nil {
 		return writter.CustomError(pctx, http.StatusBadRequest, err)
 	}
