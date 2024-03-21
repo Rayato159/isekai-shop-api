@@ -9,7 +9,7 @@ import (
 
 func AdminIDGetting(pctx echo.Context) (string, error) {
 	if adminID, ok := pctx.Get("adminID").(string); !ok || adminID == "" {
-		return "", &_admin.AdminIDNotfound{}
+		return "", &_admin.AdminNotFound{AdminID: "Unknown"}
 	} else {
 		return adminID, nil
 	}

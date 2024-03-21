@@ -2,10 +2,10 @@ package exception
 
 import "fmt"
 
-type InsertAdmin struct {
+type AdminCreating struct {
 	AdminID string
 }
 
-func (e *InsertAdmin) Error() string {
+func (e *AdminCreating) Error() string {
 	return fmt.Sprintf("Failed to insert admin with ID: %s", e.AdminID)
 }
