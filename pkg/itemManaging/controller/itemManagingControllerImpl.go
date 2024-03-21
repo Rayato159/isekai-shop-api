@@ -4,11 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
+	custom "github.com/Rayato159/isekai-shop-api/pkg/custom"
 	_itemManagingModel "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/model"
 	_itemManging "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/service"
-	"github.com/Rayato159/isekai-shop-api/pkg/utils"
-	"github.com/Rayato159/isekai-shop-api/server/validation"
-	"github.com/Rayato159/isekai-shop-api/server/writter"
+	"github.com/Rayato159/isekai-shop-api/pkg/validation"
 	"github.com/labstack/echo/v4"
 )
 
@@ -21,9 +20,9 @@ func NewItemManagingControllerImpl(itemManging _itemManging.ItemManagingService)
 }
 
 func (c *itemManagingImpl) Creating(pctx echo.Context) error {
-	adminID, err := utils.GetAdminID(pctx)
+	adminID, err := validation.AdminIDGetting(pctx)
 	if err != nil {
-		return writter.CustomError(pctx, http.StatusUnauthorized, err)
+		return custom.CustomError(pctx, http.StatusUnauthorized, err)
 	}
 
 	itemCreatingReq := new(_itemManagingModel.ItemCreatingReq)
@@ -31,27 +30,27 @@ func (c *itemManagingImpl) Creating(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(itemCreatingReq); err != nil {
-		return writter.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	itemCreatingReq.AdminID = adminID
 
 	item, err := c.itemManging.Creating(itemCreatingReq)
 	if err != nil {
-		return writter.CustomError(pctx, http.StatusInternalServerError, err)
+		return custom.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
 	return pctx.JSON(http.StatusCreated, item)
 }
 
 func (c *itemManagingImpl) Editing(pctx echo.Context) error {
-	adminID, err := utils.GetAdminID(pctx)
+	adminID, err := validation.AdminIDGetting(pctx)
 	if err != nil {
-		return writter.CustomError(pctx, http.StatusUnauthorized, err)
+		return custom.CustomError(pctx, http.StatusUnauthorized, err)
 	}
 
 	itemID, err := c.getItemID(pctx)
 	if err != nil {
-		return writter.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
 	editItemReq := new(_itemManagingModel.ItemEditingReq)
@@ -59,32 +58,32 @@ func (c *itemManagingImpl) Editing(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(editItemReq); err != nil {
-		return writter.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.CustomError(pctx, http.StatusBadRequest, err)
 	}
 	editItemReq.AdminID = adminID
 
 	item, err := c.itemManging.Editing(itemID, editItemReq)
 	if err != nil {
-		return writter.CustomError(pctx, http.StatusInternalServerError, err)
+		return custom.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
 	return pctx.JSON(http.StatusOK, item)
 }
 
 func (c *itemManagingImpl) Archiving(pctx echo.Context) error {
-	_, err := utils.GetAdminID(pctx)
+	_, err := validation.AdminIDGetting(pctx)
 	if err != nil {
-		return writter.CustomError(pctx, http.StatusUnauthorized, err)
+		return custom.CustomError(pctx, http.StatusUnauthorized, err)
 	}
 
 	itemID, err := c.getItemID(pctx)
 	if err != nil {
-		return writter.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.CustomError(pctx, http.StatusBadRequest, err)
 	}
 
 	err = c.itemManging.Archiving(itemID)
 	if err != nil {
-		return writter.CustomError(pctx, http.StatusInternalServerError, err)
+		return custom.CustomError(pctx, http.StatusInternalServerError, err)
 	}
 
 	return pctx.NoContent(http.StatusNoContent)

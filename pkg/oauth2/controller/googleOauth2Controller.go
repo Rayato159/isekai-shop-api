@@ -9,12 +9,12 @@ import (
 	"sync"
 
 	_adminModel "github.com/Rayato159/isekai-shop-api/pkg/admin/model"
+	"github.com/Rayato159/isekai-shop-api/pkg/custom"
 	_oauth2 "github.com/Rayato159/isekai-shop-api/pkg/oauth2/exception"
 	_oauth2Model "github.com/Rayato159/isekai-shop-api/pkg/oauth2/model"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/pkg/oauth2/service"
 	"github.com/Rayato159/isekai-shop-api/pkg/oauth2/state"
 	_playerModel "github.com/Rayato159/isekai-shop-api/pkg/player/model"
-	"github.com/Rayato159/isekai-shop-api/server/writter"
 
 	"github.com/Rayato159/isekai-shop-api/config"
 	"github.com/labstack/echo/v4"
@@ -112,13 +112,13 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 
 	if err := c.callbackValidate(pctx); err != nil {
 		c.logger.Errorf("Error validating callback: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
+		return custom.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
 	}
 
 	token, err := playerGoogleOAuth2.Exchange(ctx, pctx.QueryParam("code"))
 	if err != nil {
 		c.logger.Errorf("Error exchanging code for token: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
+		return custom.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
 	}
 
 	client := playerGoogleOAuth2.Client(ctx, token)
@@ -126,7 +126,7 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
+		return custom.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
 
 	}
 
@@ -138,7 +138,7 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 	}
 
 	if err := c.oauth2Service.PlayerAccountCreating(playerCreatingReq); err != nil {
-		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2.OAuth2Processing{})
+		return custom.CustomError(pctx, http.StatusInternalServerError, &_oauth2.OAuth2Processing{})
 	}
 
 	c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, token.AccessToken)
@@ -152,13 +152,13 @@ func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 
 	if err := c.callbackValidate(pctx); err != nil {
 		c.logger.Errorf("Error validating callback: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
+		return custom.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
 	}
 
 	token, err := adminGoogleOAuth2.Exchange(ctx, pctx.QueryParam("code"))
 	if err != nil {
 		c.logger.Errorf("Error exchanging code for token: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
+		return custom.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
 	}
 
 	client := adminGoogleOAuth2.Client(ctx, token)
@@ -166,7 +166,7 @@ func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
+		return custom.CustomError(pctx, http.StatusBadRequest, &_oauth2.OAuth2Processing{})
 
 	}
 
@@ -178,7 +178,7 @@ func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 	}
 
 	if err := c.oauth2Service.AdminAccountCreating(createAdminReq); err != nil {
-		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2.OAuth2Processing{})
+		return custom.CustomError(pctx, http.StatusInternalServerError, &_oauth2.OAuth2Processing{})
 	}
 
 	c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, token.AccessToken)
@@ -191,12 +191,12 @@ func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
 	accessToken, err := pctx.Cookie(oauth2AccessTokenCookieName)
 	if err != nil {
 		c.logger.Errorf("Error reading access token: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusBadRequest, &_oauth2.Logout{})
+		return custom.CustomError(pctx, http.StatusBadRequest, &_oauth2.Logout{})
 	}
 
 	if err := c.revokeToken(accessToken.Value); err != nil {
 		c.logger.Errorf("Error revoking token: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusInternalServerError, &_oauth2.Logout{})
+		return custom.CustomError(pctx, http.StatusInternalServerError, &_oauth2.Logout{})
 	}
 
 	c.removeSameSiteCookie(pctx, oauth2AccessTokenCookieName)

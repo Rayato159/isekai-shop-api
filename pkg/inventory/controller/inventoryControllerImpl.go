@@ -3,9 +3,9 @@ package controller
 import (
 	"net/http"
 
+	custom "github.com/Rayato159/isekai-shop-api/pkg/custom"
 	_inventoryService "github.com/Rayato159/isekai-shop-api/pkg/inventory/service"
-	"github.com/Rayato159/isekai-shop-api/pkg/utils"
-	"github.com/Rayato159/isekai-shop-api/server/writter"
+	"github.com/Rayato159/isekai-shop-api/pkg/validation"
 	"github.com/labstack/echo/v4"
 )
 
@@ -25,10 +25,10 @@ func NewInventoryControllerImpl(
 }
 
 func (c *inventoryControllerImpl) Listing(pctx echo.Context) error {
-	playerID, err := utils.GetPlayerID(pctx)
+	playerID, err := validation.PlayerIDGetting(pctx)
 	if err != nil {
 		c.logger.Error("Failed to get playerID", err.Error())
-		return writter.CustomError(pctx, http.StatusUnauthorized, err)
+		return custom.CustomError(pctx, http.StatusUnauthorized, err)
 	}
 
 	inventoryListing, err := c.inventoryService.Listing(playerID)

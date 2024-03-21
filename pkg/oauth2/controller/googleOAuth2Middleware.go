@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/Rayato159/isekai-shop-api/pkg/custom"
 	_oauth2 "github.com/Rayato159/isekai-shop-api/pkg/oauth2/exception"
-	"github.com/Rayato159/isekai-shop-api/server/writter"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
 )
@@ -16,7 +16,7 @@ func (c *googleOAuth2Controller) PlayerAuthorizing(pctx echo.Context, next echo.
 	tokenSource, err := c.getToken(pctx)
 	if err != nil {
 		c.logger.Errorf("Error reading token: %s", err.Error())
-		return writter.CustomError(
+		return custom.CustomError(
 			pctx, http.StatusUnauthorized,
 			&_oauth2.UnAuthorize{},
 		)
@@ -31,7 +31,7 @@ func (c *googleOAuth2Controller) PlayerAuthorizing(pctx echo.Context, next echo.
 		tokenSource, err = c.playerRefreshToken(pctx, tokenSource)
 		if err != nil {
 			c.logger.Errorf("Error refreshing token: %s", err.Error())
-			return writter.CustomError(
+			return custom.CustomError(
 				pctx, http.StatusUnauthorized,
 				&_oauth2.UnAuthorize{},
 			)
@@ -44,12 +44,12 @@ func (c *googleOAuth2Controller) PlayerAuthorizing(pctx echo.Context, next echo.
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusUnauthorized, &_oauth2.UnAuthorize{})
+		return custom.CustomError(pctx, http.StatusUnauthorized, &_oauth2.UnAuthorize{})
 
 	}
 
 	if !c.oauth2Service.IsThisGuyIsReallyPlayer(userInfo.ID) {
-		return writter.CustomError(pctx, http.StatusUnauthorized, &_oauth2.NoPermission{})
+		return custom.CustomError(pctx, http.StatusUnauthorized, &_oauth2.NoPermission{})
 	}
 
 	pctx.Set("playerID", userInfo.ID)
@@ -63,7 +63,7 @@ func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.H
 	tokenSource, err := c.getToken(pctx)
 	if err != nil {
 		c.logger.Errorf("Error reading token: %s", err.Error())
-		return writter.CustomError(
+		return custom.CustomError(
 			pctx, http.StatusUnauthorized,
 			&_oauth2.UnAuthorize{},
 		)
@@ -78,7 +78,7 @@ func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.H
 		tokenSource, err = c.adminRefreshToken(pctx, tokenSource)
 		if err != nil {
 			c.logger.Errorf("Error refreshing token: %s", err.Error())
-			return writter.CustomError(
+			return custom.CustomError(
 				pctx, http.StatusUnauthorized,
 				&_oauth2.UnAuthorize{},
 			)
@@ -91,12 +91,12 @@ func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.H
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
-		return writter.CustomError(pctx, http.StatusUnauthorized, &_oauth2.UnAuthorize{})
+		return custom.CustomError(pctx, http.StatusUnauthorized, &_oauth2.UnAuthorize{})
 
 	}
 
 	if !c.oauth2Service.IsThisGuyIsReallyAdmin(userInfo.ID) {
-		return writter.CustomError(pctx, http.StatusUnauthorized, &_oauth2.NoPermission{})
+		return custom.CustomError(pctx, http.StatusUnauthorized, &_oauth2.NoPermission{})
 	}
 
 	pctx.Set("adminID", userInfo.ID)
