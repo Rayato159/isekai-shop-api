@@ -4,9 +4,8 @@ import (
 	_adminRepository "github.com/Rayato159/isekai-shop-api/pkg/admin/repository"
 	_oauth2Controller "github.com/Rayato159/isekai-shop-api/pkg/oauth2/controller"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/pkg/oauth2/service"
+	"github.com/Rayato159/isekai-shop-api/pkg/oauth2/state"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/pkg/player/repository"
-
-	"github.com/Rayato159/isekai-shop-api/packages/state"
 )
 
 func (s *echoServer) initOAuth2Router() {

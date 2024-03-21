@@ -12,11 +12,11 @@ import (
 	_oauth2 "github.com/Rayato159/isekai-shop-api/pkg/oauth2/exception"
 	_oauth2Model "github.com/Rayato159/isekai-shop-api/pkg/oauth2/model"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/pkg/oauth2/service"
+	"github.com/Rayato159/isekai-shop-api/pkg/oauth2/state"
 	_playerModel "github.com/Rayato159/isekai-shop-api/pkg/player/model"
 	"github.com/Rayato159/isekai-shop-api/server/writter"
 
 	"github.com/Rayato159/isekai-shop-api/config"
-	"github.com/Rayato159/isekai-shop-api/packages/state"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
 )
