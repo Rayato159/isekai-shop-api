@@ -5,10 +5,9 @@ import (
 	_itemManagingRepository "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/repository"
 	_itemManagingService "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/service"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
-	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 )
 
-func (s *echoServer) initItemManagingRouter(customMiddleware customMiddleware.CustomMiddleware) {
+func (s *echoServer) initItemManagingRouter(m *customMiddleware) {
 	router := s.baseRouter.Group("/item-managing")
 
 	itemRepository := _itemShopRepository.NewItemShopRepositoryImpl(s.db, s.app.Logger)
@@ -18,7 +17,7 @@ func (s *echoServer) initItemManagingRouter(customMiddleware customMiddleware.Cu
 
 	itemManaging := _itemManagingController.NewItemManagingControllerImpl(itemManagingService)
 
-	router.POST("", itemManaging.Creating, customMiddleware.AdminAuthorizing)
-	router.PATCH("/:itemID", itemManaging.Editing, customMiddleware.AdminAuthorizing)
-	router.DELETE("/:itemID", itemManaging.Archiving, customMiddleware.AdminAuthorizing)
+	router.POST("", itemManaging.Creating, m.AdminAuthorizing)
+	router.PATCH("/:itemID", itemManaging.Editing, m.AdminAuthorizing)
+	router.DELETE("/:itemID", itemManaging.Archiving, m.AdminAuthorizing)
 }

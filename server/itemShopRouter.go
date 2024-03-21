@@ -6,10 +6,9 @@ import (
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
 	_itemShopService "github.com/Rayato159/isekai-shop-api/pkg/itemShop/service"
 	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
-	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 )
 
-func (s *echoServer) initItemShopRouter(customMiddleware customMiddleware.CustomMiddleware) {
+func (s *echoServer) initItemShopRouter(m *customMiddleware) {
 	router := s.baseRouter.Group("/item-shop")
 
 	balancingRepository := _playerCoinRepository.NewPlayerCoinRepositoryImpl(s.db, s.app.Logger)
@@ -25,6 +24,6 @@ func (s *echoServer) initItemShopRouter(customMiddleware customMiddleware.Custom
 	itemShopController := _itemShopController.NewItemShopControllerImpl(itemShopService)
 
 	router.GET("", itemShopController.Listing)
-	router.POST("/buying", itemShopController.Buying, customMiddleware.PlayerAuthorizing)
-	router.POST("/selling", itemShopController.Selling, customMiddleware.PlayerAuthorizing)
+	router.POST("/buying", itemShopController.Buying, m.PlayerAuthorizing)
+	router.POST("/selling", itemShopController.Selling, m.PlayerAuthorizing)
 }
