@@ -1,7 +1,7 @@
 package entity
 
 import (
-	_playerCoinModel "github.com/Rayato159/isekai-shop-api/domains/playerCoin/model"
+	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 
 	"time"
 )

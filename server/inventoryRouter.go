@@ -1,10 +1,10 @@
 package server
 
 import (
-	_inventoryController "github.com/Rayato159/isekai-shop-api/domains/inventory/controller"
-	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
-	_inventoryService "github.com/Rayato159/isekai-shop-api/domains/inventory/service"
-	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
+	_inventoryController "github.com/Rayato159/isekai-shop-api/pkg/inventory/controller"
+	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
+	_inventoryService "github.com/Rayato159/isekai-shop-api/pkg/inventory/service"
+	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
 	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 )
 

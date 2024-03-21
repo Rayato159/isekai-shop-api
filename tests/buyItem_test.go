@@ -1,13 +1,13 @@
 package tests
 
 import (
-	_inventoryRepository "github.com/Rayato159/isekai-shop-api/domains/inventory/repository"
-	_itemShop "github.com/Rayato159/isekai-shop-api/domains/itemShop/exception"
-	_itemShopModel "github.com/Rayato159/isekai-shop-api/domains/itemShop/model"
-	_itemShopRepository "github.com/Rayato159/isekai-shop-api/domains/itemShop/repository"
-	_itemShopService "github.com/Rayato159/isekai-shop-api/domains/itemShop/service"
-	_playerCoinModel "github.com/Rayato159/isekai-shop-api/domains/playerCoin/model"
-	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/domains/playerCoin/repository"
+	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
+	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
+	_itemShopModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
+	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
+	_itemShopService "github.com/Rayato159/isekai-shop-api/pkg/itemShop/service"
+	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
+	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	"github.com/stretchr/testify/assert"
 

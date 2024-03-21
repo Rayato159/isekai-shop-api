@@ -1,9 +1,9 @@
 package server
 
 import (
-	_playerCoinController "github.com/Rayato159/isekai-shop-api/domains/playerCoin/controller"
-	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/domains/playerCoin/repository"
-	_playerCoinService "github.com/Rayato159/isekai-shop-api/domains/playerCoin/service"
+	_playerCoinController "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/controller"
+	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
+	_playerCoinService "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/service"
 	"github.com/Rayato159/isekai-shop-api/server/customMiddleware"
 )
 

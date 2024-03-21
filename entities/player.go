@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	_playerModel "github.com/Rayato159/isekai-shop-api/domains/player/model"
+	_playerModel "github.com/Rayato159/isekai-shop-api/pkg/player/model"
 )
 
 type (

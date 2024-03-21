@@ -1,7 +1,7 @@
 package customMiddleware
 
 import (
-	_oauth2Controller "github.com/Rayato159/isekai-shop-api/domains/oauth2/controller"
+	_oauth2Controller "github.com/Rayato159/isekai-shop-api/pkg/oauth2/controller"
 
 	"github.com/Rayato159/isekai-shop-api/config"
 	"github.com/labstack/echo/v4"
