@@ -50,7 +50,6 @@ func NewEchoServer(conf *config.Config, db *gorm.DB) *echoServer {
 
 func (s *echoServer) Start() {
 	// Initialize all middlewares
-	loggerMiddleware := getLoggerMiddleware(s.app.Logger)
 	timeOutMiddleware := getTimeOutMiddleware(s.conf.Server.Timeout)
 	corsMiddleware := getCorsMiddleware(s.conf.Server.AllowOrigins)
 	bodyLimitMiddleware := getBodyLimitMiddleware(s.conf.Server.BodyLimit)
@@ -58,7 +57,7 @@ func (s *echoServer) Start() {
 	// Prevent application from crashing
 	s.app.Use(middleware.Recover())
 
-	s.app.Use(loggerMiddleware)
+	s.app.Use(middleware.Logger())
 	s.app.Use(timeOutMiddleware)
 	s.app.Use(corsMiddleware)
 	s.app.Use(bodyLimitMiddleware)
@@ -134,10 +133,6 @@ func (s *echoServer) getCustomMiddleware() *customMiddleware {
 		oauth2Conf:       s.conf.OAuth2,
 		logger:           s.app.Logger,
 	}
-}
-
-func getLoggerMiddleware(logger echo.Logger) echo.MiddlewareFunc {
-	return middleware.Logger()
 }
 
 func getTimeOutMiddleware(timeout time.Duration) echo.MiddlewareFunc {
