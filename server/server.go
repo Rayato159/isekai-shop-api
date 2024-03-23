@@ -84,9 +84,9 @@ func (s *echoServer) Start() {
 }
 
 func (s *echoServer) httpListening() {
-	serverUrl := fmt.Sprintf(":%d", s.conf.Server.Port)
+	url := fmt.Sprintf(":%d", s.conf.Server.Port)
 
-	if err := s.app.Start(serverUrl); err != nil && err != http.ErrServerClosed {
+	if err := s.app.Start(url); err != nil && err != http.ErrServerClosed {
 		s.app.Logger.Fatalf("Error: %v", err)
 	}
 }
