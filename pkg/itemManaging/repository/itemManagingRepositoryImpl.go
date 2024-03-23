@@ -1,8 +1,8 @@
 package repository
 
 import (
-	_itemManaging "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/exception"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
+	_itemManaging "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/exception"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -20,7 +20,7 @@ func (r *itemMangingRepositoryImpl) Creating(itemEntity *entities.Item) (*entiti
 	insertedItem := new(entities.Item)
 
 	if err := r.db.Create(itemEntity).Scan(insertedItem).Error; err != nil {
-		r.logger.Error("Failed to insert item", err.Error())
+		r.logger.Error("Item creating failed:", err.Error())
 		return nil, &_itemManaging.ItemCreating{}
 	}
 
@@ -35,7 +35,7 @@ func (r *itemMangingRepositoryImpl) Editing(itemID uint64, updateItemDto *entiti
 	)
 
 	if tx.Error != nil {
-		r.logger.Error("Failed to update item", tx.Error.Error())
+		r.logger.Error("Editing item failed:", tx.Error.Error())
 		return 0, &_itemManaging.ItemEditing{}
 	}
 
@@ -48,7 +48,7 @@ func (r *itemMangingRepositoryImpl) Archiving(itemID uint64) error {
 	).Update(
 		"is_archive", true,
 	).Error; err != nil {
-		r.logger.Error("Failed to archive item", err.Error())
+		r.logger.Error("Archiving item failed:", err.Error())
 		return &_itemManaging.ItemArchiving{ItemID: itemID}
 	}
 

@@ -35,10 +35,10 @@ func (r *itemRepositoryImpl) TransactionCommit() error {
 func (r *itemRepositoryImpl) Listing(itemFilterDto *entities.ItemFilterDto) ([]*entities.Item, error) {
 	query := r.db.Model(&entities.Item{})
 	if itemFilterDto.Name != "" {
-		query = query.Where("name LIKE ?", "%"+itemFilterDto.Name+"%")
+		query = query.Where("name ilike ?", "%"+itemFilterDto.Name+"%")
 	}
 	if itemFilterDto.Description != "" {
-		query = query.Where("description LIKE ?", "%"+itemFilterDto.Description+"%")
+		query = query.Where("description ilike ?", "%"+itemFilterDto.Description+"%")
 	}
 
 	offset := int((itemFilterDto.Page - 1) * itemFilterDto.Size)
@@ -58,16 +58,16 @@ func (r *itemRepositoryImpl) Counting(itemFilterDto *entities.ItemFilterDto) (in
 	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false)
 
 	if itemFilterDto.Name != "" {
-		query = query.Where("name LIKE ?", "%"+itemFilterDto.Name+"%")
+		query = query.Where("name ilike ?", "%"+itemFilterDto.Name+"%")
 	}
 	if itemFilterDto.Description != "" {
-		query = query.Where("description LIKE ?", "%"+itemFilterDto.Description+"%")
+		query = query.Where("description ilike ?", "%"+itemFilterDto.Description+"%")
 	}
 
 	var count int64
 
 	if err := query.Count(&count).Error; err != nil {
-		r.logger.Error("Failed to count items", err.Error())
+		r.logger.Error("Counting items failed:", err.Error())
 		return -1, &_itemShop.ItemCounting{}
 	}
 
@@ -78,7 +78,7 @@ func (r *itemRepositoryImpl) FindByID(itemID uint64) (*entities.Item, error) {
 	item := new(entities.Item)
 
 	if err := r.db.First(item, itemID).Error; err != nil {
-		r.logger.Error("Failed to find item", err.Error())
+		r.logger.Error("Finding item failed:", err.Error())
 		return nil, &_itemShop.ItemNotFound{ItemID: itemID}
 	}
 
@@ -89,8 +89,8 @@ func (r *itemRepositoryImpl) FindByID(itemID uint64) (*entities.Item, error) {
 func (r *itemRepositoryImpl) FindByIDList(itemIDs []uint64) ([]*entities.Item, error) {
 	items := make([]*entities.Item, 0)
 
-	if err := r.db.Model(&entities.Item{}).Where("id IN ?", itemIDs).Find(&items).Error; err != nil {
-		r.logger.Error("Failed to find items by IDs", err.Error())
+	if err := r.db.Model(&entities.Item{}).Where("id in ?", itemIDs).Find(&items).Error; err != nil {
+		r.logger.Error("Finding items by ID failed:", err.Error())
 		return nil, &_itemShop.ItemListing{}
 	}
 
@@ -101,7 +101,7 @@ func (r *itemRepositoryImpl) PurchaseHistoryRecording(purchasingEntity *entities
 	insertedPurchasing := new(entities.PurchaseHistory)
 
 	if err := r.db.Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
-		r.logger.Errorf("Error inserting purchasing: %s", err.Error())
+		r.logger.Errorf("Purchase history recording failed: %s", err.Error())
 		return nil, &_itemShop.HistoryOfPurchaseRecording{}
 	}
 

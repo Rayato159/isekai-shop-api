@@ -1,8 +1,8 @@
 package repository
 
 import (
-	_inventory "github.com/Rayato159/isekai-shop-api/pkg/inventory/exception"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
+	_inventory "github.com/Rayato159/isekai-shop-api/pkg/inventory/exception"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -23,7 +23,7 @@ func (r *inventoryImpl) Filling(inventoryEntities []*entities.Inventory) ([]*ent
 	insertedInventories := make([]*entities.Inventory, 0)
 
 	if err := r.db.Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
-		r.logger.Error("Failed to insert items", err.Error())
+		r.logger.Error("Item creating failed:", err.Error())
 		return nil, &_inventory.InventoryFilling{}
 	}
 
@@ -34,9 +34,9 @@ func (r *inventoryImpl) Listing(playerID string) ([]*entities.Inventory, error) 
 	inventories := make([]*entities.Inventory, 0)
 
 	if err := r.db.Where(
-		"player_id = ? AND is_deleted = ?", playerID, false,
+		"player_id = ? and is_deleted = ?", playerID, false,
 	).Find(&inventories).Error; err != nil {
-		r.logger.Error("Failed to find inventories", err.Error())
+		r.logger.Error("Listing player's item failed:", err.Error())
 		return nil, &_inventory.PlayerItemsFinding{
 			PlayerID: playerID,
 		}
@@ -61,7 +61,7 @@ func (r *inventoryImpl) Removing(playerID string, itemID uint64, limit int) erro
 		).Updates(
 			inventory,
 		).Error; err != nil {
-			r.logger.Error("Failed to delete items", err.Error())
+			r.logger.Error("Removing item failed:", err.Error())
 			return &_inventory.PlayerItemRemoving{ItemID: itemID}
 		}
 	}
@@ -75,9 +75,9 @@ func (r *inventoryImpl) PlayerItemCounting(playerID string, itemID uint64) int64
 	if err := r.db.Model(
 		&entities.Inventory{},
 	).Where(
-		"player_id = ? AND item_id = ? AND is_deleted = ?", playerID, itemID, false,
+		"player_id = ? and item_id = ? and is_deleted = ?", playerID, itemID, false,
 	).Count(&count).Error; err != nil {
-		r.logger.Error("Failed to count player item", err.Error())
+		r.logger.Error("Player's item counting failed:", err.Error())
 		return -1
 	}
 
@@ -92,11 +92,11 @@ func (r *inventoryImpl) findPlayerItemInInventoryByID(
 	inventories := make([]*entities.Inventory, 0)
 
 	if err := r.db.Where(
-		"player_id = ? AND item_id = ? AND is_deleted = ?", playerID, itemID, false,
+		"player_id = ? and item_id = ? and is_deleted = ?", playerID, itemID, false,
 	).Limit(
 		limit,
 	).Find(&inventories).Error; err != nil {
-		r.logger.Error("Failed to find inventories", err.Error())
+		r.logger.Error("Finding player's item in inventory failed:", err.Error())
 		return nil, &_inventory.PlayerItemsFinding{PlayerID: playerID}
 	}
 
