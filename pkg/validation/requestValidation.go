@@ -1,6 +1,8 @@
 package validation
 
 import (
+	"sync"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
@@ -17,10 +19,19 @@ type (
 	}
 )
 
+var (
+	once              sync.Once
+	validatorInstance *validator.Validate
+)
+
 func NewCustomEchoRequest(echoRequest echo.Context) EchoRequest {
+	once.Do(func() {
+		validatorInstance = validator.New()
+	})
+
 	return &customEchoRequest{
 		ctx:       echoRequest,
-		validator: validator.New(),
+		validator: validatorInstance,
 	}
 }
 
