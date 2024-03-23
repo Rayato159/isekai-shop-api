@@ -7,7 +7,7 @@ import (
 )
 
 type (
-	Request interface {
+	EchoRequest interface {
 		Bind(obj any) error
 	}
 
@@ -17,7 +17,7 @@ type (
 	}
 )
 
-func NewCustomEchoRequest(echoRequest echo.Context) Request {
+func NewCustomEchoRequest(echoRequest echo.Context) EchoRequest {
 	return &customEchoRequest{
 		ctx:       echoRequest,
 		validator: validator.New(),
