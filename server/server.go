@@ -78,7 +78,7 @@ func (s *echoServer) Start() {
 	// Graceful shutdown
 	quitCh := make(chan os.Signal, 1)
 	signal.Notify(quitCh, syscall.SIGINT, syscall.SIGTERM)
-	go s.gracefulShutdown(quitCh)
+	go s.gracefullyShutdown(quitCh)
 
 	s.httpListening()
 }
@@ -91,7 +91,7 @@ func (s *echoServer) httpListening() {
 	}
 }
 
-func (s *echoServer) gracefulShutdown(quitCh <-chan os.Signal) {
+func (s *echoServer) gracefullyShutdown(quitCh <-chan os.Signal) {
 	ctx := context.Background()
 
 	<-quitCh
