@@ -76,9 +76,9 @@ func (s *echoServer) Start() {
 	s.initPlayerCoinRouter(customerMiddleware)
 
 	// Graceful shutdown
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	go s.gracefulShutdown(quit)
+	quitCh := make(chan os.Signal, 1)
+	signal.Notify(quitCh, syscall.SIGINT, syscall.SIGTERM)
+	go s.gracefulShutdown(quitCh)
 
 	s.httpListening()
 }
@@ -91,10 +91,10 @@ func (s *echoServer) httpListening() {
 	}
 }
 
-func (s *echoServer) gracefulShutdown(quit <-chan os.Signal) {
+func (s *echoServer) gracefulShutdown(quitCh <-chan os.Signal) {
 	ctx := context.Background()
 
-	<-quit
+	<-quitCh
 	s.app.Logger.Infof("Shutting down service...")
 
 	if err := s.app.Shutdown(ctx); err != nil {
