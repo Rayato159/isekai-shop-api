@@ -1,4 +1,4 @@
-package entity
+package entities
 
 import (
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"

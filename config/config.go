@@ -35,7 +35,7 @@ type (
 		ClientId          string    `mapstructure:"clientId" validate:"required"`
 		ClientSecret      string    `mapstructure:"clientSecret" validate:"required"`
 		Endpoints         *endpoint `mapstructure:"endpoints" validate:"required" `
-		Scopes            []string  `mapstructure:"scopes" validate:"required"` // https://developers.google.com/identity/protocols/oauth2/scopes
+		Scopes            []string  `mapstructure:"scopes" validate:"required"` // https://developers.google.com/identities/protocols/oauth2/scopes
 		UserInfoUrl       string    `mapstructure:"userInfoUrl" validate:"required"`
 		RevokeUrl         string    `mapstructure:"revokeUrl" validate:"required"`
 	}
