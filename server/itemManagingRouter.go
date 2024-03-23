@@ -8,7 +8,7 @@ import (
 )
 
 func (s *echoServer) initItemManagingRouter(m *customMiddleware) {
-	router := s.baseRouter.Group("/item-managing")
+	router := s.app.Group("/v1/item-managing")
 
 	itemRepository := _itemShopRepository.NewItemShopRepositoryImpl(s.db, s.app.Logger)
 	itemMangingRepository := _itemManagingRepository.NewItemManagingRepositoryImpl(s.db, s.app.Logger)

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *echoServer) initItemShopRouter(m *customMiddleware) {
-	router := s.baseRouter.Group("/item-shop")
+	router := s.app.Group("/v1/item-shop")
 
 	balancingRepository := _playerCoinRepository.NewPlayerCoinRepositoryImpl(s.db, s.app.Logger)
 	inventoryRepository := _inventoryRepository.NewInventoryRepositoryImpl(s.db, s.app.Logger)

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *echoServer) initPlayerCoinRouter(m *customMiddleware) {
-	router := s.baseRouter.Group("/player-coin")
+	router := s.app.Group("/v1/player-coin")
 
 	playerCoinRepository := _playerCoinRepository.NewPlayerCoinRepositoryImpl(s.db, s.app.Logger)
 

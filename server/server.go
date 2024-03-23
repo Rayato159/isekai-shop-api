@@ -23,10 +23,9 @@ import (
 )
 
 type echoServer struct {
-	app        *echo.Echo
-	baseRouter *echo.Group
-	db         *gorm.DB
-	conf       *config.Config
+	app  *echo.Echo
+	db   *gorm.DB
+	conf *config.Config
 }
 
 var (
@@ -38,14 +37,11 @@ func NewEchoServer(conf *config.Config, db *gorm.DB) *echoServer {
 	echoApp := echo.New()
 	echoApp.Logger.SetLevel(log.DEBUG)
 
-	baseRouter := echoApp.Group("/v1")
-
 	once.Do(func() {
 		server = &echoServer{
-			app:        echoApp,
-			baseRouter: baseRouter,
-			db:         db,
-			conf:       conf,
+			app:  echoApp,
+			db:   db,
+			conf: conf,
 		}
 	})
 
@@ -71,7 +67,7 @@ func (s *echoServer) Start() {
 	customerMiddleware := s.getCustomMiddleware()
 
 	// Initialzie all routers
-	s.baseRouter.GET("/health", s.healthCheck)
+	s.app.GET("/v1/health", s.healthCheck)
 
 	s.initOAuth2Router()
 	s.initInventoryRouter(customerMiddleware)

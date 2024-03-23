@@ -9,7 +9,7 @@ import (
 )
 
 func (s *echoServer) initOAuth2Router() {
-	router := s.baseRouter.Group("/oauth2/google")
+	router := s.app.Group("/v1/oauth2/google")
 
 	stateConfig := s.conf.State
 
