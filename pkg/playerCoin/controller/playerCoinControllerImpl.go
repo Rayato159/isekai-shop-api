@@ -28,7 +28,7 @@ func (c *playerCoinControllerImpl) CoinAdding(pctx echo.Context) error {
 
 	coinAddingReq := new(_playerCoinModel.CoinAddingReq)
 
-	validatingContext := validation.NewCustomEchoRequest(pctx)
+	validatingContext := custom.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(coinAddingReq); err != nil {
 		return custom.Error(pctx, http.StatusBadRequest, err)

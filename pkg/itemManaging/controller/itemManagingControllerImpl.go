@@ -27,7 +27,7 @@ func (c *itemManagingImpl) Creating(pctx echo.Context) error {
 
 	itemCreatingReq := new(_itemManagingModel.ItemCreatingReq)
 
-	validatingContext := validation.NewCustomEchoRequest(pctx)
+	validatingContext := custom.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(itemCreatingReq); err != nil {
 		return custom.Error(pctx, http.StatusBadRequest, err)
@@ -55,7 +55,7 @@ func (c *itemManagingImpl) Editing(pctx echo.Context) error {
 
 	editItemReq := new(_itemManagingModel.ItemEditingReq)
 
-	validatingContext := validation.NewCustomEchoRequest(pctx)
+	validatingContext := custom.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(editItemReq); err != nil {
 		return custom.Error(pctx, http.StatusBadRequest, err)

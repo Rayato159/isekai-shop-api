@@ -21,7 +21,7 @@ func NewItemShopControllerImpl(itemShopService _itemShopService.ItemShopService)
 func (c *itemShopControllerImpl) Listing(pctx echo.Context) error {
 	itemFilter := new(_itemShopModel.ItemFilter)
 
-	validatingContext := validation.NewCustomEchoRequest(pctx)
+	validatingContext := custom.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(itemFilter); err != nil {
 		return custom.Error(pctx, http.StatusBadRequest, err)
@@ -43,7 +43,7 @@ func (c *itemShopControllerImpl) Buying(pctx echo.Context) error {
 
 	buyingReq := new(_itemShopModel.BuyingReq)
 
-	validatingContext := validation.NewCustomEchoRequest(pctx)
+	validatingContext := custom.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(buyingReq); err != nil {
 		return custom.Error(pctx, http.StatusBadRequest, err)
@@ -66,7 +66,7 @@ func (c *itemShopControllerImpl) Selling(pctx echo.Context) error {
 
 	sellingReq := new(_itemShopModel.SellingReq)
 
-	validatingContext := validation.NewCustomEchoRequest(pctx)
+	validatingContext := custom.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(sellingReq); err != nil {
 		return custom.Error(pctx, http.StatusBadRequest, err)
