@@ -4,8 +4,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 
-	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
+	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
 )
 
 type itemRepositoryImpl struct {
@@ -18,6 +18,18 @@ func NewItemShopRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemShopReposito
 		db:     db,
 		logger: logger,
 	}
+}
+
+func (r *itemRepositoryImpl) TransactionBegin() {
+	r.db.Begin()
+}
+
+func (r *itemRepositoryImpl) TransactionRollback() {
+	r.db.Rollback()
+}
+
+func (r *itemRepositoryImpl) TransactionCommit() error {
+	return r.db.Commit().Error
 }
 
 func (r *itemRepositoryImpl) Listing(itemFilterDto *entities.ItemFilterDto) ([]*entities.Item, error) {

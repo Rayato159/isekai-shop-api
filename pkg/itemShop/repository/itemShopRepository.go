@@ -10,4 +10,7 @@ type ItemShopRepository interface {
 	FindByIDList(itemIDs []uint64) ([]*entities.Item, error)
 	Counting(itemFilterDto *entities.ItemFilterDto) (int64, error)
 	PurchaseHistoryRecording(purchasingEntity *entities.PurchaseHistory) (*entities.PurchaseHistory, error)
+	TransactionBegin()
+	TransactionRollback()
+	TransactionCommit() error
 }

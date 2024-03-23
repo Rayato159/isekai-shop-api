@@ -3,13 +3,13 @@ package service
 import (
 	"log"
 
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
 	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
-	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type itemShopServiceImpl struct {
@@ -77,7 +77,9 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		return nil, err
 	}
 
-	insertedPurchasing, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
+	s.itemShopRepository.TransactionBegin()
+
+	recordedPurchasing, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
 		PlayerID:        buyingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -89,26 +91,32 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Inserted itemShop: %d", insertedPurchasing.ID)
+	log.Printf("Purchase history recorded: %d", recordedPurchasing.ID)
 
 	inventoryEntities := s.groupInventoryEntities(buyingReq)
 
-	insertedCoin, err := s.playerCoinRepository.Recording(&entities.PlayerCoin{
+	recordedCoin, err := s.playerCoinRepository.Recording(&entities.PlayerCoin{
 		PlayerID: buyingReq.PlayerID,
 		Amount:   -totalPrice,
 	})
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Coin entity: %d", insertedCoin.ID)
+	log.Printf("Player coins removed for: %d coins", recordedCoin.ID)
 
 	inventory, err := s.inventoryRepository.Filling(inventoryEntities)
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Inserted inventories: %d", len(inventory))
 
-	return insertedCoin.ToPlayerCoinModel(), nil
+	if err := s.itemShopRepository.TransactionCommit(); err != nil {
+		s.itemShopRepository.TransactionRollback()
+		return nil, err
+	}
+
+	log.Printf("Items inserted into player inventory: %d", len(inventory))
+
+	return recordedCoin.ToPlayerCoinModel(), nil
 }
 
 // 1. Check if player has enough quantity
@@ -134,7 +142,9 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), sellingReq.Quantity)
 	totalPrice = totalPrice / 2
 
-	insertedPurchasing, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
+	s.itemShopRepository.TransactionBegin()
+
+	recordedPurchasing, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
 		PlayerID:        sellingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -146,16 +156,16 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Inserted itemShop: %d", insertedPurchasing.ID)
+	log.Printf("Pucahse history recorded: %d", recordedPurchasing.ID)
 
-	insertedCoin, err := s.playerCoinRepository.Recording(&entities.PlayerCoin{
+	recordedCoin, err := s.playerCoinRepository.Recording(&entities.PlayerCoin{
 		PlayerID: sellingReq.PlayerID,
 		Amount:   totalPrice,
 	})
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Coin entity: %d", insertedCoin.ID)
+	log.Printf("Coins added into player: %d coins", recordedCoin.ID)
 
 	if err := s.inventoryRepository.Removing(
 		sellingReq.PlayerID,
@@ -164,9 +174,15 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	); err != nil {
 		return nil, err
 	}
-	log.Printf("Deleted inventories for %d records", sellingReq.Quantity)
 
-	return insertedCoin.ToPlayerCoinModel(), nil
+	if err := s.itemShopRepository.TransactionCommit(); err != nil {
+		s.itemShopRepository.TransactionRollback()
+		return nil, err
+	}
+
+	log.Printf("Deleted player item from player's inventory for %d records", sellingReq.Quantity)
+
+	return recordedCoin.ToPlayerCoinModel(), nil
 }
 
 func (s *itemShopServiceImpl) groupInventoryEntities(buyingReq *_itemShopModel.BuyingReq) []*entities.Inventory {

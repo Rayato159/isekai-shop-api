@@ -1,6 +1,9 @@
 package tests
 
 import (
+	"errors"
+
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
 	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
@@ -8,7 +11,6 @@ import (
 	_itemShopService "github.com/Rayato159/isekai-shop-api/pkg/itemShop/service"
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
-	entities "github.com/Rayato159/isekai-shop-api/entities"
 	"github.com/stretchr/testify/assert"
 
 	"testing"
@@ -24,6 +26,12 @@ func TestItemSellingSuccess(t *testing.T) {
 		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
 	)
+
+	itemShopRepositoryMock.On("TransactionBegin").Return()
+
+	itemShopRepositoryMock.On("TransactionCommit").Return(nil)
+
+	itemShopRepositoryMock.On("TransactionRollback").Return()
 
 	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(3), nil)
 
@@ -99,6 +107,12 @@ func TestItemSellingFailed(t *testing.T) {
 		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
 	)
+
+	itemShopRepositoryMock.On("TransactionBegin").Return()
+
+	itemShopRepositoryMock.On("TransactionCommit").Return(errors.New("failed to commit transaction"))
+
+	itemShopRepositoryMock.On("TransactionRollback").Return()
 
 	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(2), nil)
 
