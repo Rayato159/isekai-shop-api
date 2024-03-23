@@ -24,7 +24,7 @@ import (
 type (
 	googleOAuth2Controller struct {
 		oauth2Service _oauth2Service.OAuth2Service
-		oauth2Conf    *config.OAuth2Config
+		oauth2Conf    *config.OAuth2
 		stateProvider state.State
 		logger        echo.Logger
 	}
@@ -41,7 +41,7 @@ var (
 
 func NewGoogleOAuth2Controller(
 	oauth2Service _oauth2Service.OAuth2Service,
-	oauth2Conf *config.OAuth2Config,
+	oauth2Conf *config.OAuth2,
 	stateProvider state.State,
 	logger echo.Logger,
 ) OAuth2Controller {
@@ -57,7 +57,7 @@ func NewGoogleOAuth2Controller(
 	}
 }
 
-func setGooleOAuth2Config(oauth2Conf *config.OAuth2Config) {
+func setGooleOAuth2Config(oauth2Conf *config.OAuth2) {
 	playerGoogleOAuth2 = &oauth2.Config{
 		ClientID:     oauth2Conf.ClientId,
 		ClientSecret: oauth2Conf.ClientSecret,

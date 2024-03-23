@@ -19,7 +19,7 @@ var (
 	once                    sync.Once
 )
 
-func NewPostgresDatabase(conf *config.DatabaseConfig) Database {
+func NewPostgresDatabase(conf *config.Database) Database {
 	once.Do(func() {
 		dsn := fmt.Sprintf(
 			"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s search_path=%s",

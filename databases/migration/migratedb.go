@@ -8,7 +8,7 @@ import (
 
 func main() {
 	conf := config.ConfigGetting()
-	db := databases.NewPostgresDatabase(conf.DatabaseConfig)
+	db := databases.NewPostgresDatabase(conf.Database)
 
 	playerMigration(db)
 	adminMigration(db)

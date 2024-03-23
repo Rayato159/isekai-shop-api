@@ -9,7 +9,7 @@ import (
 
 type customMiddleware struct {
 	oauth2Controller _oauth2Controller.OAuth2Controller
-	oauth2Conf       *config.OAuth2Config
+	oauth2Conf       *config.OAuth2
 	logger           echo.Logger
 }
 

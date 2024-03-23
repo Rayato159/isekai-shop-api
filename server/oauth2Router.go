@@ -11,7 +11,7 @@ import (
 func (s *echoServer) initOAuth2Router() {
 	router := s.baseRouter.Group("/oauth2/google")
 
-	stateConfig := s.conf.StateConfig
+	stateConfig := s.conf.State
 
 	stateProvider := state.NewJwtState(
 		[]byte(stateConfig.Secret),
@@ -29,7 +29,7 @@ func (s *echoServer) initOAuth2Router() {
 
 	oauth2Controller := _oauth2Controller.NewGoogleOAuth2Controller(
 		oauth2Service,
-		s.conf.OAuth2Config,
+		s.conf.OAuth2,
 		stateProvider,
 		s.app.Logger,
 	)

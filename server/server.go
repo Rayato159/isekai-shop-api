@@ -26,7 +26,7 @@ type echoServer struct {
 	app        *echo.Echo
 	baseRouter *echo.Group
 	db         *gorm.DB
-	conf       *config.AppConfig
+	conf       *config.Config
 }
 
 var (
@@ -34,7 +34,7 @@ var (
 	once   sync.Once
 )
 
-func NewEchoServer(conf *config.AppConfig, db *gorm.DB) *echoServer {
+func NewEchoServer(conf *config.Config, db *gorm.DB) *echoServer {
 	echoApp := echo.New()
 	echoApp.Logger.SetLevel(log.DEBUG)
 
@@ -55,9 +55,9 @@ func NewEchoServer(conf *config.AppConfig, db *gorm.DB) *echoServer {
 func (s *echoServer) Start() {
 	// Initialize all middlewares
 	loggerMiddleware := getLoggerMiddleware(s.app.Logger)
-	timeOutMiddleware := getTimeOutMiddleware(s.conf.ServerConfig.Timeout)
-	corsMiddleware := getCorsMiddleware(s.conf.ServerConfig.AllowOrigins)
-	bodyLimitMiddleware := getBodyLimitMiddleware(s.conf.ServerConfig.BodyLimit)
+	timeOutMiddleware := getTimeOutMiddleware(s.conf.Server.Timeout)
+	corsMiddleware := getCorsMiddleware(s.conf.Server.AllowOrigins)
+	bodyLimitMiddleware := getBodyLimitMiddleware(s.conf.Server.BodyLimit)
 
 	// Prevent application from crashing
 	s.app.Use(middleware.Recover())
@@ -88,7 +88,7 @@ func (s *echoServer) Start() {
 }
 
 func (s *echoServer) httpListening() {
-	serverUrl := fmt.Sprintf(":%d", s.conf.ServerConfig.Port)
+	serverUrl := fmt.Sprintf(":%d", s.conf.Server.Port)
 
 	if err := s.app.Start(serverUrl); err != nil && err != http.ErrServerClosed {
 		s.app.Logger.Fatalf("Error: %v", err)
@@ -111,7 +111,7 @@ func (s *echoServer) healthCheck(pctx echo.Context) error {
 }
 
 func (s *echoServer) getCustomMiddleware() *customMiddleware {
-	stateConfig := s.conf.StateConfig
+	stateConfig := s.conf.State
 	stateProvider := state.NewJwtState(
 		[]byte(stateConfig.Secret),
 		stateConfig.ExpiresAt,
@@ -128,14 +128,14 @@ func (s *echoServer) getCustomMiddleware() *customMiddleware {
 
 	oauth2Controller := _oauth2Controller.NewGoogleOAuth2Controller(
 		oauth2Service,
-		s.conf.OAuth2Config,
+		s.conf.OAuth2,
 		stateProvider,
 		s.app.Logger,
 	)
 
 	return &customMiddleware{
 		oauth2Controller: oauth2Controller,
-		oauth2Conf:       s.conf.OAuth2Config,
+		oauth2Conf:       s.conf.OAuth2,
 		logger:           s.app.Logger,
 	}
 }
