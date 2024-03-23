@@ -5,7 +5,6 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 )
 
 type (
@@ -35,14 +34,12 @@ func NewCustomEchoRequest(echoRequest echo.Context) EchoRequest {
 	}
 }
 
-func (r *customEchoRequest) Bind(data any) error {
-	if err := r.ctx.Bind(data); err != nil {
-		log.Errorf("Error binding request: %s", err.Error())
+func (r *customEchoRequest) Bind(obj any) error {
+	if err := r.ctx.Bind(obj); err != nil {
 		return err
 	}
 
-	if err := r.validator.Struct(data); err != nil {
-		log.Errorf("Error validating request: %s", err.Error())
+	if err := r.validator.Struct(obj); err != nil {
 		return err
 	}
 
