@@ -1,11 +1,11 @@
 package service
 
 import (
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_adminModel "github.com/Rayato159/isekai-shop-api/pkg/admin/model"
 	_adminRepository "github.com/Rayato159/isekai-shop-api/pkg/admin/repository"
 	_playerModel "github.com/Rayato159/isekai-shop-api/pkg/player/model"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/pkg/player/repository"
-	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type googleOAuth2Service struct {
@@ -32,8 +32,7 @@ func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerMo
 			Avatar: playerCreatingReq.Avatar,
 		}
 
-		_, err := s.playerRepository.Creating(playerEntity)
-		if err != nil {
+		if _, err := s.playerRepository.Creating(playerEntity); err != nil {
 			return err
 		}
 	}
@@ -50,8 +49,7 @@ func (s *googleOAuth2Service) AdminAccountCreating(createAdminInfo *_adminModel.
 			Avatar: createAdminInfo.Avatar,
 		}
 
-		_, err := s.adminRepository.Creating(adminEntity)
-		if err != nil {
+		if _, err := s.adminRepository.Creating(adminEntity); err != nil {
 			return err
 		}
 	}
