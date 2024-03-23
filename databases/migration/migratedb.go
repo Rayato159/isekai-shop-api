@@ -7,42 +7,37 @@ import (
 )
 
 func main() {
-	appConfig := config.GetAppConfig()
-	database := databases.NewPostgresDatabase(appConfig.DatabaseConfig)
+	conf := config.ConfigGetting()
+	db := databases.NewPostgresDatabase(conf.DatabaseConfig)
 
-	uuidMigreate(database)
-	playerMigrate(database)
-	adminMigrate(database)
-	itemMigrate(database)
-	playerCoinMigrate(database)
-	inventoryMigrate(database)
-	purchaseHistoryMigrate(database)
+	playerMigration(db)
+	adminMigration(db)
+	itemMigration(db)
+	playerCoinMigration(db)
+	inventoryMigration(db)
+	purchaseHistoryMigration(db)
 }
 
-func uuidMigreate(db databases.Database) {
-	db.GetDb().Raw(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`).Scan(&struct{}{})
+func playerMigration(db databases.Database) {
+	db.ConnectionGetting().Migrator().CreateTable(&entities.Player{})
 }
 
-func playerMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&entities.Player{})
+func adminMigration(db databases.Database) {
+	db.ConnectionGetting().Migrator().CreateTable(&entities.Admin{})
 }
 
-func adminMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&entities.Admin{})
+func itemMigration(db databases.Database) {
+	db.ConnectionGetting().Migrator().CreateTable(&entities.Item{})
 }
 
-func itemMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&entities.Item{})
+func playerCoinMigration(db databases.Database) {
+	db.ConnectionGetting().Migrator().CreateTable(&entities.PlayerCoin{})
 }
 
-func playerCoinMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&entities.PlayerCoin{})
+func inventoryMigration(db databases.Database) {
+	db.ConnectionGetting().Migrator().CreateTable(&entities.Inventory{})
 }
 
-func inventoryMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&entities.Inventory{})
-}
-
-func purchaseHistoryMigrate(db databases.Database) {
-	db.GetDb().Migrator().CreateTable(&entities.PurchaseHistory{})
+func purchaseHistoryMigration(db databases.Database) {
+	db.ConnectionGetting().Migrator().CreateTable(&entities.PurchaseHistory{})
 }

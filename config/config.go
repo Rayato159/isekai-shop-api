@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"strings"
 	"sync"
 	"time"
@@ -63,7 +62,7 @@ type (
 
 var appConfigInstance *AppConfig
 
-func GetAppConfig() *AppConfig {
+func ConfigGetting() *AppConfig {
 	once.Do(func() {
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
@@ -72,17 +71,17 @@ func GetAppConfig() *AppConfig {
 		viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 		if err := viper.ReadInConfig(); err != nil {
-			panic(fmt.Errorf("read config file failed: %v", err))
+			panic(err)
 		}
 
 		if err := viper.Unmarshal(&appConfigInstance); err != nil {
-			panic(fmt.Errorf("unmarshalkey config file failed: %v", err))
+			panic(err)
 		}
 
 		validate := validator.New()
 
 		if err := validate.Struct(appConfigInstance); err != nil {
-			panic(fmt.Errorf("validate config file failed: %v", err))
+			panic(err)
 		}
 	})
 

@@ -19,26 +19,25 @@ var (
 	once                    sync.Once
 )
 
-func NewPostgresDatabase(cfg *config.DatabaseConfig) Database {
+func NewPostgresDatabase(conf *config.DatabaseConfig) Database {
 	once.Do(func() {
 		dsn := fmt.Sprintf(
 			"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s search_path=%s",
-			cfg.Host,
-			cfg.User,
-			cfg.Password,
-			cfg.DBName,
-			cfg.Port,
-			cfg.SSLMode,
-			cfg.Schema,
+			conf.Host,
+			conf.User,
+			conf.Password,
+			conf.DBName,
+			conf.Port,
+			conf.SSLMode,
+			conf.Schema,
 		)
 
 		conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
-			errMessage := fmt.Sprintf("failed to connect database: %s", err.Error())
-			panic(errMessage)
+			panic(err)
 		}
 
-		log.Printf("Connected to database %s", cfg.DBName)
+		log.Printf("Connected to database %s", conf.DBName)
 
 		postgresDatabaseInstace = &postgresDatabase{conn}
 	})
@@ -46,6 +45,6 @@ func NewPostgresDatabase(cfg *config.DatabaseConfig) Database {
 	return postgresDatabaseInstace
 }
 
-func (db *postgresDatabase) GetDb() *gorm.DB {
+func (db *postgresDatabase) ConnectionGetting() *gorm.DB {
 	return db.DB
 }
