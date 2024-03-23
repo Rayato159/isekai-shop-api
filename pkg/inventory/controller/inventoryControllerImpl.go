@@ -28,7 +28,7 @@ func (c *inventoryControllerImpl) Listing(pctx echo.Context) error {
 	playerID, err := validation.PlayerIDGetting(pctx)
 	if err != nil {
 		c.logger.Error("Failed to get playerID", err.Error())
-		return custom.CustomError(pctx, http.StatusUnauthorized, err)
+		return custom.Error(pctx, http.StatusUnauthorized, err)
 	}
 
 	inventoryListing, err := c.inventoryService.Listing(playerID)

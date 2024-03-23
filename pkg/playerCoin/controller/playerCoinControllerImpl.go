@@ -23,7 +23,7 @@ func NewPlayerCoinControllerImpl(playerCoinService _playerCoinService.PlayerCoin
 func (c *playerCoinControllerImpl) CoinAdding(pctx echo.Context) error {
 	playerID, err := validation.PlayerIDGetting(pctx)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 
 	coinAddingReq := new(_playerCoinModel.CoinAddingReq)
@@ -31,13 +31,13 @@ func (c *playerCoinControllerImpl) CoinAdding(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(coinAddingReq); err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 	coinAddingReq.PlayerID = playerID
 
 	playerCoin, err := c.playerCoinService.CoinAdding(coinAddingReq)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusInternalServerError, err)
+		return custom.Error(pctx, http.StatusInternalServerError, err)
 	}
 
 	return pctx.JSON(http.StatusCreated, playerCoin)
@@ -46,7 +46,7 @@ func (c *playerCoinControllerImpl) CoinAdding(pctx echo.Context) error {
 func (c *playerCoinControllerImpl) PlayerCoinShowing(pctx echo.Context) error {
 	playerID, err := validation.PlayerIDGetting(pctx)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 
 	playerCoin := c.playerCoinService.PlayerCoinShowing(playerID)

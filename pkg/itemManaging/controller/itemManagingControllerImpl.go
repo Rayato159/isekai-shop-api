@@ -22,7 +22,7 @@ func NewItemManagingControllerImpl(itemManging _itemManging.ItemManagingService)
 func (c *itemManagingImpl) Creating(pctx echo.Context) error {
 	adminID, err := validation.AdminIDGetting(pctx)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusUnauthorized, err)
+		return custom.Error(pctx, http.StatusUnauthorized, err)
 	}
 
 	itemCreatingReq := new(_itemManagingModel.ItemCreatingReq)
@@ -30,13 +30,13 @@ func (c *itemManagingImpl) Creating(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(itemCreatingReq); err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 	itemCreatingReq.AdminID = adminID
 
 	item, err := c.itemManging.Creating(itemCreatingReq)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusInternalServerError, err)
+		return custom.Error(pctx, http.StatusInternalServerError, err)
 	}
 
 	return pctx.JSON(http.StatusCreated, item)
@@ -45,12 +45,12 @@ func (c *itemManagingImpl) Creating(pctx echo.Context) error {
 func (c *itemManagingImpl) Editing(pctx echo.Context) error {
 	adminID, err := validation.AdminIDGetting(pctx)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusUnauthorized, err)
+		return custom.Error(pctx, http.StatusUnauthorized, err)
 	}
 
 	itemID, err := c.getItemID(pctx)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 
 	editItemReq := new(_itemManagingModel.ItemEditingReq)
@@ -58,13 +58,13 @@ func (c *itemManagingImpl) Editing(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(editItemReq); err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 	editItemReq.AdminID = adminID
 
 	item, err := c.itemManging.Editing(itemID, editItemReq)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusInternalServerError, err)
+		return custom.Error(pctx, http.StatusInternalServerError, err)
 	}
 
 	return pctx.JSON(http.StatusOK, item)
@@ -73,17 +73,17 @@ func (c *itemManagingImpl) Editing(pctx echo.Context) error {
 func (c *itemManagingImpl) Archiving(pctx echo.Context) error {
 	_, err := validation.AdminIDGetting(pctx)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusUnauthorized, err)
+		return custom.Error(pctx, http.StatusUnauthorized, err)
 	}
 
 	itemID, err := c.getItemID(pctx)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 
 	err = c.itemManging.Archiving(itemID)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusInternalServerError, err)
+		return custom.Error(pctx, http.StatusInternalServerError, err)
 	}
 
 	return pctx.NoContent(http.StatusNoContent)

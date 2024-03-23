@@ -24,12 +24,12 @@ func (c *itemShopControllerImpl) Listing(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(itemFilter); err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 
 	itemListingResult, err := c.itemShopService.Listing(itemFilter)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusInternalServerError, err)
+		return custom.Error(pctx, http.StatusInternalServerError, err)
 	}
 
 	return pctx.JSON(http.StatusOK, itemListingResult)
@@ -38,7 +38,7 @@ func (c *itemShopControllerImpl) Listing(pctx echo.Context) error {
 func (c *itemShopControllerImpl) Buying(pctx echo.Context) error {
 	playerID, err := validation.PlayerIDGetting(pctx)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 
 	buyingReq := new(_itemShopModel.BuyingReq)
@@ -46,13 +46,13 @@ func (c *itemShopControllerImpl) Buying(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(buyingReq); err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 	buyingReq.PlayerID = playerID
 
 	result, err := c.itemShopService.Buying(buyingReq)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusInternalServerError, err)
+		return custom.Error(pctx, http.StatusInternalServerError, err)
 	}
 
 	return pctx.JSON(http.StatusOK, result)
@@ -61,7 +61,7 @@ func (c *itemShopControllerImpl) Buying(pctx echo.Context) error {
 func (c *itemShopControllerImpl) Selling(pctx echo.Context) error {
 	playerID, err := validation.PlayerIDGetting(pctx)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 
 	sellingReq := new(_itemShopModel.SellingReq)
@@ -69,13 +69,13 @@ func (c *itemShopControllerImpl) Selling(pctx echo.Context) error {
 	validatingContext := validation.NewCustomEchoRequest(pctx)
 
 	if err := validatingContext.Bind(sellingReq); err != nil {
-		return custom.CustomError(pctx, http.StatusBadRequest, err)
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 	sellingReq.PlayerID = playerID
 
 	result, err := c.itemShopService.Selling(sellingReq)
 	if err != nil {
-		return custom.CustomError(pctx, http.StatusInternalServerError, err)
+		return custom.Error(pctx, http.StatusInternalServerError, err)
 	}
 
 	return pctx.JSON(http.StatusOK, result)
