@@ -83,7 +83,7 @@
 			]
 		},
 		{
-			"name": "player balancing",
+			"name": "player playerCoin",
 			"item": [
 				{
 					"name": "showing",

@@ -11,13 +11,13 @@ import (
 func (s *echoServer) initItemShopRouter(m *customMiddleware) {
 	router := s.app.Group("/v1/item-shop")
 
-	balancingRepository := _playerCoinRepository.NewPlayerCoinRepositoryImpl(s.db, s.app.Logger)
+	playerCoinRepository := _playerCoinRepository.NewPlayerCoinRepositoryImpl(s.db, s.app.Logger)
 	inventoryRepository := _inventoryRepository.NewInventoryRepositoryImpl(s.db, s.app.Logger)
 	itemShopRepository := _itemShopRepository.NewItemShopRepositoryImpl(s.db, s.app.Logger)
 
 	itemShopService := _itemShopService.NewItemShopServiceImpl(
 		itemShopRepository,
-		balancingRepository,
+		playerCoinRepository,
 		inventoryRepository,
 	)
 
