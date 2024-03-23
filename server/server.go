@@ -51,7 +51,7 @@ func NewEchoServer(conf *config.Config, db *gorm.DB) *echoServer {
 func (s *echoServer) Start() {
 	// Initialize all middlewares
 	timeOutMiddleware := getTimeOutMiddleware(s.conf.Server.Timeout)
-	corsMiddleware := getCorsMiddleware(s.conf.Server.AllowOrigins)
+	corsMiddleware := getCORSMiddleware(s.conf.Server.AllowOrigins)
 	bodyLimitMiddleware := getBodyLimitMiddleware(s.conf.Server.BodyLimit)
 
 	// Prevent application from crashing
@@ -143,7 +143,7 @@ func getTimeOutMiddleware(timeout time.Duration) echo.MiddlewareFunc {
 	})
 }
 
-func getCorsMiddleware(allowOrigins []string) echo.MiddlewareFunc {
+func getCORSMiddleware(allowOrigins []string) echo.MiddlewareFunc {
 	return middleware.CORSWithConfig(middleware.CORSConfig{
 		Skipper:      middleware.DefaultSkipper,
 		AllowOrigins: allowOrigins,
