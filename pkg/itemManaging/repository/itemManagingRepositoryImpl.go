@@ -18,14 +18,14 @@ func NewItemManagingRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemManaging
 }
 
 func (r *itemMangingRepositoryImpl) Creating(itemEntity *entities.Item) (*entities.Item, error) {
-	insertedItem := new(entities.Item)
+	item := new(entities.Item)
 
-	if err := r.db.Create(itemEntity).Scan(insertedItem).Error; err != nil {
+	if err := r.db.Create(itemEntity).Scan(item).Error; err != nil {
 		r.logger.Error("Item creating failed:", err.Error())
 		return nil, &_itemManagingException.ItemCreating{}
 	}
 
-	return insertedItem, nil
+	return item, nil
 }
 
 func (r *itemMangingRepositoryImpl) Editing(itemID uint64, itemEditingReq *_itemManagingModel.ItemEditingReq) (uint64, error) {
