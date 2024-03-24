@@ -35,6 +35,7 @@ func (r *itemRepositoryImpl) TransactionCommit() error {
 
 func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
 	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false)
+
 	if itemFilter.Name != "" {
 		query = query.Where("name ilike ?", "%"+itemFilter.Name+"%")
 	}
