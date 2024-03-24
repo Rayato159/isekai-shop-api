@@ -1,8 +1,9 @@
 package repository
 
 import (
-	entities "github.com/Rayato159/isekai-shop-api/entities"
+	"github.com/Rayato159/isekai-shop-api/entities"
 	_playerCoin "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/exception"
+	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -31,8 +32,8 @@ func (r *playerCoinImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*enti
 	return insertedPlayerCoin, nil
 }
 
-func (r *playerCoinImpl) Showing(playerID string) (*entities.PlayerCoinShowingDto, error) {
-	coinDto := new(entities.PlayerCoinShowingDto)
+func (r *playerCoinImpl) Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error) {
+	playerCoin := new(_playerCoinModel.PlayerCoinShowing)
 
 	if err := r.db.Model(
 		&entities.PlayerCoin{},
@@ -42,10 +43,10 @@ func (r *playerCoinImpl) Showing(playerID string) (*entities.PlayerCoinShowingDt
 		"player_id, sum(amount) as coin",
 	).Group(
 		"player_id",
-	).Scan(&coinDto).Error; err != nil {
+	).Scan(&playerCoin).Error; err != nil {
 		r.logger.Error("Calculating player coin failed:", err.Error())
 		return nil, &_playerCoin.PlayerCoinShowing{}
 	}
 
-	return coinDto, nil
+	return playerCoin, nil
 }

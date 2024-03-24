@@ -6,6 +6,7 @@ import (
 
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
+	_itemShopModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
 )
 
 type itemRepositoryImpl struct {
@@ -32,17 +33,17 @@ func (r *itemRepositoryImpl) TransactionCommit() error {
 	return r.db.Commit().Error
 }
 
-func (r *itemRepositoryImpl) Listing(itemFilterDto *entities.ItemFilterDto) ([]*entities.Item, error) {
-	query := r.db.Model(&entities.Item{})
-	if itemFilterDto.Name != "" {
-		query = query.Where("name ilike ?", "%"+itemFilterDto.Name+"%")
+func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
+	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false)
+	if itemFilter.Name != "" {
+		query = query.Where("name ilike ?", "%"+itemFilter.Name+"%")
 	}
-	if itemFilterDto.Description != "" {
-		query = query.Where("description ilike ?", "%"+itemFilterDto.Description+"%")
+	if itemFilter.Description != "" {
+		query = query.Where("description ilike ?", "%"+itemFilter.Description+"%")
 	}
 
-	offset := int((itemFilterDto.Page - 1) * itemFilterDto.Size)
-	size := int(itemFilterDto.Size)
+	offset := int((itemFilter.Page - 1) * itemFilter.Size)
+	size := int(itemFilter.Size)
 
 	items := make([]*entities.Item, 0)
 
@@ -54,14 +55,14 @@ func (r *itemRepositoryImpl) Listing(itemFilterDto *entities.ItemFilterDto) ([]*
 	return items, nil
 }
 
-func (r *itemRepositoryImpl) Counting(itemFilterDto *entities.ItemFilterDto) (int64, error) {
+func (r *itemRepositoryImpl) Counting(itemFilter *_itemShopModel.ItemFilter) (int64, error) {
 	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false)
 
-	if itemFilterDto.Name != "" {
-		query = query.Where("name ilike ?", "%"+itemFilterDto.Name+"%")
+	if itemFilter.Name != "" {
+		query = query.Where("name ilike ?", "%"+itemFilter.Name+"%")
 	}
-	if itemFilterDto.Description != "" {
-		query = query.Where("description ilike ?", "%"+itemFilterDto.Description+"%")
+	if itemFilter.Description != "" {
+		query = query.Where("description ilike ?", "%"+itemFilter.Description+"%")
 	}
 
 	var count int64

@@ -2,6 +2,7 @@ package repository
 
 import (
 	entities "github.com/Rayato159/isekai-shop-api/entities"
+	_itemShopModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
 
 	"github.com/stretchr/testify/mock"
 )
@@ -15,8 +16,8 @@ func (m *ItemShopRepositoryMock) FindByID(itemID uint64) (*entities.Item, error)
 	return args.Get(0).(*entities.Item), args.Error(1)
 }
 
-func (m *ItemShopRepositoryMock) Listing(itemFilterDto *entities.ItemFilterDto) ([]*entities.Item, error) {
-	args := m.Called(itemFilterDto)
+func (m *ItemShopRepositoryMock) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
+	args := m.Called(itemFilter)
 	return args.Get(0).([]*entities.Item), args.Error(1)
 }
 
@@ -25,8 +26,8 @@ func (m *ItemShopRepositoryMock) FindByIDList(itemIDs []uint64) ([]*entities.Ite
 	return args.Get(0).([]*entities.Item), args.Error(1)
 }
 
-func (m *ItemShopRepositoryMock) Counting(itemFilterDto *entities.ItemFilterDto) (int64, error) {
-	args := m.Called(itemFilterDto)
+func (m *ItemShopRepositoryMock) Counting(itemFilter *_itemShopModel.ItemFilter) (int64, error) {
+	args := m.Called(itemFilter)
 	return args.Get(0).(int64), args.Error(1)
 }
 

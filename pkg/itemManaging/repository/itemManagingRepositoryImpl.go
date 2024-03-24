@@ -2,7 +2,8 @@ package repository
 
 import (
 	entities "github.com/Rayato159/isekai-shop-api/entities"
-	_itemManaging "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/exception"
+	_itemManagingException "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/exception"
+	_itemManagingModel "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/model"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -21,22 +22,22 @@ func (r *itemMangingRepositoryImpl) Creating(itemEntity *entities.Item) (*entiti
 
 	if err := r.db.Create(itemEntity).Scan(insertedItem).Error; err != nil {
 		r.logger.Error("Item creating failed:", err.Error())
-		return nil, &_itemManaging.ItemCreating{}
+		return nil, &_itemManagingException.ItemCreating{}
 	}
 
 	return insertedItem, nil
 }
 
-func (r *itemMangingRepositoryImpl) Editing(itemID uint64, updateItemDto *entities.ItemEditingDto) (uint64, error) {
+func (r *itemMangingRepositoryImpl) Editing(itemID uint64, itemEditingReq *_itemManagingModel.ItemEditingReq) (uint64, error) {
 	tx := r.db.Model(&entities.Item{}).Where(
 		"id = ?", itemID,
 	).Updates(
-		updateItemDto,
+		itemEditingReq,
 	)
 
 	if tx.Error != nil {
 		r.logger.Error("Editing item failed:", tx.Error.Error())
-		return 0, &_itemManaging.ItemEditing{}
+		return 0, &_itemManagingException.ItemEditing{}
 	}
 
 	return itemID, nil
@@ -49,7 +50,7 @@ func (r *itemMangingRepositoryImpl) Archiving(itemID uint64) error {
 		"is_archive", true,
 	).Error; err != nil {
 		r.logger.Error("Archiving item failed:", err.Error())
-		return &_itemManaging.ItemArchiving{ItemID: itemID}
+		return &_itemManagingException.ItemArchiving{ItemID: itemID}
 	}
 
 	return nil

@@ -41,7 +41,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	playerCoinRepositoryMock.On("Showing", "P001").Return(&entities.PlayerCoinShowingDto{
+	playerCoinRepositoryMock.On("Showing", "P001").Return(&_playerCoinModel.PlayerCoinShowing{
 		PlayerID: "P001",
 		Coin:     5000,
 	}, nil)
@@ -151,7 +151,7 @@ func TestItemBuyingFail(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	playerCoinRepositoryMock.On("Showing", "P001").Return(&entities.PlayerCoinShowingDto{
+	playerCoinRepositoryMock.On("Showing", "P001").Return(&_playerCoinModel.PlayerCoinShowing{
 		PlayerID: "P001",
 		Coin:     2000,
 	}, nil)

@@ -1,9 +1,12 @@
 package repository
 
-import entities "github.com/Rayato159/isekai-shop-api/entities"
+import (
+	"github.com/Rayato159/isekai-shop-api/entities"
+	_itemManagingModel "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/model"
+)
 
 type ItemManagingRepository interface {
 	Creating(itemEntity *entities.Item) (*entities.Item, error)
-	Editing(itemID uint64, updateItemDto *entities.ItemEditingDto) (uint64, error)
+	Editing(itemID uint64, itemEditingReq *_itemManagingModel.ItemEditingReq) (uint64, error)
 	Archiving(itemID uint64) error // Soft delete
 }

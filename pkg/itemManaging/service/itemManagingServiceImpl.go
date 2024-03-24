@@ -1,11 +1,11 @@
 package service
 
 import (
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_itemManagingModel "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/model"
 	_itemManagingRepository "github.com/Rayato159/isekai-shop-api/pkg/itemManaging/repository"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
-	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type itemManagingServiceImpl struct {
@@ -40,16 +40,8 @@ func (s *itemManagingServiceImpl) Creating(itemCreatingReq *_itemManagingModel.I
 	return itemEntity.ToItemModel(), nil
 }
 
-func (s *itemManagingServiceImpl) Editing(itemID uint64, updateItemReq *_itemManagingModel.ItemEditingReq) (*_itemShopModel.Item, error) {
-	updateItemDto := &entities.ItemEditingDto{
-		AdminID:     &updateItemReq.AdminID,
-		Name:        updateItemReq.Name,
-		Description: updateItemReq.Description,
-		Picture:     updateItemReq.Picture,
-		Price:       updateItemReq.Price,
-	}
-
-	updatedItemID, err := s.itemManagingRepository.Editing(itemID, updateItemDto)
+func (s *itemManagingServiceImpl) Editing(itemID uint64, itemEditingReq *_itemManagingModel.ItemEditingReq) (*_itemShopModel.Item, error) {
+	updatedItemID, err := s.itemManagingRepository.Editing(itemID, itemEditingReq)
 	if err != nil {
 		return nil, err
 	}

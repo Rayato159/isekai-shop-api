@@ -31,21 +31,12 @@ func NewItemShopServiceImpl(
 }
 
 func (s *itemShopServiceImpl) Listing(itemFilter *_itemShopModel.ItemFilter) (*_itemShopModel.ItemResult, error) {
-	itemFilterDto := &entities.ItemFilterDto{
-		Name:        itemFilter.Name,
-		Description: itemFilter.Description,
-		PaginateDto: entities.PaginateDto{
-			Page: itemFilter.Page,
-			Size: itemFilter.Size,
-		},
-	}
-
-	itemEntityList, err := s.itemShopRepository.Listing(itemFilterDto)
+	itemEntityList, err := s.itemShopRepository.Listing(itemFilter)
 	if err != nil {
 		return nil, err
 	}
 
-	totalItems, err := s.itemShopRepository.Counting(itemFilterDto)
+	totalItems, err := s.itemShopRepository.Counting(itemFilter)
 	if err != nil {
 		return nil, err
 	}
@@ -211,12 +202,12 @@ func (s *itemShopServiceImpl) checkPlayerItemQuantity(playerID string, itemID ui
 }
 
 func (s *itemShopServiceImpl) checkPlayerBalance(playerID string, amount int64) error {
-	coinDto, err := s.playerCoinRepository.Showing(playerID)
+	playerCoin, err := s.playerCoinRepository.Showing(playerID)
 	if err != nil {
 		return err
 	}
 
-	if coinDto.Coin < amount {
+	if playerCoin.Coin < amount {
 		log.Printf("Player %s has not enough coin", playerID)
 		return &_itemShop.CoinNotEnough{}
 	}

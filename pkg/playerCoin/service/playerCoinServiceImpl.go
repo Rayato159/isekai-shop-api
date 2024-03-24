@@ -1,9 +1,9 @@
 package service
 
 import (
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
-	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
 type playerCoinImpl struct {
@@ -31,13 +31,13 @@ func (s *playerCoinImpl) CoinAdding(coinAddingReq *_playerCoinModel.CoinAddingRe
 }
 
 func (s *playerCoinImpl) PlayerCoinShowing(playerID string) *_playerCoinModel.PlayerCoinShowing {
-	coinDto, err := s.playerCoinRepository.Showing(playerID)
+	coin, err := s.playerCoinRepository.Showing(playerID)
 	if err != nil {
 		return &_playerCoinModel.PlayerCoinShowing{
 			PlayerID: playerID,
-			Balance:  0,
+			Coin:     0,
 		}
 	}
 
-	return coinDto.ToPlayerCoinShowingModel()
+	return coin
 }
