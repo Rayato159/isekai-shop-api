@@ -29,14 +29,12 @@ func (r *itemMangingRepositoryImpl) Creating(itemEntity *entities.Item) (*entiti
 }
 
 func (r *itemMangingRepositoryImpl) Editing(itemID uint64, itemEditingReq *_itemManagingModel.ItemEditingReq) (uint64, error) {
-	tx := r.db.Model(&entities.Item{}).Where(
+	if err := r.db.Model(&entities.Item{}).Where(
 		"id = ?", itemID,
 	).Updates(
 		itemEditingReq,
-	)
-
-	if tx.Error != nil {
-		r.logger.Error("Editing item failed:", tx.Error.Error())
+	).Error; err != nil {
+		r.logger.Error("Editing item failed:", err.Error())
 		return 0, &_itemManagingException.ItemEditing{}
 	}
 
