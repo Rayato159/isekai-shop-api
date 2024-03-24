@@ -48,7 +48,7 @@ func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*
 
 	items := make([]*entities.Item, 0)
 
-	if err := query.Offset(offset).Limit(size).Find(&items).Error; err != nil {
+	if err := query.Offset(offset).Limit(size).Find(&items).Order("id asc").Error; err != nil {
 		r.logger.Error("Failed to find items", err.Error())
 		return nil, &_itemShop.ItemListing{}
 	}
