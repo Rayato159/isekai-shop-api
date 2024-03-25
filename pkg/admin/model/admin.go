@@ -1,6 +1,6 @@
 package model
 
-type CreateAdminReq struct {
+type AdminCreatingReq struct {
 	ID     string
 	Email  string
 	Name   string

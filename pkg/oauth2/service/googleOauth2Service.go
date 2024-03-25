@@ -23,7 +23,7 @@ func NewGoogleOAuth2Service(
 	}
 }
 
-func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerModel.CreatePlayerReq) error {
+func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerModel.PlayerCreatingReq) error {
 	if !s.isPlayerIsExists(playerCreatingReq.ID) {
 		playerEntity := &entities.Player{
 			ID:     playerCreatingReq.ID,
@@ -40,7 +40,7 @@ func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerMo
 	return nil
 }
 
-func (s *googleOAuth2Service) AdminAccountCreating(createAdminInfo *_adminModel.CreateAdminReq) error {
+func (s *googleOAuth2Service) AdminAccountCreating(createAdminInfo *_adminModel.AdminCreatingReq) error {
 	if !s.isAdminIsExists(createAdminInfo.ID) {
 		adminEntity := &entities.Admin{
 			ID:     createAdminInfo.ID,

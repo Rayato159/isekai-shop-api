@@ -128,7 +128,7 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 
 	}
 
-	playerCreatingReq := &_playerModel.CreatePlayerReq{
+	playerCreatingReq := &_playerModel.PlayerCreatingReq{
 		ID:     userInfo.ID,
 		Email:  userInfo.Email,
 		Name:   userInfo.Name,
@@ -168,7 +168,7 @@ func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 
 	}
 
-	createAdminReq := &_adminModel.CreateAdminReq{
+	createAdminReq := &_adminModel.AdminCreatingReq{
 		ID:     userInfo.ID,
 		Email:  userInfo.Email,
 		Name:   userInfo.Name,

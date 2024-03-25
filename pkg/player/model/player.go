@@ -1,6 +1,6 @@
 package model
 
-type CreatePlayerReq struct {
+type PlayerCreatingReq struct {
 	ID     string
 	Email  string
 	Name   string
