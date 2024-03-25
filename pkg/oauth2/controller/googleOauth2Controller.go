@@ -23,13 +23,11 @@ import (
 	"golang.org/x/oauth2"
 )
 
-type (
-	googleOAuth2Controller struct {
-		oauth2Service _oauth2Service.OAuth2Service
-		oauth2Conf    *config.OAuth2
-		logger        echo.Logger
-	}
-)
+type googleOAuth2Controller struct {
+	oauth2Service _oauth2Service.OAuth2Service
+	oauth2Conf    *config.OAuth2
+	logger        echo.Logger
+}
 
 var (
 	playerGoogleOAuth2 *oauth2.Config
