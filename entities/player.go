@@ -2,8 +2,6 @@ package entities
 
 import (
 	"time"
-
-	_playerModel "github.com/Rayato159/isekai-shop-api/pkg/player/model"
 )
 
 type Player struct {
@@ -14,15 +12,4 @@ type Player struct {
 	Inventories []Inventory `gorm:"foreignKey:PlayerID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CreatedAt   time.Time   `gorm:"not null;autoCreateTime;"`
 	UpdatedAt   time.Time   `gorm:"not null;autoUpdateTime;"`
-}
-
-func (p *Player) ToPlayerModel() *_playerModel.Player {
-	return &_playerModel.Player{
-		ID:        p.ID,
-		Email:     p.Email,
-		Name:      p.Name,
-		Avatar:    p.Avatar,
-		CreatedAt: p.CreatedAt,
-		UpdatedAt: p.UpdatedAt,
-	}
 }
