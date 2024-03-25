@@ -1,18 +1,18 @@
 package repository
 
 import (
+	"github.com/Rayato159/isekai-shop-api/databases"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventory "github.com/Rayato159/isekai-shop-api/pkg/inventory/exception"
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 )
 
 type inventoryImpl struct {
-	db     *gorm.DB
+	db     databases.Database
 	logger echo.Logger
 }
 
-func NewInventoryRepositoryImpl(db *gorm.DB, logger echo.Logger) InventoryRepository {
+func NewInventoryRepositoryImpl(db databases.Database, logger echo.Logger) InventoryRepository {
 	return &inventoryImpl{
 		db:     db,
 		logger: logger,
@@ -22,7 +22,7 @@ func NewInventoryRepositoryImpl(db *gorm.DB, logger echo.Logger) InventoryReposi
 func (r *inventoryImpl) Filling(inventoryEntities []*entities.Inventory) ([]*entities.Inventory, error) {
 	insertedInventories := make([]*entities.Inventory, 0)
 
-	if err := r.db.Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
+	if err := r.db.ConnectionGetting().Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
 		r.logger.Error("Item creating failed:", err.Error())
 		return nil, &_inventory.InventoryFilling{}
 	}
@@ -33,7 +33,7 @@ func (r *inventoryImpl) Filling(inventoryEntities []*entities.Inventory) ([]*ent
 func (r *inventoryImpl) Listing(playerID string) ([]*entities.Inventory, error) {
 	inventories := make([]*entities.Inventory, 0)
 
-	if err := r.db.Where(
+	if err := r.db.ConnectionGetting().Where(
 		"player_id = ? and is_deleted = ?", playerID, false,
 	).Find(&inventories).Error; err != nil {
 		r.logger.Error("Listing player's item failed:", err.Error())
@@ -54,7 +54,7 @@ func (r *inventoryImpl) Removing(playerID string, itemID uint64, limit int) erro
 	for _, inventory := range inventories {
 		inventory.IsDeleted = true
 
-		if err := r.db.Model(
+		if err := r.db.ConnectionGetting().Model(
 			&entities.Inventory{},
 		).Where(
 			"id = ?", inventory.ID,
@@ -72,7 +72,7 @@ func (r *inventoryImpl) Removing(playerID string, itemID uint64, limit int) erro
 func (r *inventoryImpl) PlayerItemCounting(playerID string, itemID uint64) int64 {
 	var count int64
 
-	if err := r.db.Model(
+	if err := r.db.ConnectionGetting().Model(
 		&entities.Inventory{},
 	).Where(
 		"player_id = ? and item_id = ? and is_deleted = ?", playerID, itemID, false,
@@ -91,7 +91,7 @@ func (r *inventoryImpl) findPlayerItemInInventoryByID(
 ) ([]*entities.Inventory, error) {
 	inventories := make([]*entities.Inventory, 0)
 
-	if err := r.db.Where(
+	if err := r.db.ConnectionGetting().Where(
 		"player_id = ? and item_id = ? and is_deleted = ?", playerID, itemID, false,
 	).Limit(
 		limit,

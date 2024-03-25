@@ -2,19 +2,19 @@ package repository
 
 import (
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 
+	"github.com/Rayato159/isekai-shop-api/databases"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
 )
 
 type itemRepositoryImpl struct {
-	db     *gorm.DB
+	db     databases.Database
 	logger echo.Logger
 }
 
-func NewItemShopRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemShopRepository {
+func NewItemShopRepositoryImpl(db databases.Database, logger echo.Logger) ItemShopRepository {
 	return &itemRepositoryImpl{
 		db:     db,
 		logger: logger,
@@ -22,19 +22,19 @@ func NewItemShopRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemShopReposito
 }
 
 func (r *itemRepositoryImpl) TransactionBegin() {
-	r.db.Begin()
+	r.db.ConnectionGetting().Begin()
 }
 
 func (r *itemRepositoryImpl) TransactionRollback() {
-	r.db.Rollback()
+	r.db.ConnectionGetting().Rollback()
 }
 
 func (r *itemRepositoryImpl) TransactionCommit() error {
-	return r.db.Commit().Error
+	return r.db.ConnectionGetting().Commit().Error
 }
 
 func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
-	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false)
+	query := r.db.ConnectionGetting().Model(&entities.Item{}).Where("is_archive = ?", false)
 
 	if itemFilter.Name != "" {
 		query = query.Where("name ilike ?", "%"+itemFilter.Name+"%")
@@ -57,7 +57,7 @@ func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*
 }
 
 func (r *itemRepositoryImpl) Counting(itemFilter *_itemShopModel.ItemFilter) (int64, error) {
-	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false)
+	query := r.db.ConnectionGetting().Model(&entities.Item{}).Where("is_archive = ?", false)
 
 	if itemFilter.Name != "" {
 		query = query.Where("name ilike ?", "%"+itemFilter.Name+"%")
@@ -79,7 +79,7 @@ func (r *itemRepositoryImpl) Counting(itemFilter *_itemShopModel.ItemFilter) (in
 func (r *itemRepositoryImpl) FindByID(itemID uint64) (*entities.Item, error) {
 	item := new(entities.Item)
 
-	if err := r.db.First(item, itemID).Error; err != nil {
+	if err := r.db.ConnectionGetting().First(item, itemID).Error; err != nil {
 		r.logger.Error("Finding item failed:", err.Error())
 		return nil, &_itemShop.ItemNotFound{ItemID: itemID}
 	}
@@ -91,7 +91,7 @@ func (r *itemRepositoryImpl) FindByID(itemID uint64) (*entities.Item, error) {
 func (r *itemRepositoryImpl) FindByIDList(itemIDs []uint64) ([]*entities.Item, error) {
 	items := make([]*entities.Item, 0)
 
-	if err := r.db.Model(&entities.Item{}).Where("id in ?", itemIDs).Find(&items).Error; err != nil {
+	if err := r.db.ConnectionGetting().Model(&entities.Item{}).Where("id in ?", itemIDs).Find(&items).Error; err != nil {
 		r.logger.Error("Finding items by ID failed:", err.Error())
 		return nil, &_itemShop.ItemListing{}
 	}
@@ -102,7 +102,7 @@ func (r *itemRepositoryImpl) FindByIDList(itemIDs []uint64) ([]*entities.Item, e
 func (r *itemRepositoryImpl) PurchaseHistoryRecording(purchasingEntity *entities.PurchaseHistory) (*entities.PurchaseHistory, error) {
 	insertedPurchasing := new(entities.PurchaseHistory)
 
-	if err := r.db.Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
+	if err := r.db.ConnectionGetting().Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
 		r.logger.Errorf("Purchase history recording failed: %s", err.Error())
 		return nil, &_itemShop.HistoryOfPurchaseRecording{}
 	}

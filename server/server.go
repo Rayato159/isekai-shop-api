@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/Rayato159/isekai-shop-api/config"
+	"github.com/Rayato159/isekai-shop-api/databases"
 	_adminRepository "github.com/Rayato159/isekai-shop-api/pkg/admin/repository"
 	_oauth2Controller "github.com/Rayato159/isekai-shop-api/pkg/oauth2/controller"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/pkg/oauth2/service"
@@ -19,12 +20,11 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
-	"gorm.io/gorm"
 )
 
 type echoServer struct {
 	app  *echo.Echo
-	db   *gorm.DB
+	db   databases.Database
 	conf *config.Config
 }
 
@@ -33,7 +33,7 @@ var (
 	once   sync.Once
 )
 
-func NewEchoServer(conf *config.Config, db *gorm.DB) *echoServer {
+func NewEchoServer(conf *config.Config, db databases.Database) *echoServer {
 	echoApp := echo.New()
 	echoApp.Logger.SetLevel(log.DEBUG)
 

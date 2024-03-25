@@ -1,20 +1,20 @@
 package repository
 
 import (
+	"github.com/Rayato159/isekai-shop-api/databases"
 	"github.com/Rayato159/isekai-shop-api/entities"
 	_playerCoin "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/exception"
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 )
 
 type playerCoinImpl struct {
-	db     *gorm.DB
+	db     databases.Database
 	logger echo.Logger
 }
 
-func NewPlayerCoinRepositoryImpl(db *gorm.DB, logger echo.Logger) PlayerCoinRepository {
+func NewPlayerCoinRepositoryImpl(db databases.Database, logger echo.Logger) PlayerCoinRepository {
 	return &playerCoinImpl{
 		db:     db,
 		logger: logger,
@@ -24,7 +24,7 @@ func NewPlayerCoinRepositoryImpl(db *gorm.DB, logger echo.Logger) PlayerCoinRepo
 func (r *playerCoinImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
 	insertedPlayerCoin := new(entities.PlayerCoin)
 
-	if err := r.db.Create(playerCoinEntity).Scan(insertedPlayerCoin).Error; err != nil {
+	if err := r.db.ConnectionGetting().Create(playerCoinEntity).Scan(insertedPlayerCoin).Error; err != nil {
 		r.logger.Error("Player's balance recording failed:", err.Error())
 		return nil, &_playerCoin.CoinAdding{}
 	}
@@ -35,7 +35,7 @@ func (r *playerCoinImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*enti
 func (r *playerCoinImpl) Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error) {
 	playerCoin := new(_playerCoinModel.PlayerCoinShowing)
 
-	if err := r.db.Model(
+	if err := r.db.ConnectionGetting().Model(
 		&entities.PlayerCoin{},
 	).Where(
 		"player_id = ?", playerID,
