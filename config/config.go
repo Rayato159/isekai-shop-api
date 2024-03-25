@@ -46,17 +46,10 @@ type (
 		DeviceAuthUrl string `mapstructure:"deviceAuthUrl" validate:"required"`
 	}
 
-	State struct {
-		Secret    string        `mapstructure:"secret" validate:"required"`
-		ExpiresAt time.Duration `mapstructure:"expiresAt" validate:"required"`
-		Issuer    string        `mapstructure:"issuer" validate:"required"`
-	}
-
 	Config struct {
 		Database *Database `mapstructure:"database" validate:"required"`
 		Server   *Server   `mapstructure:"server" validate:"required"`
 		OAuth2   *OAuth2   `mapstructure:"oauth2" validate:"required"`
-		State    *State    `mapstructure:"state" validate:"required"`
 	}
 )
 

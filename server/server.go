@@ -15,7 +15,6 @@ import (
 	_adminRepository "github.com/Rayato159/isekai-shop-api/pkg/admin/repository"
 	_oauth2Controller "github.com/Rayato159/isekai-shop-api/pkg/oauth2/controller"
 	_oauth2Service "github.com/Rayato159/isekai-shop-api/pkg/oauth2/service"
-	"github.com/Rayato159/isekai-shop-api/pkg/oauth2/state"
 	_playerRepository "github.com/Rayato159/isekai-shop-api/pkg/player/repository"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -106,13 +105,6 @@ func (s *echoServer) healthCheck(pctx echo.Context) error {
 }
 
 func (s *echoServer) getCustomMiddleware() *customMiddleware {
-	stateConfig := s.conf.State
-	stateProvider := state.NewJwtState(
-		[]byte(stateConfig.Secret),
-		stateConfig.ExpiresAt,
-		stateConfig.Issuer,
-	)
-
 	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
 	adminRepository := _adminRepository.NewAdminRepositoryImpl(s.db, s.app.Logger)
 
@@ -124,7 +116,6 @@ func (s *echoServer) getCustomMiddleware() *customMiddleware {
 	oauth2Controller := _oauth2Controller.NewGoogleOAuth2Controller(
 		oauth2Service,
 		s.conf.OAuth2,
-		stateProvider,
 		s.app.Logger,
 	)
 
