@@ -24,7 +24,7 @@ func NewPlayerCoinRepositoryImpl(db databases.Database, logger echo.Logger) Play
 func (r *playerCoinImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
 	insertedPlayerCoin := new(entities.PlayerCoin)
 
-	if err := r.db.ConnectionGetting().Create(playerCoinEntity).Scan(insertedPlayerCoin).Error; err != nil {
+	if err := r.db.Connect().Create(playerCoinEntity).Scan(insertedPlayerCoin).Error; err != nil {
 		r.logger.Error("Player's balance recording failed:", err.Error())
 		return nil, &_playerCoin.CoinAdding{}
 	}
@@ -35,7 +35,7 @@ func (r *playerCoinImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*enti
 func (r *playerCoinImpl) Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error) {
 	playerCoin := new(_playerCoinModel.PlayerCoinShowing)
 
-	if err := r.db.ConnectionGetting().Model(
+	if err := r.db.Connect().Model(
 		&entities.PlayerCoin{},
 	).Where(
 		"player_id = ?", playerID,

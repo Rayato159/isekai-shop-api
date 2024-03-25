@@ -23,7 +23,7 @@ func NewPlayerRepositoryImpl(db databases.Database, logger echo.Logger) PlayerRe
 func (r *playerRepositoryImpl) Creating(playerEntity *entities.Player) (*entities.Player, error) {
 	insertedPlayer := new(entities.Player)
 
-	if err := r.db.ConnectionGetting().Create(playerEntity).Scan(insertedPlayer).Error; err != nil {
+	if err := r.db.Connect().Create(playerEntity).Scan(insertedPlayer).Error; err != nil {
 		r.logger.Error("Creating player failed", err.Error())
 		return nil, &_player.PlayerCreating{PlayerID: playerEntity.ID}
 	}
@@ -33,7 +33,7 @@ func (r *playerRepositoryImpl) Creating(playerEntity *entities.Player) (*entitie
 
 func (r *playerRepositoryImpl) FindByID(playerID string) (*entities.Player, error) {
 	player := new(entities.Player)
-	tx := r.db.ConnectionGetting().Where("id = ?", playerID).First(player)
+	tx := r.db.Connect().Where("id = ?", playerID).First(player)
 
 	if tx.Error != nil {
 		r.logger.Errorf("Finding player failed: %s", tx.Error.Error())

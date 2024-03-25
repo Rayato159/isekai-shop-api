@@ -22,19 +22,19 @@ func NewItemShopRepositoryImpl(db databases.Database, logger echo.Logger) ItemSh
 }
 
 func (r *itemRepositoryImpl) TransactionBegin() {
-	r.db.ConnectionGetting().Begin()
+	r.db.Connect().Begin()
 }
 
 func (r *itemRepositoryImpl) TransactionRollback() {
-	r.db.ConnectionGetting().Rollback()
+	r.db.Connect().Rollback()
 }
 
 func (r *itemRepositoryImpl) TransactionCommit() error {
-	return r.db.ConnectionGetting().Commit().Error
+	return r.db.Connect().Commit().Error
 }
 
 func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
-	query := r.db.ConnectionGetting().Model(&entities.Item{}).Where("is_archive = ?", false)
+	query := r.db.Connect().Model(&entities.Item{}).Where("is_archive = ?", false)
 
 	if itemFilter.Name != "" {
 		query = query.Where("name ilike ?", "%"+itemFilter.Name+"%")
@@ -57,7 +57,7 @@ func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*
 }
 
 func (r *itemRepositoryImpl) Counting(itemFilter *_itemShopModel.ItemFilter) (int64, error) {
-	query := r.db.ConnectionGetting().Model(&entities.Item{}).Where("is_archive = ?", false)
+	query := r.db.Connect().Model(&entities.Item{}).Where("is_archive = ?", false)
 
 	if itemFilter.Name != "" {
 		query = query.Where("name ilike ?", "%"+itemFilter.Name+"%")
@@ -79,7 +79,7 @@ func (r *itemRepositoryImpl) Counting(itemFilter *_itemShopModel.ItemFilter) (in
 func (r *itemRepositoryImpl) FindByID(itemID uint64) (*entities.Item, error) {
 	item := new(entities.Item)
 
-	if err := r.db.ConnectionGetting().First(item, itemID).Error; err != nil {
+	if err := r.db.Connect().First(item, itemID).Error; err != nil {
 		r.logger.Error("Finding item failed:", err.Error())
 		return nil, &_itemShop.ItemNotFound{ItemID: itemID}
 	}
@@ -91,7 +91,7 @@ func (r *itemRepositoryImpl) FindByID(itemID uint64) (*entities.Item, error) {
 func (r *itemRepositoryImpl) FindByIDList(itemIDs []uint64) ([]*entities.Item, error) {
 	items := make([]*entities.Item, 0)
 
-	if err := r.db.ConnectionGetting().Model(&entities.Item{}).Where("id in ?", itemIDs).Find(&items).Error; err != nil {
+	if err := r.db.Connect().Model(&entities.Item{}).Where("id in ?", itemIDs).Find(&items).Error; err != nil {
 		r.logger.Error("Finding items by ID failed:", err.Error())
 		return nil, &_itemShop.ItemListing{}
 	}
@@ -102,7 +102,7 @@ func (r *itemRepositoryImpl) FindByIDList(itemIDs []uint64) ([]*entities.Item, e
 func (r *itemRepositoryImpl) PurchaseHistoryRecording(purchasingEntity *entities.PurchaseHistory) (*entities.PurchaseHistory, error) {
 	insertedPurchasing := new(entities.PurchaseHistory)
 
-	if err := r.db.ConnectionGetting().Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
+	if err := r.db.Connect().Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
 		r.logger.Errorf("Purchase history recording failed: %s", err.Error())
 		return nil, &_itemShop.HistoryOfPurchaseRecording{}
 	}

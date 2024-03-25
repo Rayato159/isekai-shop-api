@@ -20,7 +20,7 @@ func NewAdminRepositoryImpl(db databases.Database, logger echo.Logger) AdminRepo
 }
 
 func (r *adminRepositoryImpl) Creating(adminEntity *entities.Admin) (string, error) {
-	tx := r.db.ConnectionGetting().Create(adminEntity)
+	tx := r.db.Connect().Create(adminEntity)
 
 	if tx.Error != nil {
 		r.logger.Errorf("Error inserting player: %s", tx.Error.Error())
@@ -32,7 +32,7 @@ func (r *adminRepositoryImpl) Creating(adminEntity *entities.Admin) (string, err
 
 func (r *adminRepositoryImpl) FindByID(adminID string) (*entities.Admin, error) {
 	admin := new(entities.Admin)
-	tx := r.db.ConnectionGetting().Where("id = ?", adminID).First(admin)
+	tx := r.db.Connect().Where("id = ?", adminID).First(admin)
 
 	if tx.Error != nil {
 		r.logger.Errorf("Error finding player: %s", tx.Error.Error())

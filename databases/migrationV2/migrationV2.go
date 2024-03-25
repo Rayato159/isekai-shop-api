@@ -11,7 +11,7 @@ func main() {
 	conf := config.ConfigGetting()
 	db := databases.NewPostgresDatabase(conf.Database)
 
-	tx := db.ConnectionGetting().Begin()
+	tx := db.Connect().Begin()
 
 	itemsAdding(tx)
 
