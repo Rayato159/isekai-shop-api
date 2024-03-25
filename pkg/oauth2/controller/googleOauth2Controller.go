@@ -34,9 +34,9 @@ var (
 	adminGoogleOAuth2  *oauth2.Config
 	once               sync.Once
 
-	oauth2AccessTokenCookieName  = "act"
-	oauth2RefreshTokenCookieName = "rft"
-	stateCookieName              = "state"
+	accessTokenCookieName  = "act"
+	refreshTokenCookieName = "rft"
+	stateCookieName        = "state"
 
 	letters = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 )
@@ -137,8 +137,8 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 		return custom.Error(pctx, http.StatusInternalServerError, &_oauth2Exception.OAuth2Processing{})
 	}
 
-	c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, token.AccessToken)
-	c.setSameSiteCookie(pctx, oauth2RefreshTokenCookieName, token.RefreshToken)
+	c.setSameSiteCookie(pctx, accessTokenCookieName, token.AccessToken)
+	c.setSameSiteCookie(pctx, refreshTokenCookieName, token.RefreshToken)
 
 	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{Message: "Login successful"})
 }
@@ -179,14 +179,14 @@ func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 		return custom.Error(pctx, http.StatusInternalServerError, &_oauth2Exception.OAuth2Processing{})
 	}
 
-	c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, token.AccessToken)
-	c.setSameSiteCookie(pctx, oauth2RefreshTokenCookieName, token.RefreshToken)
+	c.setSameSiteCookie(pctx, accessTokenCookieName, token.AccessToken)
+	c.setSameSiteCookie(pctx, refreshTokenCookieName, token.RefreshToken)
 
 	return pctx.JSON(http.StatusOK, &_oauth2Model.LoginResponse{Message: "Login successful"})
 }
 
 func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
-	accessToken, err := pctx.Cookie(oauth2AccessTokenCookieName)
+	accessToken, err := pctx.Cookie(accessTokenCookieName)
 	if err != nil {
 		c.logger.Errorf("Error reading access token: %s", err.Error())
 		return custom.Error(pctx, http.StatusBadRequest, &_oauth2Exception.Logout{})
@@ -197,8 +197,8 @@ func (c *googleOAuth2Controller) Logout(pctx echo.Context) error {
 		return custom.Error(pctx, http.StatusInternalServerError, &_oauth2Exception.Logout{})
 	}
 
-	c.removeSameSiteCookie(pctx, oauth2AccessTokenCookieName)
-	c.removeSameSiteCookie(pctx, oauth2RefreshTokenCookieName)
+	c.removeSameSiteCookie(pctx, accessTokenCookieName)
+	c.removeSameSiteCookie(pctx, refreshTokenCookieName)
 
 	return pctx.JSON(http.StatusOK, &_oauth2Model.LogoutResponse{Message: "Logout successful"})
 }

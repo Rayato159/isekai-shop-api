@@ -114,8 +114,8 @@ func (c *googleOAuth2Controller) playerRefreshToken(pctx echo.Context, token *oa
 	}
 
 	// Update cookies
-	c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, updatedToken.AccessToken)
-	c.setSameSiteCookie(pctx, oauth2RefreshTokenCookieName, updatedToken.RefreshToken)
+	c.setSameSiteCookie(pctx, accessTokenCookieName, updatedToken.AccessToken)
+	c.setSameSiteCookie(pctx, refreshTokenCookieName, updatedToken.RefreshToken)
 
 	return updatedToken, nil
 }
@@ -130,20 +130,20 @@ func (c *googleOAuth2Controller) adminRefreshToken(pctx echo.Context, token *oau
 	}
 
 	// Update cookies
-	c.setSameSiteCookie(pctx, oauth2AccessTokenCookieName, updatedToken.AccessToken)
-	c.setSameSiteCookie(pctx, oauth2RefreshTokenCookieName, updatedToken.RefreshToken)
+	c.setSameSiteCookie(pctx, accessTokenCookieName, updatedToken.AccessToken)
+	c.setSameSiteCookie(pctx, refreshTokenCookieName, updatedToken.RefreshToken)
 
 	return updatedToken, nil
 }
 
 func (c *googleOAuth2Controller) getToken(pctx echo.Context) (*oauth2.Token, error) {
-	accessToken, err := pctx.Cookie(oauth2AccessTokenCookieName)
+	accessToken, err := pctx.Cookie(accessTokenCookieName)
 	if err != nil {
 		c.logger.Errorf("Error reading access token: %s", err.Error())
 		return nil, err
 	}
 
-	refreshToken, err := pctx.Cookie(oauth2AccessTokenCookieName)
+	refreshToken, err := pctx.Cookie(accessTokenCookieName)
 	if err != nil {
 		c.logger.Errorf("Error reading refresh token: %s", err.Error())
 		return nil, err
