@@ -18,7 +18,7 @@ func (c *googleOAuth2Controller) PlayerAuthorizing(pctx echo.Context, next echo.
 		c.logger.Errorf("Error reading token: %s", err.Error())
 		return custom.Error(
 			pctx, http.StatusUnauthorized,
-			&_oauth2.UnAuthorize{},
+			&_oauth2.Unauthorized{},
 		)
 
 	}
@@ -33,7 +33,7 @@ func (c *googleOAuth2Controller) PlayerAuthorizing(pctx echo.Context, next echo.
 			c.logger.Errorf("Error refreshing token: %s", err.Error())
 			return custom.Error(
 				pctx, http.StatusUnauthorized,
-				&_oauth2.UnAuthorize{},
+				&_oauth2.Unauthorized{},
 			)
 		}
 	}
@@ -44,7 +44,7 @@ func (c *googleOAuth2Controller) PlayerAuthorizing(pctx echo.Context, next echo.
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
-		return custom.Error(pctx, http.StatusUnauthorized, &_oauth2.UnAuthorize{})
+		return custom.Error(pctx, http.StatusUnauthorized, &_oauth2.Unauthorized{})
 
 	}
 
@@ -65,7 +65,7 @@ func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.H
 		c.logger.Errorf("Error reading token: %s", err.Error())
 		return custom.Error(
 			pctx, http.StatusUnauthorized,
-			&_oauth2.UnAuthorize{},
+			&_oauth2.Unauthorized{},
 		)
 
 	}
@@ -80,7 +80,7 @@ func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.H
 			c.logger.Errorf("Error refreshing token: %s", err.Error())
 			return custom.Error(
 				pctx, http.StatusUnauthorized,
-				&_oauth2.UnAuthorize{},
+				&_oauth2.Unauthorized{},
 			)
 		}
 	}
@@ -91,7 +91,7 @@ func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.H
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
-		return custom.Error(pctx, http.StatusUnauthorized, &_oauth2.UnAuthorize{})
+		return custom.Error(pctx, http.StatusUnauthorized, &_oauth2.Unauthorized{})
 
 	}
 
