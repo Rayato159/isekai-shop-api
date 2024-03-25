@@ -24,7 +24,7 @@ func NewGoogleOAuth2Service(
 }
 
 func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerModel.PlayerCreatingReq) error {
-	if !s.isPlayerIsExists(playerCreatingReq.ID) {
+	if !s.IsThisGuyIsReallyPlayer(playerCreatingReq.ID) {
 		playerEntity := &entities.Player{
 			ID:     playerCreatingReq.ID,
 			Email:  playerCreatingReq.Email,
@@ -40,13 +40,13 @@ func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerMo
 	return nil
 }
 
-func (s *googleOAuth2Service) AdminAccountCreating(createAdminInfo *_adminModel.AdminCreatingReq) error {
-	if !s.isAdminIsExists(createAdminInfo.ID) {
+func (s *googleOAuth2Service) AdminAccountCreating(adminCreatingInfoReq *_adminModel.AdminCreatingReq) error {
+	if !s.IsThisGuyIsReallyAdmin(adminCreatingInfoReq.ID) {
 		adminEntity := &entities.Admin{
-			ID:     createAdminInfo.ID,
-			Email:  createAdminInfo.Email,
-			Name:   createAdminInfo.Name,
-			Avatar: createAdminInfo.Avatar,
+			ID:     adminCreatingInfoReq.ID,
+			Email:  adminCreatingInfoReq.Email,
+			Name:   adminCreatingInfoReq.Name,
+			Avatar: adminCreatingInfoReq.Avatar,
 		}
 
 		if _, err := s.adminRepository.Creating(adminEntity); err != nil {
@@ -58,21 +58,7 @@ func (s *googleOAuth2Service) AdminAccountCreating(createAdminInfo *_adminModel.
 
 }
 
-func (s *googleOAuth2Service) IsThisGuyIsReallyAdmin(adminID string) bool {
-	if _, err := s.adminRepository.FindByID(adminID); err != nil {
-		return false
-	}
-	return true
-}
-
-func (s *googleOAuth2Service) IsThisGuyIsReallyPlayer(playerID string) bool {
-	if _, err := s.playerRepository.FindByID(playerID); err != nil {
-		return false
-	}
-	return true
-}
-
-func (s *googleOAuth2Service) isPlayerIsExists(palyerId string) bool {
+func (s *googleOAuth2Service) IsThisGuyIsReallyPlayer(palyerId string) bool {
 	player, err := s.playerRepository.FindByID(palyerId)
 	if err != nil {
 		return false
@@ -81,7 +67,7 @@ func (s *googleOAuth2Service) isPlayerIsExists(palyerId string) bool {
 	return player != nil
 }
 
-func (s *googleOAuth2Service) isAdminIsExists(adminId string) bool {
+func (s *googleOAuth2Service) IsThisGuyIsReallyAdmin(adminId string) bool {
 	admin, err := s.adminRepository.FindByID(adminId)
 	if err != nil {
 		return false
