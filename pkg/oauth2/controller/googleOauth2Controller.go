@@ -146,9 +146,11 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 	ctx := context.Background()
 
-	if err := c.callbackValidate(pctx); err != nil {
+	if err := retry.Do(func() error {
+		return c.callbackValidate(pctx)
+	}, retry.Attempts(3), retry.Delay(3*time.Second)); err != nil {
 		c.logger.Errorf("Error validating callback: %s", err.Error())
-		return custom.Error(pctx, http.StatusBadRequest, &_oauth2Exception.OAuth2Processing{})
+		return custom.Error(pctx, http.StatusBadRequest, err)
 	}
 
 	token, err := adminGoogleOAuth2.Exchange(ctx, pctx.QueryParam("code"))
