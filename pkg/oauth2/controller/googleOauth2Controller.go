@@ -105,7 +105,7 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 	ctx := context.Background()
 
 	if err := retry.Do(func() error {
-		return c.callbackValidate(pctx)
+		return c.callbackValidating(pctx)
 	}, retry.Attempts(3), retry.Delay(3*time.Second)); err != nil {
 		c.logger.Errorf("Error validating callback: %s", err.Error())
 		return custom.Error(pctx, http.StatusBadRequest, err)
@@ -114,7 +114,7 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 	token, err := playerGoogleOAuth2.Exchange(ctx, pctx.QueryParam("code"))
 	if err != nil {
 		c.logger.Errorf("Error exchanging code for token: %s", err.Error())
-		return custom.Error(pctx, http.StatusBadRequest, &_oauth2Exception.OAuth2Processing{})
+		return custom.Error(pctx, http.StatusBadRequest, &_oauth2Exception.Unauthorized{})
 	}
 
 	client := playerGoogleOAuth2.Client(ctx, token)
@@ -122,7 +122,7 @@ func (c *googleOAuth2Controller) PlayerLoginCallback(pctx echo.Context) error {
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
-		return custom.Error(pctx, http.StatusBadRequest, &_oauth2Exception.OAuth2Processing{})
+		return custom.Error(pctx, http.StatusBadRequest, &_oauth2Exception.Unauthorized{})
 
 	}
 
@@ -147,7 +147,7 @@ func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 	ctx := context.Background()
 
 	if err := retry.Do(func() error {
-		return c.callbackValidate(pctx)
+		return c.callbackValidating(pctx)
 	}, retry.Attempts(3), retry.Delay(3*time.Second)); err != nil {
 		c.logger.Errorf("Error validating callback: %s", err.Error())
 		return custom.Error(pctx, http.StatusBadRequest, err)
@@ -156,7 +156,7 @@ func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 	token, err := adminGoogleOAuth2.Exchange(ctx, pctx.QueryParam("code"))
 	if err != nil {
 		c.logger.Errorf("Error exchanging code for token: %s", err.Error())
-		return custom.Error(pctx, http.StatusBadRequest, &_oauth2Exception.OAuth2Processing{})
+		return custom.Error(pctx, http.StatusBadRequest, &_oauth2Exception.Unauthorized{})
 	}
 
 	client := adminGoogleOAuth2.Client(ctx, token)
@@ -164,7 +164,7 @@ func (c *googleOAuth2Controller) AdminLoginCallback(pctx echo.Context) error {
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
-		return custom.Error(pctx, http.StatusBadRequest, &_oauth2Exception.OAuth2Processing{})
+		return custom.Error(pctx, http.StatusBadRequest, &_oauth2Exception.Unauthorized{})
 
 	}
 
@@ -217,7 +217,7 @@ func (c *googleOAuth2Controller) revokeToken(accessToken string) error {
 	return nil
 }
 
-func (c *googleOAuth2Controller) callbackValidate(pctx echo.Context) error {
+func (c *googleOAuth2Controller) callbackValidating(pctx echo.Context) error {
 	state := pctx.QueryParam("state")
 
 	stateFromCookie, err := pctx.Cookie(stateCookieName)
