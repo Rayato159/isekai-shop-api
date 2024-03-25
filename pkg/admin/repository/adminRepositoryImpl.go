@@ -32,10 +32,9 @@ func (r *adminRepositoryImpl) Creating(adminEntity *entities.Admin) (string, err
 
 func (r *adminRepositoryImpl) FindByID(adminID string) (*entities.Admin, error) {
 	admin := new(entities.Admin)
-	tx := r.db.Connect().Where("id = ?", adminID).First(admin)
 
-	if tx.Error != nil {
-		r.logger.Errorf("Error finding player: %s", tx.Error.Error())
+	if err := r.db.Connect().Where("id = ?", adminID).First(admin).Error; err != nil {
+		r.logger.Errorf("Error finding player: %s", err.Error())
 		return nil, &_adminExpception.AdminNotFound{AdminID: adminID}
 	}
 

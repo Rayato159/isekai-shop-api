@@ -33,10 +33,9 @@ func (r *playerRepositoryImpl) Creating(playerEntity *entities.Player) (*entitie
 
 func (r *playerRepositoryImpl) FindByID(playerID string) (*entities.Player, error) {
 	player := new(entities.Player)
-	tx := r.db.Connect().Where("id = ?", playerID).First(player)
 
-	if tx.Error != nil {
-		r.logger.Errorf("Finding player failed: %s", tx.Error.Error())
+	if err := r.db.Connect().Where("id = ?", playerID).First(player).Error; err != nil {
+		r.logger.Errorf("Finding player failed: %s", err.Error())
 		return nil, &_player.PlayerNotFound{PlayerID: playerID}
 	}
 
