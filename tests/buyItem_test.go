@@ -92,7 +92,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		},
 	}, nil)
 
-	playerCoinRepositoryMock.On("Recording", &entities.PlayerCoin{
+	playerCoinRepositoryMock.On("CoinAdding", &entities.PlayerCoin{
 		PlayerID: "P001",
 		Amount:   -3000,
 	}).Return(&entities.PlayerCoin{

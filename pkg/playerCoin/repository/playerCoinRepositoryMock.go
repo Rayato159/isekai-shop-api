@@ -12,7 +12,7 @@ type CoinRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *CoinRepositoryMock) Recording(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
+func (m *CoinRepositoryMock) CoinAdding(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
 	args := m.Called(playerCoinEntity)
 	return args.Get(0).(*entities.PlayerCoin), args.Error(1)
 }
