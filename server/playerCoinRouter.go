@@ -6,7 +6,7 @@ import (
 	_playerCoinService "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/service"
 )
 
-func (s *echoServer) initPlayerCoinRouter(m *customMiddleware) {
+func (s *echoServer) initPlayerCoinRouter(m *authorizingMiddleware) {
 	router := s.app.Group("/v1/player-coin")
 
 	playerCoinRepository := _playerCoinRepository.NewPlayerCoinRepositoryImpl(s.db, s.app.Logger)

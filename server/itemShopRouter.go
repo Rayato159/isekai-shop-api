@@ -8,7 +8,7 @@ import (
 	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
 )
 
-func (s *echoServer) initItemShopRouter(m *customMiddleware) {
+func (s *echoServer) initItemShopRouter(m *authorizingMiddleware) {
 	router := s.app.Group("/v1/item-shop")
 
 	playerCoinRepository := _playerCoinRepository.NewPlayerCoinRepositoryImpl(s.db, s.app.Logger)

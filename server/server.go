@@ -104,7 +104,7 @@ func (s *echoServer) healthCheck(pctx echo.Context) error {
 	return pctx.String(http.StatusOK, "OK")
 }
 
-func (s *echoServer) getCustomMiddleware() *customMiddleware {
+func (s *echoServer) getCustomMiddleware() *authorizingMiddleware {
 	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
 	adminRepository := _adminRepository.NewAdminRepositoryImpl(s.db, s.app.Logger)
 
@@ -119,7 +119,7 @@ func (s *echoServer) getCustomMiddleware() *customMiddleware {
 		s.app.Logger,
 	)
 
-	return &customMiddleware{
+	return &authorizingMiddleware{
 		oauth2Controller: oauth2Controller,
 		oauth2Conf:       s.conf.OAuth2,
 		logger:           s.app.Logger,

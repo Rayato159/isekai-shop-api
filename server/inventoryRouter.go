@@ -7,7 +7,7 @@ import (
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
 )
 
-func (s *echoServer) initInventoryRouter(m *customMiddleware) {
+func (s *echoServer) initInventoryRouter(m *authorizingMiddleware) {
 	router := s.app.Group("/v1/inventory-searching")
 
 	itemRepository := _itemShopRepository.NewItemShopRepositoryImpl(s.db, s.app.Logger)

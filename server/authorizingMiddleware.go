@@ -7,19 +7,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type customMiddleware struct {
+type authorizingMiddleware struct {
 	oauth2Controller _oauth2Controller.OAuth2Controller
 	oauth2Conf       *config.OAuth2
 	logger           echo.Logger
 }
 
-func (m *customMiddleware) PlayerAuthorizing(next echo.HandlerFunc) echo.HandlerFunc {
+func (m *authorizingMiddleware) PlayerAuthorizing(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(pctx echo.Context) error {
 		return m.oauth2Controller.PlayerAuthorizing(pctx, next)
 	}
 }
 
-func (m *customMiddleware) AdminAuthorizing(next echo.HandlerFunc) echo.HandlerFunc {
+func (m *authorizingMiddleware) AdminAuthorizing(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(pctx echo.Context) error {
 		return m.oauth2Controller.AdminAuthorizing(pctx, next)
 	}
