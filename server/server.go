@@ -62,16 +62,16 @@ func (s *echoServer) Start() {
 	s.app.Use(bodyLimitMiddleware)
 
 	// Initialize all custom middlewares
-	customerMiddleware := s.getCustomMiddleware()
+	authorizingMiddleware := s.getAuthorizingMiddleware()
 
 	// Initialzie all routers
 	s.app.GET("/v1/health", s.healthCheck)
 
 	s.initOAuth2Router()
-	s.initInventoryRouter(customerMiddleware)
-	s.initItemShopRouter(customerMiddleware)
-	s.initItemManagingRouter(customerMiddleware)
-	s.initPlayerCoinRouter(customerMiddleware)
+	s.initInventoryRouter(authorizingMiddleware)
+	s.initItemShopRouter(authorizingMiddleware)
+	s.initItemManagingRouter(authorizingMiddleware)
+	s.initPlayerCoinRouter(authorizingMiddleware)
 
 	// Graceful shutdown
 	quitCh := make(chan os.Signal, 1)
@@ -104,7 +104,7 @@ func (s *echoServer) healthCheck(pctx echo.Context) error {
 	return pctx.String(http.StatusOK, "OK")
 }
 
-func (s *echoServer) getCustomMiddleware() *authorizingMiddleware {
+func (s *echoServer) getAuthorizingMiddleware() *authorizingMiddleware {
 	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
 	adminRepository := _adminRepository.NewAdminRepositoryImpl(s.db, s.app.Logger)
 
