@@ -28,7 +28,7 @@ func (c *googleOAuth2Controller) PlayerAuthorizing(pctx echo.Context, next echo.
 		c.logger.Errorf("Token is not valid")
 
 		// Refresh the token
-		tokenSource, err = c.playerRefreshToken(pctx, tokenSource)
+		tokenSource, err = c.playerTokenRefreshing(pctx, tokenSource)
 		if err != nil {
 			c.logger.Errorf("Error refreshing token: %s", err.Error())
 			return custom.Error(
@@ -75,7 +75,7 @@ func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.H
 		c.logger.Errorf("Token is not valid")
 
 		// Refresh the token
-		tokenSource, err = c.adminRefreshToken(pctx, tokenSource)
+		tokenSource, err = c.adminTokenRefreshing(pctx, tokenSource)
 		if err != nil {
 			c.logger.Errorf("Error refreshing token: %s", err.Error())
 			return custom.Error(
@@ -104,8 +104,8 @@ func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.H
 	return next(pctx)
 }
 
-func (c *googleOAuth2Controller) playerRefreshToken(pctx echo.Context, token *oauth2.Token) (*oauth2.Token, error) {
-	ctx := pctx.Request().Context()
+func (c *googleOAuth2Controller) playerTokenRefreshing(pctx echo.Context, token *oauth2.Token) (*oauth2.Token, error) {
+	ctx := context.Background()
 
 	updatedToken, err := playerGoogleOAuth2.TokenSource(ctx, token).Token()
 	if err != nil {
@@ -120,8 +120,8 @@ func (c *googleOAuth2Controller) playerRefreshToken(pctx echo.Context, token *oa
 	return updatedToken, nil
 }
 
-func (c *googleOAuth2Controller) adminRefreshToken(pctx echo.Context, token *oauth2.Token) (*oauth2.Token, error) {
-	ctx := pctx.Request().Context()
+func (c *googleOAuth2Controller) adminTokenRefreshing(pctx echo.Context, token *oauth2.Token) (*oauth2.Token, error) {
+	ctx := context.Background()
 
 	updatedToken, err := adminGoogleOAuth2.TokenSource(ctx, token).Token()
 	if err != nil {
@@ -140,13 +140,13 @@ func (c *googleOAuth2Controller) getToken(pctx echo.Context) (*oauth2.Token, err
 	accessToken, err := pctx.Cookie(accessTokenCookieName)
 	if err != nil {
 		c.logger.Errorf("Error reading access token: %s", err.Error())
-		return nil, err
+		return nil, &_oauth2.Unauthorized{}
 	}
 
 	refreshToken, err := pctx.Cookie(accessTokenCookieName)
 	if err != nil {
 		c.logger.Errorf("Error reading refresh token: %s", err.Error())
-		return nil, err
+		return nil, &_oauth2.Unauthorized{}
 	}
 
 	return &oauth2.Token{
