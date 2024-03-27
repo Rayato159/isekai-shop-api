@@ -21,7 +21,7 @@ func NewPlayerCoinRepositoryImpl(db databases.Database, logger echo.Logger) Play
 	}
 }
 
-func (r *playerCoinRepositoryImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
+func (r *playerCoinRepositoryImpl) CoinAdding(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
 	insertedPlayerCoin := new(entities.PlayerCoin)
 
 	if err := r.db.Connect().Create(playerCoinEntity).Scan(insertedPlayerCoin).Error; err != nil {

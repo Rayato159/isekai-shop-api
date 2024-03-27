@@ -22,7 +22,7 @@ func (s *playerCoinImpl) CoinAdding(coinAddingReq *_playerCoinModel.CoinAddingRe
 		Amount:   coinAddingReq.Amount,
 	}
 
-	insertedPlayerCoin, err := s.playerCoinRepository.Recording(playerCoinEntity)
+	insertedPlayerCoin, err := s.playerCoinRepository.CoinAdding(playerCoinEntity)
 	if err != nil {
 		return nil, err
 	}

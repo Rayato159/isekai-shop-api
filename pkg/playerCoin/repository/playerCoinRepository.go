@@ -6,6 +6,6 @@ import (
 )
 
 type PlayerCoinRepository interface {
-	Recording(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error)
+	CoinAdding(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error)
 	Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error)
 }
