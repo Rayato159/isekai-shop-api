@@ -86,7 +86,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 
 	inventoryEntities := s.groupInventoryEntities(buyingReq)
 
-	recordedCoin, err := s.playerCoinRepository.Recording(&entities.PlayerCoin{
+	recordedCoin, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
 		PlayerID: buyingReq.PlayerID,
 		Amount:   -totalPrice,
 	})
@@ -149,7 +149,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	}
 	log.Printf("Pucahse history recorded: %d", recordedPurchasing.ID)
 
-	recordedCoin, err := s.playerCoinRepository.Recording(&entities.PlayerCoin{
+	recordedCoin, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
 		PlayerID: sellingReq.PlayerID,
 		Amount:   totalPrice,
 	})

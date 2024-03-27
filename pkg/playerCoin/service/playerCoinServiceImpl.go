@@ -22,12 +22,12 @@ func (s *playerCoinImpl) CoinAdding(coinAddingReq *_playerCoinModel.CoinAddingRe
 		Amount:   coinAddingReq.Amount,
 	}
 
-	insertedPlayerCoin, err := s.playerCoinRepository.CoinAdding(playerCoinEntity)
+	playerCoin, err := s.playerCoinRepository.CoinAdding(playerCoinEntity)
 	if err != nil {
 		return nil, err
 	}
 
-	return insertedPlayerCoin.ToPlayerCoinModel(), nil
+	return playerCoin.ToPlayerCoinModel(), nil
 }
 
 func (s *playerCoinImpl) PlayerCoinShowing(playerID string) *_playerCoinModel.PlayerCoinShowing {

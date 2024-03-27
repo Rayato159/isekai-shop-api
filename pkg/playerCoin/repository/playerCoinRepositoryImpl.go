@@ -22,14 +22,14 @@ func NewPlayerCoinRepositoryImpl(db databases.Database, logger echo.Logger) Play
 }
 
 func (r *playerCoinRepositoryImpl) CoinAdding(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
-	insertedPlayerCoin := new(entities.PlayerCoin)
+	playerCoin := new(entities.PlayerCoin)
 
-	if err := r.db.Connect().Create(playerCoinEntity).Scan(insertedPlayerCoin).Error; err != nil {
+	if err := r.db.Connect().Create(playerCoinEntity).Scan(playerCoin).Error; err != nil {
 		r.logger.Error("Player's balance recording failed:", err.Error())
 		return nil, &_playerCoin.CoinAdding{}
 	}
 
-	return insertedPlayerCoin, nil
+	return playerCoin, nil
 }
 
 func (r *playerCoinRepositoryImpl) Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error) {
