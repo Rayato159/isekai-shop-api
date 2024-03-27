@@ -31,10 +31,7 @@ func (c *googleOAuth2Controller) PlayerAuthorizing(pctx echo.Context, next echo.
 		tokenSource, err = c.playerTokenRefreshing(pctx, tokenSource)
 		if err != nil {
 			c.logger.Errorf("Error refreshing token: %s", err.Error())
-			return custom.Error(
-				pctx, http.StatusUnauthorized,
-				&_oauth2.Unauthorized{},
-			)
+			return custom.Error(pctx, http.StatusUnauthorized, err)
 		}
 	}
 
@@ -44,7 +41,7 @@ func (c *googleOAuth2Controller) PlayerAuthorizing(pctx echo.Context, next echo.
 	userInfo, err := c.getUserInfo(client)
 	if err != nil {
 		c.logger.Errorf("Error reading user info: %s", err.Error())
-		return custom.Error(pctx, http.StatusUnauthorized, &_oauth2.Unauthorized{})
+		return custom.Error(pctx, http.StatusUnauthorized, err)
 
 	}
 
@@ -63,10 +60,7 @@ func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.H
 	tokenSource, err := c.getToken(pctx)
 	if err != nil {
 		c.logger.Errorf("Error reading token: %s", err.Error())
-		return custom.Error(
-			pctx, http.StatusUnauthorized,
-			&_oauth2.Unauthorized{},
-		)
+		return custom.Error(pctx, http.StatusUnauthorized, err)
 
 	}
 
@@ -78,10 +72,7 @@ func (c *googleOAuth2Controller) AdminAuthorizing(pctx echo.Context, next echo.H
 		tokenSource, err = c.adminTokenRefreshing(pctx, tokenSource)
 		if err != nil {
 			c.logger.Errorf("Error refreshing token: %s", err.Error())
-			return custom.Error(
-				pctx, http.StatusUnauthorized,
-				&_oauth2.Unauthorized{},
-			)
+			return custom.Error(pctx, http.StatusUnauthorized, err)
 		}
 	}
 
@@ -110,7 +101,7 @@ func (c *googleOAuth2Controller) playerTokenRefreshing(pctx echo.Context, token 
 	updatedToken, err := playerGoogleOAuth2.TokenSource(ctx, token).Token()
 	if err != nil {
 		c.logger.Errorf("Error refreshing token: %s", err.Error())
-		return nil, err
+		return nil, &_oauth2.Unauthorized{}
 	}
 
 	// Update cookies
@@ -126,7 +117,7 @@ func (c *googleOAuth2Controller) adminTokenRefreshing(pctx echo.Context, token *
 	updatedToken, err := adminGoogleOAuth2.TokenSource(ctx, token).Token()
 	if err != nil {
 		c.logger.Errorf("Error refreshing token: %s", err.Error())
-		return nil, err
+		return nil, &_oauth2.Unauthorized{}
 	}
 
 	// Update cookies
