@@ -9,19 +9,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type playerCoinImpl struct {
+type playerCoinRepositoryImpl struct {
 	db     databases.Database
 	logger echo.Logger
 }
 
 func NewPlayerCoinRepositoryImpl(db databases.Database, logger echo.Logger) PlayerCoinRepository {
-	return &playerCoinImpl{
+	return &playerCoinRepositoryImpl{
 		db:     db,
 		logger: logger,
 	}
 }
 
-func (r *playerCoinImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
+func (r *playerCoinRepositoryImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
 	insertedPlayerCoin := new(entities.PlayerCoin)
 
 	if err := r.db.Connect().Create(playerCoinEntity).Scan(insertedPlayerCoin).Error; err != nil {
@@ -32,7 +32,7 @@ func (r *playerCoinImpl) Recording(playerCoinEntity *entities.PlayerCoin) (*enti
 	return insertedPlayerCoin, nil
 }
 
-func (r *playerCoinImpl) Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error) {
+func (r *playerCoinRepositoryImpl) Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error) {
 	playerCoin := new(_playerCoinModel.PlayerCoinShowing)
 
 	if err := r.db.Connect().Model(
