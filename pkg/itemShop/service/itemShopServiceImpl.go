@@ -64,7 +64,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 
 	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), buyingReq.Quantity)
 
-	if err := s.checkPlayerCoin(buyingReq.PlayerID, totalPrice); err != nil {
+	if err := s.playerCoinChecking(buyingReq.PlayerID, totalPrice); err != nil {
 		return nil, err
 	}
 
@@ -201,7 +201,7 @@ func (s *itemShopServiceImpl) checkPlayerItemQuantity(playerID string, itemID ui
 	return nil
 }
 
-func (s *itemShopServiceImpl) checkPlayerCoin(playerID string, amount int64) error {
+func (s *itemShopServiceImpl) playerCoinChecking(playerID string, amount int64) error {
 	playerCoin, err := s.playerCoinRepository.Showing(playerID)
 	if err != nil {
 		return err
