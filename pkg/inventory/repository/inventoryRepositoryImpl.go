@@ -20,14 +20,17 @@ func NewInventoryRepositoryImpl(db databases.Database, logger echo.Logger) Inven
 }
 
 func (r *inventoryImpl) Filling(inventoryEntities []*entities.Inventory) ([]*entities.Inventory, error) {
-	insertedInventories := make([]*entities.Inventory, 0)
+	inventoryEntitiesResult := make([]*entities.Inventory, 0)
 
-	if err := r.db.Connect().Create(inventoryEntities).Scan(&insertedInventories).Error; err != nil {
+	if err := r.db.Connect().Create(inventoryEntities).Scan(&inventoryEntitiesResult).Error; err != nil {
 		r.logger.Error("Item creating failed:", err.Error())
-		return nil, &_inventory.InventoryFilling{}
+		return nil, &_inventory.InventoryFilling{
+			PlayerID: inventoryEntities[0].PlayerID,
+			ItemID:   inventoryEntities[0].ItemID,
+		}
 	}
 
-	return insertedInventories, nil
+	return inventoryEntitiesResult, nil
 }
 
 func (r *inventoryImpl) Listing(playerID string) ([]*entities.Inventory, error) {
