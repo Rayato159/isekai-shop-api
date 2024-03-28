@@ -3,9 +3,7 @@ package service
 import (
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventoryModel "github.com/Rayato159/isekai-shop-api/pkg/inventory/model"
-	_inventory "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
-	_itemModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
 )
 
@@ -15,7 +13,7 @@ type inventoryServiceImpl struct {
 }
 
 func NewInventoryServiceImpl(
-	inventoryRepository _inventory.InventoryRepository,
+	inventoryRepository _inventoryRepository.InventoryRepository,
 	itemShopRepository _itemShopRepository.ItemShopRepository,
 ) InventoryService {
 	return &inventoryServiceImpl{
@@ -52,16 +50,9 @@ func (s *inventoryServiceImpl) buildInventoryListingResult(
 
 	for _, itemEntity := range itemEntities {
 		results = append(results, &_inventoryModel.Inventory{
-			Item: &_itemModel.Item{
-				ID:          itemEntity.ID,
-				Name:        itemEntity.Name,
-				Description: itemEntity.Description,
-				Picture:     itemEntity.Picture,
-				Price:       itemEntity.Price,
-			},
+			Item:     itemEntity.ToItemModel(),
 			Quantity: itemMapWithQuantity[itemEntity.ID],
 		})
-
 	}
 
 	return results
