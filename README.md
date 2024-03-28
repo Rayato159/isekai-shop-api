@@ -106,11 +106,6 @@ oauth2:
     - "https://www.googleapis.com/auth/userinfo.profile"
   userInfoUrl: "https://www.googleapis.com/oauth2/v2/userinfo"
   revokeUrl: "https://accounts.google.com/o/oauth2/revoke"
-
-state:
-  secret: "xxxxx"
-  expiresAt: 120 # Seconds
-  issuer: "isekaishop"
   
 database:
   host: localhost
