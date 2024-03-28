@@ -1,15 +1,15 @@
 package service
 
 import (
+	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventoryModel "github.com/Rayato159/isekai-shop-api/pkg/inventory/model"
 	_inventory "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
 	_itemModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
-	entities "github.com/Rayato159/isekai-shop-api/entities"
 )
 
-type inventoryImpl struct {
+type inventoryServiceImpl struct {
 	inventoryRepository _inventoryRepository.InventoryRepository
 	itemShopRepository  _itemShopRepository.ItemShopRepository
 }
@@ -18,13 +18,13 @@ func NewInventoryServiceImpl(
 	inventoryRepository _inventory.InventoryRepository,
 	itemShopRepository _itemShopRepository.ItemShopRepository,
 ) InventoryService {
-	return &inventoryImpl{
+	return &inventoryServiceImpl{
 		inventoryRepository,
 		itemShopRepository,
 	}
 }
 
-func (s *inventoryImpl) Listing(playerID string) ([]*_inventoryModel.Inventory, error) {
+func (s *inventoryServiceImpl) Listing(playerID string) ([]*_inventoryModel.Inventory, error) {
 	inventories, err := s.inventoryRepository.Listing(playerID)
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func (s *inventoryImpl) Listing(playerID string) ([]*_inventoryModel.Inventory, 
 	), nil
 }
 
-func (s *inventoryImpl) buildInventoryListingResult(
+func (s *inventoryServiceImpl) buildInventoryListingResult(
 	uniqueItemWithQuantityCounterList []_inventoryModel.ItemQuantityCounting,
 ) []*_inventoryModel.Inventory {
 	uniqueItemIDList := s.getItemIDList(uniqueItemWithQuantityCounterList)
@@ -67,7 +67,7 @@ func (s *inventoryImpl) buildInventoryListingResult(
 	return results
 }
 
-func (s *inventoryImpl) getUniqueItemWithQuantityCounterList(
+func (s *inventoryServiceImpl) getUniqueItemWithQuantityCounterList(
 	inventories []*entities.Inventory,
 ) []_inventoryModel.ItemQuantityCounting {
 	itemQuantityCounterList := make([]_inventoryModel.ItemQuantityCounting, 0)
@@ -89,7 +89,7 @@ func (s *inventoryImpl) getUniqueItemWithQuantityCounterList(
 	return itemQuantityCounterList
 }
 
-func (s *inventoryImpl) getItemIDList(
+func (s *inventoryServiceImpl) getItemIDList(
 	uniqueItemWithQuantityCounterList []_inventoryModel.ItemQuantityCounting,
 ) []uint64 {
 	uniqueItemIDList := make([]uint64, 0)
@@ -101,7 +101,7 @@ func (s *inventoryImpl) getItemIDList(
 	return uniqueItemIDList
 }
 
-func (s *inventoryImpl) getItemMapWithQuantity(
+func (s *inventoryServiceImpl) getItemMapWithQuantity(
 	uniqueItemWithQuantityCounterList []_inventoryModel.ItemQuantityCounting,
 ) map[uint64]uint {
 	itemMapWithQuantity := make(map[uint64]uint)

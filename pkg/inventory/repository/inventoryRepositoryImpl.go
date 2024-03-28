@@ -7,19 +7,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type inventoryImpl struct {
+type inventoryRepositoryImpl struct {
 	db     databases.Database
 	logger echo.Logger
 }
 
 func NewInventoryRepositoryImpl(db databases.Database, logger echo.Logger) InventoryRepository {
-	return &inventoryImpl{
+	return &inventoryRepositoryImpl{
 		db:     db,
 		logger: logger,
 	}
 }
 
-func (r *inventoryImpl) Filling(inventoryEntities []*entities.Inventory) ([]*entities.Inventory, error) {
+func (r *inventoryRepositoryImpl) Filling(inventoryEntities []*entities.Inventory) ([]*entities.Inventory, error) {
 	inventoryEntitiesResult := make([]*entities.Inventory, 0)
 
 	if err := r.db.Connect().Create(inventoryEntities).Scan(&inventoryEntitiesResult).Error; err != nil {
@@ -33,28 +33,28 @@ func (r *inventoryImpl) Filling(inventoryEntities []*entities.Inventory) ([]*ent
 	return inventoryEntitiesResult, nil
 }
 
-func (r *inventoryImpl) Listing(playerID string) ([]*entities.Inventory, error) {
-	inventories := make([]*entities.Inventory, 0)
+func (r *inventoryRepositoryImpl) Listing(playerID string) ([]*entities.Inventory, error) {
+	inventoryEntities := make([]*entities.Inventory, 0)
 
 	if err := r.db.Connect().Where(
 		"player_id = ? and is_deleted = ?", playerID, false,
-	).Find(&inventories).Error; err != nil {
+	).Find(&inventoryEntities).Error; err != nil {
 		r.logger.Error("Listing player's item failed:", err.Error())
 		return nil, &_inventory.PlayerItemsFinding{
 			PlayerID: playerID,
 		}
 	}
 
-	return inventories, nil
+	return inventoryEntities, nil
 }
 
-func (r *inventoryImpl) Removing(playerID string, itemID uint64, limit int) error {
-	inventories, err := r.findPlayerItemInInventoryByID(playerID, itemID, limit)
+func (r *inventoryRepositoryImpl) Removing(playerID string, itemID uint64, limit int) error {
+	inventoryEntities, err := r.findPlayerItemInInventoryByID(playerID, itemID, limit)
 	if err != nil {
 		return err
 	}
 
-	for _, inventory := range inventories {
+	for _, inventory := range inventoryEntities {
 		inventory.IsDeleted = true
 
 		if err := r.db.Connect().Model(
@@ -72,7 +72,7 @@ func (r *inventoryImpl) Removing(playerID string, itemID uint64, limit int) erro
 	return nil
 }
 
-func (r *inventoryImpl) PlayerItemCounting(playerID string, itemID uint64) int64 {
+func (r *inventoryRepositoryImpl) PlayerItemCounting(playerID string, itemID uint64) int64 {
 	var count int64
 
 	if err := r.db.Connect().Model(
@@ -87,21 +87,21 @@ func (r *inventoryImpl) PlayerItemCounting(playerID string, itemID uint64) int64
 	return count
 }
 
-func (r *inventoryImpl) findPlayerItemInInventoryByID(
+func (r *inventoryRepositoryImpl) findPlayerItemInInventoryByID(
 	playerID string,
 	itemID uint64,
 	limit int,
 ) ([]*entities.Inventory, error) {
-	inventories := make([]*entities.Inventory, 0)
+	inventoryEntities := make([]*entities.Inventory, 0)
 
 	if err := r.db.Connect().Where(
 		"player_id = ? and item_id = ? and is_deleted = ?", playerID, itemID, false,
 	).Limit(
 		limit,
-	).Find(&inventories).Error; err != nil {
+	).Find(&inventoryEntities).Error; err != nil {
 		r.logger.Error("Finding player's item in inventory failed:", err.Error())
 		return nil, &_inventory.PlayerItemsFinding{PlayerID: playerID}
 	}
 
-	return inventories, nil
+	return inventoryEntities, nil
 }
