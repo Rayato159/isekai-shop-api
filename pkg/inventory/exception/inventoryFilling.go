@@ -8,5 +8,5 @@ type InventoryFilling struct {
 }
 
 func (e *InventoryFilling) Error() string {
-	return fmt.Sprintf("inventory filling for playerID: %s and itemID: %d", e.PlayerID, e.ItemID)
+	return fmt.Sprintf("inventory filling for playerID: %s and itemID: %d failed", e.PlayerID, e.ItemID)
 }

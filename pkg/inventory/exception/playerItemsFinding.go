@@ -7,5 +7,5 @@ type PlayerItemsFinding struct {
 }
 
 func (e *PlayerItemsFinding) Error() string {
-	return fmt.Sprintf("finding player items for playerID: %s", e.PlayerID)
+	return fmt.Sprintf("finding player items for playerID: %s failed", e.PlayerID)
 }
