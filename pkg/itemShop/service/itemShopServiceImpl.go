@@ -65,12 +65,13 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), buyingReq.Quantity)
 
 	if err := s.playerCoinChecking(buyingReq.PlayerID, totalPrice); err != nil {
+		s.itemShopRepository.TransactionRollback()
 		return nil, err
 	}
 
 	s.itemShopRepository.TransactionBegin()
 
-	recordedPurchasing, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
+	purchaseRecording, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
 		PlayerID:        buyingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -80,9 +81,10 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		Quantity:        buyingReq.Quantity,
 	})
 	if err != nil {
+		s.itemShopRepository.TransactionRollback()
 		return nil, err
 	}
-	log.Printf("Purchase history recorded: %d", recordedPurchasing.ID)
+	log.Printf("Purchase history recorded: %d", purchaseRecording.ID)
 
 	inventoryEntities := s.groupInventoryEntities(buyingReq)
 
@@ -97,6 +99,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 
 	inventory, err := s.inventoryRepository.Filling(inventoryEntities)
 	if err != nil {
+		s.itemShopRepository.TransactionRollback()
 		return nil, err
 	}
 
@@ -135,7 +138,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 
 	s.itemShopRepository.TransactionBegin()
 
-	recordedPurchasing, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
+	purchaseRecording, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
 		PlayerID:        sellingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -145,15 +148,17 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		Quantity:        sellingReq.Quantity,
 	})
 	if err != nil {
+		s.itemShopRepository.TransactionRollback()
 		return nil, err
 	}
-	log.Printf("Pucahse history recorded: %d", recordedPurchasing.ID)
+	log.Printf("Pucahse history recorded: %d", purchaseRecording.ID)
 
 	recordedCoin, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
 		PlayerID: sellingReq.PlayerID,
 		Amount:   totalPrice,
 	})
 	if err != nil {
+		s.itemShopRepository.TransactionRollback()
 		return nil, err
 	}
 	log.Printf("Coins added into player: %d coins", recordedCoin.ID)
@@ -163,6 +168,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		sellingReq.ItemID,
 		int(sellingReq.Quantity),
 	); err != nil {
+		s.itemShopRepository.TransactionRollback()
 		return nil, err
 	}
 
