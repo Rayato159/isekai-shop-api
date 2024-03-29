@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"github.com/Rayato159/isekai-shop-api/databases"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
 	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
@@ -16,6 +17,11 @@ import (
 
 func TestItemBuyingSuccess(t *testing.T) {
 	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
+	db, mockSql := databases.NewMockDatabase()
+	mockSql.ExpectBegin()
+	mockSql.ExpectCommit()
+	itemShopRepositoryMock.On("GetDb").Return(db)
+
 	playerCoinRepositoryMock := new(_playerCoinRepository.CoinRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 
@@ -120,6 +126,11 @@ func TestItemBuyingSuccess(t *testing.T) {
 
 func TestItemBuyingFail(t *testing.T) {
 	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
+	db, mockSql := databases.NewMockDatabase()
+	mockSql.ExpectBegin()
+	mockSql.ExpectCommit()
+	itemShopRepositoryMock.On("GetDb").Return(db)
+
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
 	playerCoinRepositoryMock := new(_playerCoinRepository.CoinRepositoryMock)
 

@@ -14,6 +14,7 @@ require (
 )
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2 // indirect
 	github.com/avast/retry-go v3.0.0+incompatible // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect

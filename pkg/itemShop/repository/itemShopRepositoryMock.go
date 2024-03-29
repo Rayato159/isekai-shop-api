@@ -3,6 +3,7 @@ package repository
 import (
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
+	"gorm.io/gorm"
 
 	"github.com/stretchr/testify/mock"
 )
@@ -34,4 +35,9 @@ func (m *ItemShopRepositoryMock) Counting(itemFilter *_itemShopModel.ItemFilter)
 func (m *ItemShopRepositoryMock) PurchaseHistoryRecording(purchasingEntity *entities.PurchaseHistory) (*entities.PurchaseHistory, error) {
 	args := m.Called(purchasingEntity)
 	return args.Get(0).(*entities.PurchaseHistory), args.Error(1)
+}
+
+func (m *ItemShopRepositoryMock) GetDb() *gorm.DB {
+	args := m.Called()
+	return args.Get(0).(*gorm.DB)
 }
