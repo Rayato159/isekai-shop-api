@@ -88,14 +88,14 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 
 	inventoryEntities := s.groupInventoryEntities(buyingReq)
 
-	recordedCoin, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
+	coinRecording, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
 		PlayerID: buyingReq.PlayerID,
 		Amount:   -totalPrice,
 	})
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Player coins removed for: %d coins", recordedCoin.ID)
+	log.Printf("Player coins removed for: %d coins", coinRecording.ID)
 
 	inventory, err := s.inventoryRepository.Filling(inventoryEntities)
 	if err != nil {
@@ -110,7 +110,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 
 	log.Printf("Items inserted into player inventory: %d", len(inventory))
 
-	return recordedCoin.ToPlayerCoinModel(), nil
+	return coinRecording.ToPlayerCoinModel(), nil
 }
 
 // 1. Check if player has enough quantity
@@ -153,7 +153,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	}
 	log.Printf("Pucahse history recorded: %d", purchaseRecording.ID)
 
-	recordedCoin, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
+	coinRecording, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
 		PlayerID: sellingReq.PlayerID,
 		Amount:   totalPrice,
 	})
@@ -161,7 +161,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		s.itemShopRepository.TransactionRollback()
 		return nil, err
 	}
-	log.Printf("Coins added into player: %d coins", recordedCoin.ID)
+	log.Printf("Coins added into player: %d coins", coinRecording.ID)
 
 	if err := s.inventoryRepository.Removing(
 		sellingReq.PlayerID,
@@ -179,7 +179,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 
 	log.Printf("Deleted player item from player's inventory for %d records", sellingReq.Quantity)
 
-	return recordedCoin.ToPlayerCoinModel(), nil
+	return coinRecording.ToPlayerCoinModel(), nil
 }
 
 func (s *itemShopServiceImpl) groupInventoryEntities(buyingReq *_itemShopModel.BuyingReq) []*entities.Inventory {
