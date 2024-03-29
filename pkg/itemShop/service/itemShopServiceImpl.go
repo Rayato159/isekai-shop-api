@@ -5,7 +5,7 @@ import (
 
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
-	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
+	_itemShopException "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
@@ -195,7 +195,7 @@ func (s *itemShopServiceImpl) checkPlayerItemQuantity(playerID string, itemID ui
 
 	if int(inventoryCount) < int(quantity) {
 		log.Printf("Player %s has not enough item with id: %d", playerID, itemID)
-		return &_itemShop.ItemNotEnough{ItemID: itemID}
+		return &_itemShopException.ItemNotEnough{ItemID: itemID}
 	}
 
 	return nil
@@ -209,7 +209,7 @@ func (s *itemShopServiceImpl) playerCoinChecking(playerID string, amount int64) 
 
 	if playerCoin.Coin < amount {
 		log.Printf("Player %s has not enough coin", playerID)
-		return &_itemShop.CoinNotEnough{}
+		return &_itemShopException.CoinNotEnough{}
 	}
 
 	return nil
