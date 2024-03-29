@@ -86,8 +86,6 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 	}
 	log.Printf("Purchase history recorded: %d", purchaseRecording.ID)
 
-	inventoryEntities := s.groupInventoryEntities(buyingReq)
-
 	coinRecording, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
 		PlayerID: buyingReq.PlayerID,
 		Amount:   -totalPrice,
@@ -96,6 +94,8 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		return nil, err
 	}
 	log.Printf("Player coins reduced for: %d", totalPrice)
+
+	inventoryEntities := s.groupInventoryEntities(buyingReq)
 
 	inventoryRecording, err := s.inventoryRepository.Filling(inventoryEntities)
 	if err != nil {
