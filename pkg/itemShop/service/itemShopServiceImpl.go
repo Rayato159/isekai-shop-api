@@ -108,7 +108,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		return nil, err
 	}
 
-	log.Printf("Items inserted into player inventory: %d", len(inventory))
+	log.Printf("Items recorded into player inventory: %d", len(inventory))
 
 	return coinRecording.ToPlayerCoinModel(), nil
 }
