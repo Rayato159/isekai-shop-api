@@ -95,7 +95,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Player coins removed for: %d coins", coinRecording.ID)
+	log.Printf("Player coins reduced for: %d", totalPrice)
 
 	inventory, err := s.inventoryRepository.Filling(inventoryEntities)
 	if err != nil {
@@ -207,13 +207,13 @@ func (s *itemShopServiceImpl) checkPlayerItemQuantity(playerID string, itemID ui
 	return nil
 }
 
-func (s *itemShopServiceImpl) playerCoinChecking(playerID string, amount int64) error {
+func (s *itemShopServiceImpl) playerCoinChecking(playerID string, totalPrice int64) error {
 	playerCoin, err := s.playerCoinRepository.Showing(playerID)
 	if err != nil {
 		return err
 	}
 
-	if playerCoin.Coin < amount {
+	if playerCoin.Coin < totalPrice {
 		log.Printf("Player %s has not enough coin", playerID)
 		return &_itemShopException.CoinNotEnough{}
 	}
