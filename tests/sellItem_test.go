@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"github.com/Rayato159/isekai-shop-api/databases"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
 	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
@@ -25,8 +24,6 @@ func TestItemSellingSuccess(t *testing.T) {
 		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
 	)
-
-	itemShopRepositoryMock.On("Transaction").Return(databases.NewMockDatabase())
 
 	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(3), nil)
 
@@ -102,8 +99,6 @@ func TestItemSellingFailed(t *testing.T) {
 		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
 	)
-
-	itemShopRepositoryMock.On("Transaction").Return(databases.NewMockDatabase())
 
 	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(2), nil)
 

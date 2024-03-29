@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"github.com/Rayato159/isekai-shop-api/databases"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_itemShopModel "github.com/Rayato159/isekai-shop-api/pkg/itemShop/model"
 
@@ -35,9 +34,4 @@ func (m *ItemShopRepositoryMock) Counting(itemFilter *_itemShopModel.ItemFilter)
 func (m *ItemShopRepositoryMock) PurchaseHistoryRecording(purchasingEntity *entities.PurchaseHistory) (*entities.PurchaseHistory, error) {
 	args := m.Called(purchasingEntity)
 	return args.Get(0).(*entities.PurchaseHistory), args.Error(1)
-}
-
-func (m *ItemShopRepositoryMock) Transaction() databases.Database {
-	args := m.Called()
-	return args.Get(0).(databases.Database)
 }

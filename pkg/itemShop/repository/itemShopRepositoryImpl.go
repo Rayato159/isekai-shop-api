@@ -21,10 +21,6 @@ func NewItemShopRepositoryImpl(db databases.Database, logger echo.Logger) ItemSh
 	}
 }
 
-func (r *itemRepositoryImpl) Transaction() databases.Database {
-	return r.db
-}
-
 func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
 	query := r.db.Connect().Model(&entities.Item{}).Where("is_archive = ?", false)
 
