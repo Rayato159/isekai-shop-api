@@ -161,7 +161,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		s.itemShopRepository.TransactionRollback()
 		return nil, err
 	}
-	log.Printf("Coins added into player: %d coins", coinRecording.ID)
+	log.Printf("Coins added into player for: %d", coinRecording.Amount)
 
 	if err := s.inventoryRepository.Removing(
 		sellingReq.PlayerID,
