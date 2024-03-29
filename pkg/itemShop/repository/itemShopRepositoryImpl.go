@@ -2,7 +2,6 @@ package repository
 
 import (
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 
 	"github.com/Rayato159/isekai-shop-api/databases"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
@@ -20,10 +19,6 @@ func NewItemShopRepositoryImpl(db databases.Database, logger echo.Logger) ItemSh
 		db:     db,
 		logger: logger,
 	}
-}
-
-func (r *itemRepositoryImpl) GetDb() *gorm.DB {
-	return r.db.Connect()
 }
 
 func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {

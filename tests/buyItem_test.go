@@ -17,10 +17,10 @@ import (
 
 func TestItemBuyingSuccess(t *testing.T) {
 	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
-	db, mockSql := databases.NewMockDatabase()
-	mockSql.ExpectBegin()
-	mockSql.ExpectCommit()
-	itemShopRepositoryMock.On("GetDb").Return(db)
+	// db, mockSql := databases.NewMockDatabase()
+	// mockSql.ExpectBegin()
+	// mockSql.ExpectCommit()
+	// itemShopRepositoryMock.On("GetDb").Return(db)
 
 	playerCoinRepositoryMock := new(_playerCoinRepository.CoinRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
