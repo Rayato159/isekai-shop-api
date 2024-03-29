@@ -35,16 +35,3 @@ func (m *ItemShopRepositoryMock) PurchaseHistoryRecording(purchasingEntity *enti
 	args := m.Called(purchasingEntity)
 	return args.Get(0).(*entities.PurchaseHistory), args.Error(1)
 }
-
-func (m *ItemShopRepositoryMock) TransactionBegin() {
-	m.Called()
-}
-
-func (m *ItemShopRepositoryMock) TransactionRollback() {
-	m.Called()
-}
-
-func (m *ItemShopRepositoryMock) TransactionCommit() error {
-	args := m.Called()
-	return args.Error(0)
-}

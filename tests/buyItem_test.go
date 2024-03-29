@@ -1,8 +1,6 @@
 package tests
 
 import (
-	"errors"
-
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
 	_itemShop "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
@@ -26,12 +24,6 @@ func TestItemBuyingSuccess(t *testing.T) {
 		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
 	)
-
-	itemShopRepositoryMock.On("TransactionBegin").Return()
-
-	itemShopRepositoryMock.On("TransactionCommit").Return(nil)
-
-	itemShopRepositoryMock.On("TransactionRollback").Return()
 
 	itemShopRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
 		ID:          1,
@@ -136,12 +128,6 @@ func TestItemBuyingFail(t *testing.T) {
 		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
 	)
-
-	itemShopRepositoryMock.On("TransactionBegin").Return()
-
-	itemShopRepositoryMock.On("TransactionCommit").Return(errors.New("failed to commit transaction"))
-
-	itemShopRepositoryMock.On("TransactionRollback").Return()
 
 	itemShopRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
 		ID:          1,
