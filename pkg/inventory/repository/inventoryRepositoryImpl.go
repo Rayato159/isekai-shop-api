@@ -19,18 +19,44 @@ func NewInventoryRepositoryImpl(db databases.Database, logger echo.Logger) Inven
 	}
 }
 
-func (r *inventoryRepositoryImpl) Filling(inventoryEntities []*entities.Inventory) ([]*entities.Inventory, error) {
-	inventoryEntitiesResult := make([]*entities.Inventory, 0)
+func (r *inventoryRepositoryImpl) Filling(playerID string, itemID uint64, qty int) ([]*entities.Inventory, error) {
+	inventoryEntities := make([]*entities.Inventory, 0)
 
-	if err := r.db.Connect().Create(inventoryEntities).Scan(&inventoryEntitiesResult).Error; err != nil {
+	for range qty {
+		inventoryEntities = append(inventoryEntities, &entities.Inventory{
+			PlayerID: playerID,
+			ItemID:   itemID,
+		})
+	}
+
+	if err := r.db.Connect().Create(inventoryEntities).Error; err != nil {
 		r.logger.Error("Item creating failed:", err.Error())
 		return nil, &_inventory.InventoryFilling{
-			PlayerID: inventoryEntities[0].PlayerID,
-			ItemID:   inventoryEntities[0].ItemID,
+			PlayerID: playerID,
+			ItemID:   itemID,
 		}
 	}
 
-	return inventoryEntitiesResult, nil
+	return inventoryEntities, nil
+}
+
+func (r *inventoryRepositoryImpl) ReverseFilling(inventoryEntities []*entities.Inventory) error {
+	for _, inventory := range inventoryEntities {
+		inventory.IsDeleted = true
+
+		if err := r.db.Connect().Model(
+			&entities.Inventory{},
+		).Where(
+			"id = ?", inventory.ID,
+		).Updates(
+			inventory,
+		).Error; err != nil {
+			r.logger.Error("Removing item failed:", err.Error())
+			return &_inventory.PlayerItemRemoving{ItemID: inventory.ID}
+		}
+	}
+
+	return nil
 }
 
 func (r *inventoryRepositoryImpl) Listing(playerID string) ([]*entities.Inventory, error) {
@@ -56,6 +82,30 @@ func (r *inventoryRepositoryImpl) Removing(playerID string, itemID uint64, limit
 
 	for _, inventory := range inventoryEntities {
 		inventory.IsDeleted = true
+
+		if err := r.db.Connect().Model(
+			&entities.Inventory{},
+		).Where(
+			"id = ?", inventory.ID,
+		).Updates(
+			inventory,
+		).Error; err != nil {
+			r.logger.Error("Removing item failed:", err.Error())
+			return &_inventory.PlayerItemRemoving{ItemID: itemID}
+		}
+	}
+
+	return nil
+}
+
+func (r *inventoryRepositoryImpl) ReverseRemoving(playerID string, itemID uint64, limit int) error {
+	inventoryEntities, err := r.findPlayerItemInInventoryByID(playerID, itemID, limit)
+	if err != nil {
+		return err
+	}
+
+	for _, inventory := range inventoryEntities {
+		inventory.IsDeleted = false
 
 		if err := r.db.Connect().Model(
 			&entities.Inventory{},

@@ -56,20 +56,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Quantity:        3,
 	}, nil)
 
-	inventoryRepositoryMock.On("Filling", []*entities.Inventory{
-		{
-			PlayerID: "P001",
-			ItemID:   1,
-		},
-		{
-			PlayerID: "P001",
-			ItemID:   1,
-		},
-		{
-			PlayerID: "P001",
-			ItemID:   1,
-		},
-	}).Return([]*entities.Inventory{
+	inventoryRepositoryMock.On("Filling", "P001", uint64(1), int(3)).Return([]*entities.Inventory{
 		{
 			PlayerID: "P001",
 			ItemID:   1,

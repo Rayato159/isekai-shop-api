@@ -32,6 +32,15 @@ func (r *playerCoinRepositoryImpl) CoinAdding(playerCoinEntity *entities.PlayerC
 	return playerCoin, nil
 }
 
+func (r *playerCoinRepositoryImpl) ReverseCoinAdding(playerCoinEntity *entities.PlayerCoin) error {
+	if err := r.db.Connect().Delete(playerCoinEntity).Error; err != nil {
+		r.logger.Error("Player's balance deleting failed:", err.Error())
+		return &_playerCoin.CoinAdding{}
+	}
+
+	return nil
+}
+
 func (r *playerCoinRepositoryImpl) Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error) {
 	playerCoin := new(_playerCoinModel.PlayerCoinShowing)
 

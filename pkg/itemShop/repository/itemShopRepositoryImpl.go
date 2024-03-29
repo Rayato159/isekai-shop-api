@@ -97,3 +97,12 @@ func (r *itemRepositoryImpl) PurchaseHistoryRecording(purchasingEntity *entities
 
 	return insertedPurchasing, nil
 }
+
+func (r *itemRepositoryImpl) ReversePurchaseHistoryRecording(purchasingEntity *entities.PurchaseHistory) error {
+	if err := r.db.Connect().Delete(purchasingEntity).Error; err != nil {
+		r.logger.Errorf("Reversing purchase history failed: %s", err.Error())
+		return err
+	}
+
+	return nil
+}

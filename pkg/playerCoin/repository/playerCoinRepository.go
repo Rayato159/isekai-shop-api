@@ -7,5 +7,6 @@ import (
 
 type PlayerCoinRepository interface {
 	CoinAdding(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error)
+	ReverseCoinAdding(playerCoinEntity *entities.PlayerCoin) error
 	Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error)
 }

@@ -78,6 +78,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		Quantity:        buyingReq.Quantity,
 	})
 	if err != nil {
+		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
 		return nil, err
 	}
 	log.Printf("Purchase history recorded: %d", purchaseRecording.ID)
@@ -87,13 +88,21 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		Amount:   -totalPrice,
 	})
 	if err != nil {
+		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
+		s.playerCoinRepository.ReverseCoinAdding(coinRecording)
 		return nil, err
 	}
 	log.Printf("Player coins reduced for: %d", totalPrice)
 
-	inventoryEntities := s.groupInventoryEntities(buyingReq)
-	inventoryRecording, err := s.inventoryRepository.Filling(inventoryEntities)
+	inventoryRecording, err := s.inventoryRepository.Filling(
+		buyingReq.PlayerID,
+		buyingReq.ItemID,
+		int(buyingReq.Quantity),
+	)
 	if err != nil {
+		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
+		s.playerCoinRepository.ReverseCoinAdding(coinRecording)
+		s.inventoryRepository.ReverseFilling(inventoryRecording)
 		return nil, err
 	}
 	log.Printf("Items recorded into player inventory: %d", len(inventoryRecording))
@@ -134,15 +143,18 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		Quantity:        sellingReq.Quantity,
 	})
 	if err != nil {
+		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
 		return nil, err
 	}
-	log.Printf("Pucahse history recorded: %d", purchaseRecording.ID)
+	log.Printf("Puchase history recorded: %d", purchaseRecording.ID)
 
 	coinRecording, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
 		PlayerID: sellingReq.PlayerID,
 		Amount:   totalPrice,
 	})
 	if err != nil {
+		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
+		s.playerCoinRepository.ReverseCoinAdding(coinRecording)
 		return nil, err
 	}
 	log.Printf("Coins added into player for: %d", coinRecording.Amount)
@@ -152,25 +164,18 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		sellingReq.ItemID,
 		int(sellingReq.Quantity),
 	); err != nil {
+		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
+		s.playerCoinRepository.ReverseCoinAdding(coinRecording)
+		s.inventoryRepository.ReverseRemoving(
+			sellingReq.PlayerID,
+			sellingReq.ItemID,
+			int(sellingReq.Quantity),
+		)
 		return nil, err
 	}
 	log.Printf("Deleted player item from player's inventory for %d records", sellingReq.Quantity)
 
 	return coinRecording.ToPlayerCoinModel(), nil
-}
-
-func (s *itemShopServiceImpl) groupInventoryEntities(buyingReq *_itemShopModel.BuyingReq) []*entities.Inventory {
-	inventoryEntities := make([]*entities.Inventory, 0)
-
-	for i := 0; i < int(buyingReq.Quantity); i++ {
-		inventoryEntities = append(inventoryEntities, &entities.Inventory{
-			PlayerID: buyingReq.PlayerID,
-			ItemID:   buyingReq.ItemID,
-		})
-	}
-
-	return inventoryEntities
-
 }
 
 func (s *itemShopServiceImpl) checkPlayerItemQuantity(playerID string, itemID uint64, quantity uint) error {

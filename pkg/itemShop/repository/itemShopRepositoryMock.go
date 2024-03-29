@@ -41,3 +41,8 @@ func (m *ItemShopRepositoryMock) GetDb() *gorm.DB {
 	args := m.Called()
 	return args.Get(0).(*gorm.DB)
 }
+
+func (m *ItemShopRepositoryMock) ReversePurchaseHistoryRecording(purchasingEntity *entities.PurchaseHistory) error {
+	args := m.Called(purchasingEntity)
+	return args.Error(0)
+}
