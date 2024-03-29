@@ -21,16 +21,8 @@ func NewItemShopRepositoryImpl(db databases.Database, logger echo.Logger) ItemSh
 	}
 }
 
-func (r *itemRepositoryImpl) TransactionBegin() {
-	r.db.Connect().Begin()
-}
-
-func (r *itemRepositoryImpl) TransactionRollback() {
-	r.db.Connect().Rollback()
-}
-
-func (r *itemRepositoryImpl) TransactionCommit() error {
-	return r.db.Connect().Commit().Error
+func (r *itemRepositoryImpl) Transaction() databases.Database {
+	return r.db
 }
 
 func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
