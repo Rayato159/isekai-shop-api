@@ -92,12 +92,10 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 	log.Printf("Player coins reduced for: %d", totalPrice)
 
 	inventoryEntities := s.groupInventoryEntities(buyingReq)
-
 	inventoryRecording, err := s.inventoryRepository.Filling(inventoryEntities)
 	if err != nil {
 		return nil, err
 	}
-
 	log.Printf("Items recorded into player inventory: %d", len(inventoryRecording))
 
 	return coinRecording.ToPlayerCoinModel(), nil
@@ -156,7 +154,6 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	); err != nil {
 		return nil, err
 	}
-
 	log.Printf("Deleted player item from player's inventory for %d records", sellingReq.Quantity)
 
 	return coinRecording.ToPlayerCoinModel(), nil
