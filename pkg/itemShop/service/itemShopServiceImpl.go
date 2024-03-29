@@ -97,7 +97,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 	}
 	log.Printf("Player coins reduced for: %d", totalPrice)
 
-	inventory, err := s.inventoryRepository.Filling(inventoryEntities)
+	inventoryRecording, err := s.inventoryRepository.Filling(inventoryEntities)
 	if err != nil {
 		s.itemShopRepository.TransactionRollback()
 		return nil, err
@@ -107,8 +107,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		s.itemShopRepository.TransactionRollback()
 		return nil, err
 	}
-
-	log.Printf("Items recorded into player inventory: %d", len(inventory))
+	log.Printf("Items recorded into player inventory: %d", len(inventoryRecording))
 
 	return coinRecording.ToPlayerCoinModel(), nil
 }
@@ -176,7 +175,6 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		s.itemShopRepository.TransactionRollback()
 		return nil, err
 	}
-
 	log.Printf("Deleted player item from player's inventory for %d records", sellingReq.Quantity)
 
 	return coinRecording.ToPlayerCoinModel(), nil
