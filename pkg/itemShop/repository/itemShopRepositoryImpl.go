@@ -23,7 +23,8 @@ func NewItemShopRepositoryImpl(db databases.Database, logger echo.Logger) ItemSh
 }
 
 func (r *itemRepositoryImpl) BeginTransaction() *gorm.DB {
-	return r.db.Connect()
+	tx := r.db.Connect()
+	return tx.Begin()
 }
 
 func (r *itemRepositoryImpl) RollbackTransaction(tx *gorm.DB) error {
