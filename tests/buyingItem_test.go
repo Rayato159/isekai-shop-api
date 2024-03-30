@@ -91,12 +91,14 @@ func TestItemBuyingSuccess(t *testing.T) {
 	}, nil)
 
 	type args struct {
+		label    string
 		in       *_itemShopModel.BuyingReq
 		expected *_playerCoinModel.PlayerCoin
 	}
 
 	cases := []args{
 		{
+			label: "Success buying item",
 			in: &_itemShopModel.BuyingReq{
 				PlayerID: "P001",
 				ItemID:   1,
@@ -110,9 +112,11 @@ func TestItemBuyingSuccess(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := itemShopService.Buying(c.in)
-		assert.NoError(t, err)
-		assert.EqualValues(t, c.expected, result)
+		t.Run(c.label, func(t *testing.T) {
+			result, err := itemShopService.Buying(c.in)
+			assert.NoError(t, err)
+			assert.EqualValues(t, c.expected, result)
+		})
 	}
 }
 
@@ -148,12 +152,14 @@ func TestItemBuyingFail(t *testing.T) {
 	}, nil)
 
 	type args struct {
+		label    string
 		in       *_itemShopModel.BuyingReq
 		expected error
 	}
 
 	cases := []args{
 		{
+			label: "Test failed to find item 1",
 			in: &_itemShopModel.BuyingReq{
 				PlayerID: "P001",
 				ItemID:   1,
@@ -164,9 +170,11 @@ func TestItemBuyingFail(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := itemShopService.Buying(c.in)
-		assert.Nil(t, result)
-		assert.Error(t, err)
-		assert.EqualValues(t, c.expected, err)
+		t.Run(c.label, func(t *testing.T) {
+			result, err := itemShopService.Buying(c.in)
+			assert.Nil(t, result)
+			assert.Error(t, err)
+			assert.EqualValues(t, c.expected, err)
+		})
 	}
 }

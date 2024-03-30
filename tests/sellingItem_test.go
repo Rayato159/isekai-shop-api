@@ -75,12 +75,14 @@ func TestItemSellingSuccess(t *testing.T) {
 	inventoryRepositoryMock.On("Removing", tx, "P001", uint64(1), 3).Return(nil)
 
 	type args struct {
+		label    string
 		in       *_itemShopModel.SellingReq
 		expected *_playerCoinModel.PlayerCoin
 	}
 
 	cases := []args{
 		{
+			"Selling item success",
 			&_itemShopModel.SellingReq{
 				PlayerID: "P001",
 				ItemID:   1,
@@ -94,9 +96,11 @@ func TestItemSellingSuccess(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := itemShopService.Selling(c.in)
-		assert.NoError(t, err)
-		assert.Equal(t, c.expected, result)
+		t.Run(c.label, func(t *testing.T) {
+			result, err := itemShopService.Selling(c.in)
+			assert.NoError(t, err)
+			assert.Equal(t, c.expected, result)
+		})
 	}
 }
 
@@ -129,12 +133,14 @@ func TestItemSellingFailed(t *testing.T) {
 	}, nil)
 
 	type args struct {
+		label    string
 		in       *_itemShopModel.SellingReq
 		expected error
 	}
 
 	cases := []args{
 		{
+			"Selling item failed because the item is not enough",
 			&_itemShopModel.SellingReq{
 				PlayerID: "P001",
 				ItemID:   1,
@@ -145,8 +151,11 @@ func TestItemSellingFailed(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		result, err := itemShopService.Selling(c.in)
-		assert.EqualValues(t, c.expected, err)
-		assert.Nil(t, result)
+		t.Run(c.label, func(t *testing.T) {
+			result, err := itemShopService.Selling(c.in)
+			assert.Error(t, err)
+			assert.Equal(t, c.expected, err)
+			assert.Nil(t, result)
+		})
 	}
 }
