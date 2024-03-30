@@ -80,6 +80,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		ItemPrice:       itemEntity.Price,
 		ItemPicture:     itemEntity.Picture,
 		Quantity:        buyingReq.Quantity,
+		IsBuying:        true,
 	})
 	if err != nil {
 		s.itemShopRepository.RollbackTransaction(tx)
@@ -150,6 +151,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		ItemPrice:       itemEntity.Price,
 		ItemPicture:     itemEntity.Picture,
 		Quantity:        sellingReq.Quantity,
+		IsBuying:        false,
 	})
 	if err != nil {
 		s.itemShopRepository.RollbackTransaction(tx)
