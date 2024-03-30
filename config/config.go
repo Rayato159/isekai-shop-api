@@ -9,8 +9,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var once sync.Once
-
 type (
 	Database struct {
 		Host     string `mapstructure:"host" validate:"required"`
@@ -53,7 +51,10 @@ type (
 	}
 )
 
-var configInstance *Config
+var (
+	once           sync.Once
+	configInstance *Config
+)
 
 func ConfigGetting() *Config {
 	once.Do(func() {
