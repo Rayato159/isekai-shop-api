@@ -209,9 +209,9 @@ func (s *itemShopServiceImpl) playerCoinChecking(playerID string, totalPrice int
 	return nil
 }
 
-func (s *itemShopServiceImpl) calculateTotalPrice(item *_itemShopModel.Item, quantity uint) int64 {
+func (s *itemShopServiceImpl) calculateTotalPrice(item *_itemShopModel.Item, qty uint) int64 {
 	// In a real world scenario, this would be a more complex calculation
-	return int64(item.Price) * int64(quantity)
+	return int64(item.Price) * int64(qty)
 }
 
 func (s *itemShopServiceImpl) totalPageCalculation(totalItems, size int64) int64 {
