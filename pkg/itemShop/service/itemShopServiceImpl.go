@@ -124,14 +124,6 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 // 5. Create playerCoin
 // 6. Delete item into player inventory
 func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_playerCoinModel.PlayerCoin, error) {
-	if err := s.playerItemChecking(
-		sellingReq.PlayerID,
-		sellingReq.ItemID,
-		sellingReq.Quantity,
-	); err != nil {
-		return nil, err
-	}
-
 	itemEntity, err := s.itemShopRepository.FindByID(sellingReq.ItemID)
 	if err != nil {
 		return nil, err
@@ -139,6 +131,14 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 
 	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), sellingReq.Quantity)
 	totalPrice = totalPrice / 2
+
+	if err := s.playerItemChecking(
+		sellingReq.PlayerID,
+		sellingReq.ItemID,
+		sellingReq.Quantity,
+	); err != nil {
+		return nil, err
+	}
 
 	tx := s.itemShopRepository.BeginTransaction()
 
