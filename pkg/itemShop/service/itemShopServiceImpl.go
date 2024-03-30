@@ -124,7 +124,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 // 5. Create playerCoin
 // 6. Delete item into player inventory
 func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_playerCoinModel.PlayerCoin, error) {
-	if err := s.checkPlayerItemQuantity(
+	if err := s.playerItemChecking(
 		sellingReq.PlayerID,
 		sellingReq.ItemID,
 		sellingReq.Quantity,
@@ -186,7 +186,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	return coinRecording.ToPlayerCoinModel(), nil
 }
 
-func (s *itemShopServiceImpl) checkPlayerItemQuantity(playerID string, itemID uint64, quantity uint) error {
+func (s *itemShopServiceImpl) playerItemChecking(playerID string, itemID uint64, quantity uint) error {
 	inventoryCount := s.inventoryRepository.PlayerItemCounting(playerID, itemID)
 
 	if int(inventoryCount) < int(quantity) {
