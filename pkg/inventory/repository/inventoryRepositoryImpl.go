@@ -5,6 +5,7 @@ import (
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventory "github.com/Rayato159/isekai-shop-api/pkg/inventory/exception"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type inventoryRepositoryImpl struct {
@@ -19,7 +20,12 @@ func NewInventoryRepositoryImpl(db databases.Database, logger echo.Logger) Inven
 	}
 }
 
-func (r *inventoryRepositoryImpl) Filling(playerID string, itemID uint64, qty int) ([]*entities.Inventory, error) {
+func (r *inventoryRepositoryImpl) Filling(tx *gorm.DB, playerID string, itemID uint64, qty int) ([]*entities.Inventory, error) {
+	conn := r.db.Connect()
+	if tx != nil {
+		conn = tx
+	}
+
 	inventoryEntities := make([]*entities.Inventory, 0)
 
 	for range qty {
@@ -29,7 +35,7 @@ func (r *inventoryRepositoryImpl) Filling(playerID string, itemID uint64, qty in
 		})
 	}
 
-	if err := r.db.Connect().Create(inventoryEntities).Error; err != nil {
+	if err := conn.Create(inventoryEntities).Error; err != nil {
 		r.logger.Error("Item creating failed:", err.Error())
 		return nil, &_inventory.InventoryFilling{
 			PlayerID: playerID,
@@ -38,25 +44,6 @@ func (r *inventoryRepositoryImpl) Filling(playerID string, itemID uint64, qty in
 	}
 
 	return inventoryEntities, nil
-}
-
-func (r *inventoryRepositoryImpl) ReverseFilling(inventoryEntities []*entities.Inventory) error {
-	for _, inventory := range inventoryEntities {
-		inventory.IsDeleted = true
-
-		if err := r.db.Connect().Model(
-			&entities.Inventory{},
-		).Where(
-			"id = ?", inventory.ID,
-		).Updates(
-			inventory,
-		).Error; err != nil {
-			r.logger.Error("Removing item failed:", err.Error())
-			return &_inventory.PlayerItemRemoving{ItemID: inventory.ID}
-		}
-	}
-
-	return nil
 }
 
 func (r *inventoryRepositoryImpl) Listing(playerID string) ([]*entities.Inventory, error) {
@@ -74,7 +61,12 @@ func (r *inventoryRepositoryImpl) Listing(playerID string) ([]*entities.Inventor
 	return inventoryEntities, nil
 }
 
-func (r *inventoryRepositoryImpl) Removing(playerID string, itemID uint64, limit int) error {
+func (r *inventoryRepositoryImpl) Removing(tx *gorm.DB, playerID string, itemID uint64, limit int) error {
+	conn := r.db.Connect()
+	if tx != nil {
+		conn = tx
+	}
+
 	inventoryEntities, err := r.findPlayerItemInInventoryByID(playerID, itemID, limit)
 	if err != nil {
 		return err
@@ -83,31 +75,7 @@ func (r *inventoryRepositoryImpl) Removing(playerID string, itemID uint64, limit
 	for _, inventory := range inventoryEntities {
 		inventory.IsDeleted = true
 
-		if err := r.db.Connect().Model(
-			&entities.Inventory{},
-		).Where(
-			"id = ?", inventory.ID,
-		).Updates(
-			inventory,
-		).Error; err != nil {
-			r.logger.Error("Removing item failed:", err.Error())
-			return &_inventory.PlayerItemRemoving{ItemID: itemID}
-		}
-	}
-
-	return nil
-}
-
-func (r *inventoryRepositoryImpl) ReverseRemoving(playerID string, itemID uint64, limit int) error {
-	inventoryEntities, err := r.findPlayerItemInInventoryByID(playerID, itemID, limit)
-	if err != nil {
-		return err
-	}
-
-	for _, inventory := range inventoryEntities {
-		inventory.IsDeleted = false
-
-		if err := r.db.Connect().Model(
+		if err := conn.Model(
 			&entities.Inventory{},
 		).Where(
 			"id = ?", inventory.ID,

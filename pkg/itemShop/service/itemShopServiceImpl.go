@@ -68,7 +68,9 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		return nil, err
 	}
 
-	purchaseRecording, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
+	tx := s.itemShopRepository.BeginTransaction()
+
+	purchaseRecording, err := s.itemShopRepository.PurchaseHistoryRecording(tx, &entities.PurchaseHistory{
 		PlayerID:        buyingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -78,34 +80,37 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		Quantity:        buyingReq.Quantity,
 	})
 	if err != nil {
-		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
+		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
 	log.Printf("Purchase history recorded: %d", purchaseRecording.ID)
 
-	coinRecording, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
+	coinRecording, err := s.playerCoinRepository.CoinAdding(tx, &entities.PlayerCoin{
 		PlayerID: buyingReq.PlayerID,
 		Amount:   -totalPrice,
 	})
 	if err != nil {
-		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
-		s.playerCoinRepository.ReverseCoinAdding(coinRecording)
+		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
 	log.Printf("Player coins reduced for: %d", totalPrice)
 
 	inventoryRecording, err := s.inventoryRepository.Filling(
+		tx,
 		buyingReq.PlayerID,
 		buyingReq.ItemID,
 		int(buyingReq.Quantity),
 	)
 	if err != nil {
-		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
-		s.playerCoinRepository.ReverseCoinAdding(coinRecording)
-		s.inventoryRepository.ReverseFilling(inventoryRecording)
+		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
 	log.Printf("Items recorded into player inventory: %d", len(inventoryRecording))
+
+	if err := s.itemShopRepository.CommitTransaction(tx); err != nil {
+		s.itemShopRepository.RollbackTransaction(tx)
+		return nil, err
+	}
 
 	return coinRecording.ToPlayerCoinModel(), nil
 }
@@ -133,7 +138,9 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 	totalPrice := s.calculateTotalPrice(itemEntity.ToItemModel(), sellingReq.Quantity)
 	totalPrice = totalPrice / 2
 
-	purchaseRecording, err := s.itemShopRepository.PurchaseHistoryRecording(&entities.PurchaseHistory{
+	tx := s.itemShopRepository.BeginTransaction()
+
+	purchaseRecording, err := s.itemShopRepository.PurchaseHistoryRecording(tx, &entities.PurchaseHistory{
 		PlayerID:        sellingReq.PlayerID,
 		ItemID:          itemEntity.ID,
 		ItemName:        itemEntity.Name,
@@ -143,37 +150,36 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		Quantity:        sellingReq.Quantity,
 	})
 	if err != nil {
-		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
+		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
 	log.Printf("Puchase history recorded: %d", purchaseRecording.ID)
 
-	coinRecording, err := s.playerCoinRepository.CoinAdding(&entities.PlayerCoin{
+	coinRecording, err := s.playerCoinRepository.CoinAdding(tx, &entities.PlayerCoin{
 		PlayerID: sellingReq.PlayerID,
 		Amount:   totalPrice,
 	})
 	if err != nil {
-		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
-		s.playerCoinRepository.ReverseCoinAdding(coinRecording)
+		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
 	log.Printf("Coins added into player for: %d", coinRecording.Amount)
 
 	if err := s.inventoryRepository.Removing(
+		tx,
 		sellingReq.PlayerID,
 		sellingReq.ItemID,
 		int(sellingReq.Quantity),
 	); err != nil {
-		s.itemShopRepository.ReversePurchaseHistoryRecording(purchaseRecording)
-		s.playerCoinRepository.ReverseCoinAdding(coinRecording)
-		s.inventoryRepository.ReverseRemoving(
-			sellingReq.PlayerID,
-			sellingReq.ItemID,
-			int(sellingReq.Quantity),
-		)
+		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
 	log.Printf("Deleted player item from player's inventory for %d records", sellingReq.Quantity)
+
+	if err := s.itemShopRepository.CommitTransaction(tx); err != nil {
+		s.itemShopRepository.RollbackTransaction(tx)
+		return nil, err
+	}
 
 	return coinRecording.ToPlayerCoinModel(), nil
 }

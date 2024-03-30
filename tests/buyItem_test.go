@@ -10,6 +10,7 @@ import (
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 
 	"testing"
 )
@@ -25,6 +26,11 @@ func TestItemBuyingSuccess(t *testing.T) {
 		inventoryRepositoryMock,
 	)
 
+	tx := &gorm.DB{}
+	itemShopRepositoryMock.On("BeginTransaction").Return(tx)
+	itemShopRepositoryMock.On("CommitTransaction", tx).Return(nil)
+	itemShopRepositoryMock.On("RollbackTransaction", tx).Return(nil)
+
 	itemShopRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
 		ID:          1,
 		Name:        "Sword of Tester",
@@ -38,7 +44,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Coin:     5000,
 	}, nil)
 
-	itemShopRepositoryMock.On("PurchaseHistoryRecording", &entities.PurchaseHistory{
+	itemShopRepositoryMock.On("PurchaseHistoryRecording", tx, &entities.PurchaseHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -56,7 +62,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Quantity:        3,
 	}, nil)
 
-	inventoryRepositoryMock.On("Filling", "P001", uint64(1), int(3)).Return([]*entities.Inventory{
+	inventoryRepositoryMock.On("Filling", tx, "P001", uint64(1), int(3)).Return([]*entities.Inventory{
 		{
 			PlayerID: "P001",
 			ItemID:   1,
@@ -71,7 +77,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		},
 	}, nil)
 
-	playerCoinRepositoryMock.On("CoinAdding", &entities.PlayerCoin{
+	playerCoinRepositoryMock.On("CoinAdding", tx, &entities.PlayerCoin{
 		PlayerID: "P001",
 		Amount:   -3000,
 	}).Return(&entities.PlayerCoin{
@@ -115,6 +121,11 @@ func TestItemBuyingFail(t *testing.T) {
 		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
 	)
+
+	tx := &gorm.DB{}
+	itemShopRepositoryMock.On("BeginTransaction").Return(tx)
+	itemShopRepositoryMock.On("CommitTransaction", tx).Return(nil)
+	itemShopRepositoryMock.On("RollbackTransaction", tx).Return(nil)
 
 	itemShopRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
 		ID:          1,

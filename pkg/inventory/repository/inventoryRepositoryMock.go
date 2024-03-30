@@ -2,6 +2,7 @@ package repository
 
 import (
 	entities "github.com/Rayato159/isekai-shop-api/entities"
+	"gorm.io/gorm"
 
 	"github.com/stretchr/testify/mock"
 )
@@ -10,14 +11,9 @@ type InventoryRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *InventoryRepositoryMock) Filling(playerID string, itemID uint64, qty int) ([]*entities.Inventory, error) {
-	args := m.Called(playerID, itemID, qty)
+func (m *InventoryRepositoryMock) Filling(tx *gorm.DB, playerID string, itemID uint64, qty int) ([]*entities.Inventory, error) {
+	args := m.Called(tx, playerID, itemID, qty)
 	return args.Get(0).([]*entities.Inventory), args.Error(1)
-}
-
-func (m *InventoryRepositoryMock) ReverseFilling(inventoryEntities []*entities.Inventory) error {
-	args := m.Called(inventoryEntities)
-	return args.Error(0)
 }
 
 func (m *InventoryRepositoryMock) Listing(playerID string) ([]*entities.Inventory, error) {
@@ -25,13 +21,8 @@ func (m *InventoryRepositoryMock) Listing(playerID string) ([]*entities.Inventor
 	return args.Get(0).([]*entities.Inventory), args.Error(1)
 }
 
-func (m *InventoryRepositoryMock) Removing(playerID string, itemID uint64, limit int) error {
-	args := m.Called(playerID, itemID, limit)
-	return args.Error(0)
-}
-
-func (m *InventoryRepositoryMock) ReverseRemoving(playerID string, itemID uint64, limit int) error {
-	args := m.Called(playerID, itemID, limit)
+func (m *InventoryRepositoryMock) Removing(tx *gorm.DB, playerID string, itemID uint64, limit int) error {
+	args := m.Called(tx, playerID, itemID, limit)
 	return args.Error(0)
 }
 

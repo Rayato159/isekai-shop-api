@@ -5,6 +5,7 @@ import (
 	"github.com/Rayato159/isekai-shop-api/entities"
 	_playerCoin "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/exception"
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
+	"gorm.io/gorm"
 
 	"github.com/labstack/echo/v4"
 )
@@ -21,24 +22,20 @@ func NewPlayerCoinRepositoryImpl(db databases.Database, logger echo.Logger) Play
 	}
 }
 
-func (r *playerCoinRepositoryImpl) CoinAdding(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
+func (r *playerCoinRepositoryImpl) CoinAdding(tx *gorm.DB, playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
+	conn := r.db.Connect()
+	if tx != nil {
+		conn = tx
+	}
+
 	playerCoin := new(entities.PlayerCoin)
 
-	if err := r.db.Connect().Create(playerCoinEntity).Scan(playerCoin).Error; err != nil {
+	if err := conn.Create(playerCoinEntity).Scan(playerCoin).Error; err != nil {
 		r.logger.Error("Player's balance recording failed:", err.Error())
 		return nil, &_playerCoin.CoinAdding{}
 	}
 
 	return playerCoin, nil
-}
-
-func (r *playerCoinRepositoryImpl) ReverseCoinAdding(playerCoinEntity *entities.PlayerCoin) error {
-	if err := r.db.Connect().Delete(playerCoinEntity).Error; err != nil {
-		r.logger.Error("Player's balance deleting failed:", err.Error())
-		return &_playerCoin.CoinAdding{}
-	}
-
-	return nil
 }
 
 func (r *playerCoinRepositoryImpl) Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error) {

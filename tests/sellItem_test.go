@@ -10,6 +10,7 @@ import (
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 
 	"testing"
 )
@@ -25,6 +26,11 @@ func TestItemSellingSuccess(t *testing.T) {
 		inventoryRepositoryMock,
 	)
 
+	tx := &gorm.DB{}
+	itemShopRepositoryMock.On("BeginTransaction").Return(tx)
+	itemShopRepositoryMock.On("CommitTransaction", tx).Return(nil)
+	itemShopRepositoryMock.On("RollbackTransaction", tx).Return(nil)
+
 	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(3), nil)
 
 	itemShopRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
@@ -35,7 +41,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	itemShopRepositoryMock.On("PurchaseHistoryRecording", &entities.PurchaseHistory{
+	itemShopRepositoryMock.On("PurchaseHistoryRecording", tx, &entities.PurchaseHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -53,7 +59,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		Quantity:        3,
 	}, nil)
 
-	playerCoinRepositoryMock.On("CoinAdding", &entities.PlayerCoin{
+	playerCoinRepositoryMock.On("CoinAdding", tx, &entities.PlayerCoin{
 		PlayerID: "P001",
 		Amount:   1500,
 	}).Return(&entities.PlayerCoin{
@@ -61,7 +67,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		Amount:   1500,
 	}, nil)
 
-	inventoryRepositoryMock.On("Removing", "P001", uint64(1), 3).Return(nil)
+	inventoryRepositoryMock.On("Removing", tx, "P001", uint64(1), 3).Return(nil)
 
 	type args struct {
 		in       *_itemShopModel.SellingReq
@@ -99,6 +105,11 @@ func TestItemSellingFailed(t *testing.T) {
 		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
 	)
+
+	tx := &gorm.DB{}
+	itemShopRepositoryMock.On("BeginTransaction").Return(tx)
+	itemShopRepositoryMock.On("CommitTransaction", tx).Return(nil)
+	itemShopRepositoryMock.On("RollbackTransaction", tx).Return(nil)
 
 	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(2), nil)
 

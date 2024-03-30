@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 
 	"github.com/Rayato159/isekai-shop-api/databases"
 	entities "github.com/Rayato159/isekai-shop-api/entities"
@@ -19,6 +20,18 @@ func NewItemShopRepositoryImpl(db databases.Database, logger echo.Logger) ItemSh
 		db:     db,
 		logger: logger,
 	}
+}
+
+func (r *itemRepositoryImpl) BeginTransaction() *gorm.DB {
+	return r.db.Connect()
+}
+
+func (r *itemRepositoryImpl) RollbackTransaction(tx *gorm.DB) error {
+	return tx.Rollback().Error
+}
+
+func (r *itemRepositoryImpl) CommitTransaction(tx *gorm.DB) error {
+	return tx.Commit().Error
 }
 
 func (r *itemRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
@@ -87,22 +100,21 @@ func (r *itemRepositoryImpl) FindByIDList(itemIDs []uint64) ([]*entities.Item, e
 	return items, nil
 }
 
-func (r *itemRepositoryImpl) PurchaseHistoryRecording(purchasingEntity *entities.PurchaseHistory) (*entities.PurchaseHistory, error) {
+func (r *itemRepositoryImpl) PurchaseHistoryRecording(
+	tx *gorm.DB,
+	purchasingEntity *entities.PurchaseHistory,
+) (*entities.PurchaseHistory, error) {
+	conn := r.db.Connect()
+	if tx != nil {
+		conn = tx
+	}
+
 	insertedPurchasing := new(entities.PurchaseHistory)
 
-	if err := r.db.Connect().Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
+	if err := conn.Create(purchasingEntity).Scan(insertedPurchasing).Error; err != nil {
 		r.logger.Errorf("Purchase history recording failed: %s", err.Error())
 		return nil, &_itemShop.HistoryOfPurchaseRecording{}
 	}
 
 	return insertedPurchasing, nil
-}
-
-func (r *itemRepositoryImpl) ReversePurchaseHistoryRecording(purchasingEntity *entities.PurchaseHistory) error {
-	if err := r.db.Connect().Delete(purchasingEntity).Error; err != nil {
-		r.logger.Errorf("Reversing purchase history failed: %s", err.Error())
-		return err
-	}
-
-	return nil
 }
