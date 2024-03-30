@@ -9,6 +9,7 @@ import (
 	_itemShopService "github.com/Rayato159/isekai-shop-api/pkg/itemShop/service"
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
+	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
 
@@ -19,11 +20,13 @@ func TestItemSellingSuccess(t *testing.T) {
 	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
 	playerCoinRepositoryMock := new(_playerCoinRepository.CoinRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
+	echoLogger := echo.New().Logger
 
 	itemShopService := _itemShopService.NewItemShopServiceImpl(
 		itemShopRepositoryMock,
 		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
+		echoLogger,
 	)
 
 	tx := &gorm.DB{}
@@ -99,11 +102,13 @@ func TestItemSellingFailed(t *testing.T) {
 	itemShopRepositoryMock := new(_itemShopRepository.ItemShopRepositoryMock)
 	playerCoinRepositoryMock := new(_playerCoinRepository.CoinRepositoryMock)
 	inventoryRepositoryMock := new(_inventoryRepository.InventoryRepositoryMock)
+	echoLogger := echo.New().Logger
 
 	itemShopService := _itemShopService.NewItemShopServiceImpl(
 		itemShopRepositoryMock,
 		playerCoinRepositoryMock,
 		inventoryRepositoryMock,
+		echoLogger,
 	)
 
 	tx := &gorm.DB{}

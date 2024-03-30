@@ -1,8 +1,6 @@
 package service
 
 import (
-	"log"
-
 	entities "github.com/Rayato159/isekai-shop-api/entities"
 	_inventoryRepository "github.com/Rayato159/isekai-shop-api/pkg/inventory/repository"
 	_itemShopException "github.com/Rayato159/isekai-shop-api/pkg/itemShop/exception"
@@ -10,23 +8,27 @@ import (
 	_itemShopRepository "github.com/Rayato159/isekai-shop-api/pkg/itemShop/repository"
 	_playerCoinModel "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/model"
 	_playerCoinRepository "github.com/Rayato159/isekai-shop-api/pkg/playerCoin/repository"
+	"github.com/labstack/echo/v4"
 )
 
 type itemShopServiceImpl struct {
 	itemShopRepository   _itemShopRepository.ItemShopRepository
 	playerCoinRepository _playerCoinRepository.PlayerCoinRepository
 	inventoryRepository  _inventoryRepository.InventoryRepository
+	logger               echo.Logger
 }
 
 func NewItemShopServiceImpl(
 	itemShopRepository _itemShopRepository.ItemShopRepository,
 	playerCoinRepository _playerCoinRepository.PlayerCoinRepository,
 	inventoryRepository _inventoryRepository.InventoryRepository,
+	logger echo.Logger,
 ) ItemShopService {
 	return &itemShopServiceImpl{
 		itemShopRepository,
 		playerCoinRepository,
 		inventoryRepository,
+		logger,
 	}
 }
 
@@ -83,7 +85,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
-	log.Printf("Purchase history recorded: %d", purchaseRecording.ID)
+	s.logger.Infof("Purchase history recorded: %d", purchaseRecording.ID)
 
 	coinRecording, err := s.playerCoinRepository.CoinAdding(tx, &entities.PlayerCoin{
 		PlayerID: buyingReq.PlayerID,
@@ -93,7 +95,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
-	log.Printf("Player coins reduced for: %d", totalPrice)
+	s.logger.Infof("Player coins reduced for: %d", totalPrice)
 
 	inventoryRecording, err := s.inventoryRepository.Filling(
 		tx,
@@ -105,7 +107,7 @@ func (s *itemShopServiceImpl) Buying(buyingReq *_itemShopModel.BuyingReq) (*_pla
 		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
-	log.Printf("Items recorded into player inventory: %d", len(inventoryRecording))
+	s.logger.Infof("Items recorded into player inventory: %d", len(inventoryRecording))
 
 	if err := s.itemShopRepository.CommitTransaction(tx); err != nil {
 		s.itemShopRepository.RollbackTransaction(tx)
@@ -153,7 +155,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
-	log.Printf("Puchase history recorded: %d", purchaseRecording.ID)
+	s.logger.Infof("Puchase history recorded: %d", purchaseRecording.ID)
 
 	coinRecording, err := s.playerCoinRepository.CoinAdding(tx, &entities.PlayerCoin{
 		PlayerID: sellingReq.PlayerID,
@@ -163,7 +165,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
-	log.Printf("Coins added into player for: %d", coinRecording.Amount)
+	s.logger.Infof("Coins added into player for: %d", coinRecording.Amount)
 
 	if err := s.inventoryRepository.Removing(
 		tx,
@@ -174,7 +176,7 @@ func (s *itemShopServiceImpl) Selling(sellingReq *_itemShopModel.SellingReq) (*_
 		s.itemShopRepository.RollbackTransaction(tx)
 		return nil, err
 	}
-	log.Printf("Deleted player item from player's inventory for %d records", sellingReq.Quantity)
+	s.logger.Infof("Deleted player item from player's inventory for %d records", sellingReq.Quantity)
 
 	if err := s.itemShopRepository.CommitTransaction(tx); err != nil {
 		s.itemShopRepository.RollbackTransaction(tx)
@@ -188,7 +190,7 @@ func (s *itemShopServiceImpl) checkPlayerItemQuantity(playerID string, itemID ui
 	inventoryCount := s.inventoryRepository.PlayerItemCounting(playerID, itemID)
 
 	if int(inventoryCount) < int(quantity) {
-		log.Printf("Player %s has not enough item with id: %d", playerID, itemID)
+		s.logger.Errorf("Player %s has not enough item with id: %d", playerID, itemID)
 		return &_itemShopException.ItemNotEnough{ItemID: itemID}
 	}
 
@@ -202,7 +204,7 @@ func (s *itemShopServiceImpl) playerCoinChecking(playerID string, totalPrice int
 	}
 
 	if playerCoin.Coin < totalPrice {
-		log.Printf("Player %s has not enough coin", playerID)
+		s.logger.Errorf("Player %s has not enough coin", playerID)
 		return &_itemShopException.CoinNotEnough{}
 	}
 
