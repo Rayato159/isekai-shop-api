@@ -52,6 +52,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
+		IsBuying:        false,
 	}).Return(&entities.PurchaseHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
@@ -60,6 +61,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		ItemPicture:     "https://www.google.com/sword-of-tester.jpg",
 		ItemPrice:       1000,
 		Quantity:        3,
+		IsBuying:        false,
 	}, nil)
 
 	playerCoinRepositoryMock.On("CoinAdding", tx, &entities.PlayerCoin{
@@ -117,6 +119,14 @@ func TestItemSellingFailed(t *testing.T) {
 	itemShopRepositoryMock.On("RollbackTransaction", tx).Return(nil)
 
 	inventoryRepositoryMock.On("PlayerItemCounting", "P001", uint64(1)).Return(int64(2), nil)
+
+	itemShopRepositoryMock.On("FindByID", uint64(1)).Return(&entities.Item{
+		ID:          1,
+		Name:        "Sword of Tester",
+		Price:       1000,
+		Description: "A sword that can be used to test the enemy's defense",
+		Picture:     "https://www.google.com/sword-of-tester.jpg",
+	}, nil)
 
 	type args struct {
 		in       *_itemShopModel.SellingReq
