@@ -13,5 +13,6 @@ type PurchaseHistory struct {
 	ItemPrice       uint      `gorm:"not null;"`
 	ItemPicture     string    `gorm:"type:varchar(128);not null;"`
 	Quantity        uint      `gorm:"not null;"`
+	IsBuying        bool      `gorm:"type:boolean;not null;"`
 	CreatedAt       time.Time `gorm:"not null;autoCreateTime;"`
 }
