@@ -328,7 +328,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"itemID\": 3,\r\n    \"quantity\": 2\r\n}",
+							"raw": "{\r\n    \"itemID\": 1,\r\n    \"quantity\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -714,6 +714,70 @@
 							],
 							"cookie": [],
 							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "inventory",
+			"item": [
+				{
+					"name": "listing",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/inventory",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"inventory"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - ok",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/inventory",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"inventory"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 28 Mar 2024 18:14:17 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "411"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"item\": {\n            \"id\": 1,\n            \"name\": \"Sword\",\n            \"description\": \"A sword that can be used to fight enemies.\",\n            \"picture\": \"https://i.pinimg.com/736x/73/cc/79/73cc79391b764ec40a5c77052bb846b9.jpg\",\n            \"price\": 100\n        },\n        \"quantity\": 1\n    },\n    {\n        \"item\": {\n            \"id\": 2,\n            \"name\": \"Shield\",\n            \"description\": \"A shield that can be used to block enemy attacks.\",\n            \"picture\": \"https://i.pinimg.com/736x/fe/83/27/fe832717d33f05c2dbd845809ce877b8.jpg\",\n            \"price\": 50\n        },\n        \"quantity\": 1\n    }\n]"
 						}
 					]
 				}
