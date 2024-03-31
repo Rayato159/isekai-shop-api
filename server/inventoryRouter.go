@@ -8,7 +8,7 @@ import (
 )
 
 func (s *echoServer) initInventoryRouter(m *authorizingMiddleware) {
-	router := s.app.Group("/v1/inventory-searching")
+	router := s.app.Group("/v1/inventory")
 
 	itemRepository := _itemShopRepository.NewItemShopRepositoryImpl(s.db, s.app.Logger)
 	inventoryRepository := _inventoryRepository.NewInventoryRepositoryImpl(s.db, s.app.Logger)
