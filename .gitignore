@@ -26,7 +26,7 @@ go.work
 /.vscode
 /.idea
 /app
-/config/config.yml
+config.yml
 /tmp
 /.air.toml
 
