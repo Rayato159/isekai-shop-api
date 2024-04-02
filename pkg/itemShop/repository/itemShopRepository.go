@@ -15,7 +15,7 @@ type ItemShopRepository interface {
 	FindByIDList(itemIDs []uint64) ([]*entities.Item, error)
 	Counting(itemFilterDto *_itemShopModel.ItemFilter) (int64, error)
 	PurchaseHistoryRecording(
-		tx *gorm.DB,
 		purchasingEntity *entities.PurchaseHistory,
+		tx *gorm.DB,
 	) (*entities.PurchaseHistory, error)
 }

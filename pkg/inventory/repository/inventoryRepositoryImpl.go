@@ -20,7 +20,7 @@ func NewInventoryRepositoryImpl(db databases.Database, logger echo.Logger) Inven
 	}
 }
 
-func (r *inventoryRepositoryImpl) Filling(tx *gorm.DB, playerID string, itemID uint64, qty int) ([]*entities.Inventory, error) {
+func (r *inventoryRepositoryImpl) Filling(playerID string, itemID uint64, qty int, tx *gorm.DB) ([]*entities.Inventory, error) {
 	conn := r.db.Connect()
 	if tx != nil {
 		conn = tx
@@ -61,7 +61,7 @@ func (r *inventoryRepositoryImpl) Listing(playerID string) ([]*entities.Inventor
 	return inventoryEntities, nil
 }
 
-func (r *inventoryRepositoryImpl) Removing(tx *gorm.DB, playerID string, itemID uint64, limit int) error {
+func (r *inventoryRepositoryImpl) Removing(playerID string, itemID uint64, limit int, tx *gorm.DB) error {
 	conn := r.db.Connect()
 	if tx != nil {
 		conn = tx

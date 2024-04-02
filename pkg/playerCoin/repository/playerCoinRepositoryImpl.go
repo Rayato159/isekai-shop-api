@@ -22,7 +22,7 @@ func NewPlayerCoinRepositoryImpl(db databases.Database, logger echo.Logger) Play
 	}
 }
 
-func (r *playerCoinRepositoryImpl) CoinAdding(tx *gorm.DB, playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
+func (r *playerCoinRepositoryImpl) CoinAdding(playerCoinEntity *entities.PlayerCoin, tx *gorm.DB) (*entities.PlayerCoin, error) {
 	conn := r.db.Connect()
 	if tx != nil {
 		conn = tx

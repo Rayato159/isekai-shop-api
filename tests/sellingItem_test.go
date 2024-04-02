@@ -44,7 +44,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		Picture:     "https://www.google.com/sword-of-tester.jpg",
 	}, nil)
 
-	itemShopRepositoryMock.On("PurchaseHistoryRecording", tx, &entities.PurchaseHistory{
+	itemShopRepositoryMock.On("PurchaseHistoryRecording", &entities.PurchaseHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -53,7 +53,7 @@ func TestItemSellingSuccess(t *testing.T) {
 		ItemPrice:       1000,
 		Quantity:        3,
 		IsBuying:        false,
-	}).Return(&entities.PurchaseHistory{
+	}, tx).Return(&entities.PurchaseHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -64,15 +64,15 @@ func TestItemSellingSuccess(t *testing.T) {
 		IsBuying:        false,
 	}, nil)
 
-	playerCoinRepositoryMock.On("CoinAdding", tx, &entities.PlayerCoin{
+	playerCoinRepositoryMock.On("CoinAdding", &entities.PlayerCoin{
 		PlayerID: "P001",
 		Amount:   1500,
-	}).Return(&entities.PlayerCoin{
+	}, tx).Return(&entities.PlayerCoin{
 		PlayerID: "P001",
 		Amount:   1500,
 	}, nil)
 
-	inventoryRepositoryMock.On("Removing", tx, "P001", uint64(1), 3).Return(nil)
+	inventoryRepositoryMock.On("Removing", "P001", uint64(1), 3, tx).Return(nil)
 
 	type args struct {
 		label    string

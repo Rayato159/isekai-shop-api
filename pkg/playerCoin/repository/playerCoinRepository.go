@@ -7,6 +7,6 @@ import (
 )
 
 type PlayerCoinRepository interface {
-	CoinAdding(tx *gorm.DB, playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error)
+	CoinAdding(playerCoinEntity *entities.PlayerCoin, tx *gorm.DB) (*entities.PlayerCoin, error)
 	Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error)
 }

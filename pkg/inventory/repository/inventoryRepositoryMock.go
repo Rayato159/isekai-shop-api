@@ -11,8 +11,8 @@ type InventoryRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *InventoryRepositoryMock) Filling(tx *gorm.DB, playerID string, itemID uint64, qty int) ([]*entities.Inventory, error) {
-	args := m.Called(tx, playerID, itemID, qty)
+func (m *InventoryRepositoryMock) Filling(playerID string, itemID uint64, qty int, tx *gorm.DB) ([]*entities.Inventory, error) {
+	args := m.Called(playerID, itemID, qty, tx)
 	return args.Get(0).([]*entities.Inventory), args.Error(1)
 }
 
@@ -21,8 +21,8 @@ func (m *InventoryRepositoryMock) Listing(playerID string) ([]*entities.Inventor
 	return args.Get(0).([]*entities.Inventory), args.Error(1)
 }
 
-func (m *InventoryRepositoryMock) Removing(tx *gorm.DB, playerID string, itemID uint64, limit int) error {
-	args := m.Called(tx, playerID, itemID, limit)
+func (m *InventoryRepositoryMock) Removing(playerID string, itemID uint64, limit int, tx *gorm.DB) error {
+	args := m.Called(playerID, itemID, limit, tx)
 	return args.Error(0)
 }
 

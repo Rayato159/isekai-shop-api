@@ -47,7 +47,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		Coin:     5000,
 	}, nil)
 
-	itemShopRepositoryMock.On("PurchaseHistoryRecording", tx, &entities.PurchaseHistory{
+	itemShopRepositoryMock.On("PurchaseHistoryRecording", &entities.PurchaseHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -56,7 +56,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		ItemPrice:       1000,
 		Quantity:        3,
 		IsBuying:        true,
-	}).Return(&entities.PurchaseHistory{
+	}, tx).Return(&entities.PurchaseHistory{
 		PlayerID:        "P001",
 		ItemID:          1,
 		ItemName:        "Sword of Tester",
@@ -67,7 +67,7 @@ func TestItemBuyingSuccess(t *testing.T) {
 		IsBuying:        true,
 	}, nil)
 
-	inventoryRepositoryMock.On("Filling", tx, "P001", uint64(1), int(3)).Return([]*entities.Inventory{
+	inventoryRepositoryMock.On("Filling", "P001", uint64(1), int(3), tx).Return([]*entities.Inventory{
 		{
 			PlayerID: "P001",
 			ItemID:   1,
@@ -82,10 +82,10 @@ func TestItemBuyingSuccess(t *testing.T) {
 		},
 	}, nil)
 
-	playerCoinRepositoryMock.On("CoinAdding", tx, &entities.PlayerCoin{
+	playerCoinRepositoryMock.On("CoinAdding", &entities.PlayerCoin{
 		PlayerID: "P001",
 		Amount:   -3000,
-	}).Return(&entities.PlayerCoin{
+	}, tx).Return(&entities.PlayerCoin{
 		PlayerID: "P001",
 		Amount:   -3000,
 	}, nil)

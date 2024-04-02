@@ -6,8 +6,8 @@ import (
 )
 
 type InventoryRepository interface {
-	Filling(tx *gorm.DB, playerID string, itemID uint64, qty int) ([]*entities.Inventory, error)
+	Filling(playerID string, itemID uint64, qty int, tx *gorm.DB) ([]*entities.Inventory, error)
 	Listing(playerID string) ([]*entities.Inventory, error)
-	Removing(tx *gorm.DB, playerID string, itemID uint64, limit int) error
+	Removing(playerID string, itemID uint64, limit int, tx *gorm.DB) error
 	PlayerItemCounting(playerID string, itemID uint64) int64
 }

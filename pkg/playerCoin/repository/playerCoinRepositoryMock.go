@@ -13,8 +13,8 @@ type CoinRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *CoinRepositoryMock) CoinAdding(tx *gorm.DB, playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
-	args := m.Called(tx, playerCoinEntity)
+func (m *CoinRepositoryMock) CoinAdding(playerCoinEntity *entities.PlayerCoin, tx *gorm.DB) (*entities.PlayerCoin, error) {
+	args := m.Called(playerCoinEntity, tx)
 	return args.Get(0).(*entities.PlayerCoin), args.Error(1)
 }
 

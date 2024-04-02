@@ -102,8 +102,8 @@ func (r *itemRepositoryImpl) FindByIDList(itemIDs []uint64) ([]*entities.Item, e
 }
 
 func (r *itemRepositoryImpl) PurchaseHistoryRecording(
-	tx *gorm.DB,
 	purchasingEntity *entities.PurchaseHistory,
+	tx *gorm.DB,
 ) (*entities.PurchaseHistory, error) {
 	conn := r.db.Connect()
 	if tx != nil {
