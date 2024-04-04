@@ -44,7 +44,7 @@ This course project is named “Isekai Shop API.” “Isekai” means another w
 ![alt text](./screenshots/IsekaiShopArchitectureV9.png "Architecture")
 
 ## ER Diagram
-![alt text]("./screenshots/IsekaiShopEntityV10.png "ER-Diagram")
+![alt text](./screenshots/IsekaiShopEntityV10.png "ER-Diagram")
 
 ## Start PostgreSQL on Docker
 
