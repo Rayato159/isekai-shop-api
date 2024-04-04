@@ -7,10 +7,6 @@ Hi, my name is Ruangyot Nanchiang from Thailand, or you can call me Rayato159. I
 
 Before this, I had published two online courses about Golang backend, covering both monolithic and microservices. However, both courses are in the Thai language.
 
-I didn’t think it had gone too far. Some foreigners have purchased my course and requested English subtitles, which I initially planned for Thai people only.
-
-Therefore, this course will now include English subtitles and be an enhanced version, learning from my past mistakes.
-
 This course will guide you through the implementation of a Simple REST API in clean architecture using **Golang + Echo + Gorm (PostgreSQL)**, starting from scratch and designed to be beginner-friendly, taking you from zero to hero.
 
 ## About Isekai Shop API
